@@ -14,13 +14,13 @@ def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
 
 	digestedDnaByFirstCutter = digestDna(dnaSequence, restrictionEnzyme1)
 
-	allDigestedFragements = []
+	allDigestedFragments = []
 
 	for fragment in digestedDnaByFirstCutter.fragments:
 		partiallyDigestedDnaBySecondCutter = digestDna(fragment, restrictionEnzyme2)
-		allDigestedFragements.append(partiallyDigestedDnaBySecondCutter.fragments)
+		allDigestedFragments.append(partiallyDigestedDnaBySecondCutter.fragments)
 
 	fragmentsFlankedByTwoSites = filter(lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite5end) and fragment.endswith(restrictionEnzyme2.cutSite3end)
-														 or fragment.startswith(restrictionEnzyme2.cutSite5end) and fragment.endswith(restrictionEnzyme1.cutSite3end), allDigestedFragements)
+														 or fragment.startswith(restrictionEnzyme2.cutSite5end) and fragment.endswith(restrictionEnzyme1.cutSite3end), allDigestedFragments)
 
 	return DigestedDna(fragmentsFlankedByTwoSites)
