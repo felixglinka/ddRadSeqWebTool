@@ -5,6 +5,9 @@ class DigestedDna:
 
   def __init__(self, dnaFragments):
     self.fragments = dnaFragments
+    self.cutByFirstRestrictionEnzyme = 0
+    self.cutBySecondRestrictionEnzyme = 0
+
 
   def createHistogrammOfDistribution(self):
 

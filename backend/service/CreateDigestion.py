@@ -4,27 +4,37 @@ from DigestedDna import DigestedDna
 
 def digestDna(dnaSequence, restrictionEnzyme):
 
-	restrictionEnzymeCutSite = restrictionEnzyme.cutSite5end + restrictionEnzyme.cutSite3end
-	restrictionEnzymeCutSitePattern = restrictionEnzyme.cutSite5end + '|' + restrictionEnzyme.cutSite3end
+    restrictionEnzymeCutSite = restrictionEnzyme.cutSite5end + restrictionEnzyme.cutSite3end
+    restrictionEnzymeCutSitePattern = restrictionEnzyme.cutSite5end + '|' + restrictionEnzyme.cutSite3end
 
-	dnaFragments = dnaSequence.replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
+    dnaFragments = dnaSequence.replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
 
-	return DigestedDna(dnaFragments)
+    return DigestedDna(dnaFragments)
 
 
 def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
-
 	digestedDnaByFirstCutter = digestDna(dnaSequence, restrictionEnzyme1)
 
-	allDigestedFragments = []
+	digestedDnaBySecondCutter = digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme2)
 
-	for fragment in digestedDnaByFirstCutter.fragments:
-		partiallyDigestedDnaBySecondCutter = digestDna(fragment, restrictionEnzyme2)
-		allDigestedFragments.append(partiallyDigestedDnaBySecondCutter.fragments)
+	fragmentsFlankedByTwoSites = list(filter(
+		lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite3end) and fragment.endswith(
+			restrictionEnzyme2.cutSite5end)
+						 or fragment.startswith(restrictionEnzyme2.cutSite3end) and fragment.endswith(
+			restrictionEnzyme1.cutSite5end), digestedDnaBySecondCutter))
 
-	allDigestedFragments = list(np.concatenate(allDigestedFragments).flat)
+	finalDigestedDna = DigestedDna(fragmentsFlankedByTwoSites)
+	finalDigestedDna.cutByFirstRestrictionEnzyme = len(digestedDnaByFirstCutter.fragments) - 1
+	finalDigestedDna.cutBySecondRestrictionEnzyme = len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments)
 
-	fragmentsFlankedByTwoSites = filter(lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite3end) and fragment.endswith(restrictionEnzyme2.cutSite5end)
-														 or fragment.startswith(restrictionEnzyme2.cutSite3end) and fragment.endswith(restrictionEnzyme1.cutSite5end), allDigestedFragments)
+	return finalDigestedDna
 
-	return DigestedDna(fragmentsFlankedByTwoSites)
+def digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme):
+
+    allDigestedFragments = []
+
+    for fragment in digestedDnaByFirstCutter.fragments:
+        partiallyDigestedDnaBySecondCutter = digestDna(fragment, restrictionEnzyme)
+        allDigestedFragments.append(partiallyDigestedDnaBySecondCutter.fragments)
+
+    return list(np.concatenate(allDigestedFragments).flat)
