@@ -1,6 +1,8 @@
 import re
 import numpy as np
-from DigestedDna import DigestedDna
+
+from backend.service.DigestedDna import DigestedDna
+
 
 def digestDna(dnaSequence, restrictionEnzyme):
 

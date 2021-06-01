@@ -1,7 +1,7 @@
 from Bio import SeqIO
 
 def readInFastaAndReturnOnlySequence(inputFasta):
-    fasta_sequences = SeqIO.parse(open(inputFasta), 'fasta')
+    fasta_sequences = SeqIO.parse(inputFasta, 'fasta')
     allSequencesOfFasta = ""
 
     for fastaPart in fasta_sequences:

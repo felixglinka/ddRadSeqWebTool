@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>You better work</title>
+<!--    <style>-->
+<!--        img[src="data:image/png;base64,"] {-->
+<!--    display: none;-->
+<!--}-->
+<!--    </style>-->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style/webinterfaceStyle.css' %}">
 </head>
 <body>
     <div>Hannah Montana is the best</div>
@@ -11,7 +18,9 @@
         {{ form.as_p }}
         <input type="submit" value="OK">
     </form>
-    <div id="testAnswer"></div>
+    <div id="graph">
+        <img src="data:image/png;base64,{{ graph|safe }}">
+    </div>
 <!--    <div>-->
 <!--    <form action="/action_page.php">-->
 <!--      <input type="file" id="myFile" name="filename">-->
