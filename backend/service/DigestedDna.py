@@ -1,5 +1,4 @@
-import base64
-from io import BytesIO
+import io, urllib, base64
 
 import matplotlib.pyplot as plt
 
@@ -10,20 +9,18 @@ class DigestedDna:
     self.cutByFirstRestrictionEnzyme = 0
     self.cutBySecondRestrictionEnzyme = 0
 
-
   def createHistogrammOfDistribution(self):
 
     lengthsOfFragments = list(map(len, self.fragments))
     plt.hist(lengthsOfFragments, bins=10, color="blue")
 
-    buffer = BytesIO()
+    buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    image_png = buffer.getvalue()
-    buffer.close()
+    encodedImage = base64.b64encode(buffer.read())
 
-    graphic = base64.b64encode(image_png)
-    graphic = graphic.decode('utf-8')
+    graphic = 'data:image/png;base64,' + urllib.parse.quote(encodedImage)
+
+    plt.close()
 
     return graphic
-

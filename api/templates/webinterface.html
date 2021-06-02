@@ -9,9 +9,18 @@
 <!--}-->
 <!--    </style>-->
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fa/css/all.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style/webinterfaceStyle.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-danger">{{ message|safe }}</div>
+        {% endfor %}
+  {% endif %}
+
     <div>Hannah Montana is the best</div>
     <div></div>
     <form action='.' method="POST" enctype="multipart/form-data" >{% csrf_token %}
@@ -19,7 +28,7 @@
         <input type="submit" value="OK">
     </form>
     <div id="graph">
-        <img src="data:image/png;base64,{{ graph|safe }}">
+        <img src="{{ graph }}">
     </div>
 <!--    <div>-->
 <!--    <form action="/action_page.php">-->
