@@ -1,6 +1,5 @@
 from backend.models.RestrictionEnzyme import RestrictionEnzyme
 from backend.service.CreateDigestion import doubleDigestDna
-from backend.service.DigestedDna import DigestedDna
 from backend.service.HandleFastafile import readInFastaAndReturnOnlySequence
 
 def handleDDRadSeqRequest(inputFasta):

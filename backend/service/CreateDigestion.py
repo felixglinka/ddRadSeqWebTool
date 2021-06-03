@@ -15,21 +15,21 @@ def digestDna(dnaSequence, restrictionEnzyme):
 
 
 def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
-	digestedDnaByFirstCutter = digestDna(dnaSequence, restrictionEnzyme1)
 
-	digestedDnaBySecondCutter = digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme2)
+    digestedDnaByFirstCutter = digestDna(dnaSequence, restrictionEnzyme1)
+    digestedDnaBySecondCutter = digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme2)
 
-	fragmentsFlankedByTwoSites = list(filter(
-		lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite3end) and fragment.endswith(
-			restrictionEnzyme2.cutSite5end)
-						 or fragment.startswith(restrictionEnzyme2.cutSite3end) and fragment.endswith(
-			restrictionEnzyme1.cutSite5end), digestedDnaBySecondCutter))
+    fragmentsFlankedByTwoSites = list(filter(
+        lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite3end) and fragment.endswith(
+            restrictionEnzyme2.cutSite5end)
+                         or fragment.startswith(restrictionEnzyme2.cutSite3end) and fragment.endswith(
+            restrictionEnzyme1.cutSite5end), digestedDnaBySecondCutter))
 
-	finalDigestedDna = DigestedDna(fragmentsFlankedByTwoSites)
-	finalDigestedDna.cutByFirstRestrictionEnzyme = len(digestedDnaByFirstCutter.fragments) - 1
-	finalDigestedDna.cutBySecondRestrictionEnzyme = len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments)
+    finalDigestedDna = DigestedDna(fragmentsFlankedByTwoSites)
+    finalDigestedDna.cutByFirstRestrictionEnzyme = len(digestedDnaByFirstCutter.fragments) - 1
+    finalDigestedDna.cutBySecondRestrictionEnzyme = len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments)
 
-	return finalDigestedDna
+    return finalDigestedDna
 
 def digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme):
 

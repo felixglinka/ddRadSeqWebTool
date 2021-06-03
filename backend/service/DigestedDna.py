@@ -12,7 +12,10 @@ class DigestedDna:
   def createHistogrammOfDistribution(self):
 
     lengthsOfFragments = list(map(len, self.fragments))
-    plt.hist(lengthsOfFragments, bins=10, color="blue")
+
+    plt.hist(lengthsOfFragments, bins=15, color="blue")
+    plt.xlabel('Length of digested fragments')
+    plt.ylabel('Number of digested fragments')
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
