@@ -14,12 +14,14 @@ def webinterfaceViews(request):
 
     if request.method == "POST":
         inputForm = BasicInputDDRadDataForm(request.POST, request.FILES)
+
         if inputForm.is_valid():
+
             try:
                 readInputFasta = io.StringIO(request.FILES['fastaFile'].read().decode('utf-8'))
                 outputGraph = handleDDRadSeqRequest(readInputFasta)
             except:
-                messages.error(request, "You better get the best of both worlds")
+                messages.error(request, "A valid fasta file has not been uploaded")
                 context["form"] = BasicInputDDRadDataForm()
                 return render(request, "webinterface.html", context)
 

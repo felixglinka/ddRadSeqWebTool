@@ -2,11 +2,7 @@ from Bio import SeqIO
 
 def readInFastaAndReturnOnlySequence(inputFasta):
 
-    try:
-        fasta_sequences = SeqIO.parse(inputFasta, 'fasta')
-    except:
-        print("This fastafile could not be parsed")
-        raise
+    fasta_sequences = SeqIO.parse(inputFasta, 'fasta')
 
     allSequencesOfFasta = ""
 
@@ -14,4 +10,8 @@ def readInFastaAndReturnOnlySequence(inputFasta):
         sequence = str(fastaPart.seq)
         allSequencesOfFasta += sequence
 
-    return allSequencesOfFasta.upper()
+    if allSequencesOfFasta == "":
+        print("This fastafile could not be parsed")
+        raise
+    else:
+        return allSequencesOfFasta.upper()
