@@ -1,4 +1,3 @@
-import re
 import numpy as np
 
 from backend.service.DigestedDna import DigestedDna

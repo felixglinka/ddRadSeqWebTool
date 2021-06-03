@@ -1,5 +1,4 @@
-import io, urllib, base64
-
+import io, urllib, base64, math
 import matplotlib.pyplot as plt
 
 class DigestedDna:
@@ -13,8 +12,11 @@ class DigestedDna:
 
     lengthsOfFragments = list(map(len, self.fragments))
 
-    plt.hist(lengthsOfFragments, bins=15, color="blue")
-    plt.xlabel('Length of digested fragments')
+    plt.figure(figsize=(8, 6), dpi=80)
+    plt.hist(lengthsOfFragments, color="blue")
+    #plt.xlim(0, max(lengthsOfFragments) + 10 if len(self.fragments) != 0 else 1)
+    #plt.ylim(0, 0.4 * len(lengthsOfFragments) if len(self.fragments) != 0 else 1)
+    plt.xlabel('Fragment size (bp)')
     plt.ylabel('Number of digested fragments')
 
     buffer = io.BytesIO()
