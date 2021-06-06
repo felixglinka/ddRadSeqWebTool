@@ -1,5 +1,6 @@
 from backend.models.RestrictionEnzyme import RestrictionEnzyme
 from backend.service.CreateDigestion import doubleDigestDna
+from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
 from backend.service.HandleFastafile import readInFastaAndReturnOnlySequence
 
 def handleDDRadSeqRequest(inputFasta):
@@ -11,3 +12,7 @@ def handleDDRadSeqRequest(inputFasta):
 
 EcoRI = RestrictionEnzyme("EcoRI", "G" , "AATTC")
 BfaI = RestrictionEnzyme("BfaI", "C" , "TAG")
+
+def requestRestrictionEnzymes():
+
+    return extractRestrictionEnzymesFromNewEnglandList()

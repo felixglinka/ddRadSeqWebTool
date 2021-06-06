@@ -1,10 +1,13 @@
-import csv
+import csv, os
 
+from django.templatetags.static import static
 from backend.models.RestrictionEnzyme import RestrictionEnzyme
+from backend.settings import STATIC_ROOT
+
 
 def extractRestrictionEnzymesFromNewEnglandList():
 
-    with open('../../newEnglandEnzymeList.csv', encoding='utf-8-sig') as csvFile:
+    with open(os.path.join(STATIC_ROOT,'restrictionEnzymes/newEnglandEnzymeList.csv'), encoding='utf-8-sig') as csvFile:
         csvDictReader = csv.DictReader(csvFile, delimiter=";")
         newEnglandEnzymeList = list(csvDictReader)
 
