@@ -1,5 +1,12 @@
-import io, urllib, base64, math
+import io, urllib, base64
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+import os
+from backend.settings import STATIC_ROOT
+
 
 class DigestedDna:
 
@@ -7,6 +14,23 @@ class DigestedDna:
     self.fragments = dnaFragments
     self.cutByFirstRestrictionEnzyme = 0
     self.cutBySecondRestrictionEnzyme = 0
+
+  def setCutSizes(self, numberFragmentsCutByFirstRestrictionEnzyme, numberFragmentsCutBySecondRestrictionEnzyme):
+    self.cutByFirstRestrictionEnzyme = numberFragmentsCutByFirstRestrictionEnzyme
+    self.cutBySecondRestrictionEnzyme = numberFragmentsCutBySecondRestrictionEnzyme
+
+  def countFragmentInBins(self):
+
+    lengthsOfFragments = list(map(len, self.fragments))
+
+    dfOfFragmentLength = pd.DataFrame({"fragmentLengths": lengthsOfFragments})
+    ranges = np.arange(0, max(lengthsOfFragments)+10, 10)
+    numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()
+
+    # numbersFragementsInBins.index = numbersFragementsInBins.index.astype(str)
+    # numbersFragementsInBins.to_dict()
+
+    numbersFragementsInBins.to_csv(os.path.join(STATIC_ROOT,'fragmentLength.csv'))
 
   def createHistogrammOfDistribution(self):
 

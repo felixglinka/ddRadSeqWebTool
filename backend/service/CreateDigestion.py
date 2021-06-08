@@ -25,8 +25,7 @@ def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
             restrictionEnzyme1.cutSite5end), digestedDnaBySecondCutter))
 
     finalDigestedDna = DigestedDna(fragmentsFlankedByTwoSites)
-    finalDigestedDna.cutByFirstRestrictionEnzyme = len(digestedDnaByFirstCutter.fragments) - 1
-    finalDigestedDna.cutBySecondRestrictionEnzyme = len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments)
+    finalDigestedDna.setCutSizes(len(digestedDnaByFirstCutter.fragments) - 1, len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments))
 
     return finalDigestedDna
 

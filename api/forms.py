@@ -15,8 +15,16 @@ class BasicInputDDRadDataForm(forms.Form):
         self.initial['restrictionEnzyme1'] = ''
         self.initial['restrictionEnzyme2'] = ''
 
+        self.fields['restrictionEnzyme3'].choices = restrictionEnzymesChoices
+        self.fields['restrictionEnzyme4'].choices = restrictionEnzymesChoices
+        self.initial['restrictionEnzyme3'] = ''
+        self.initial['restrictionEnzyme4'] = ''
+
     fastaFile = forms.FileField(label="")
-    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1")
-    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2")
+    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1")
+    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2")
+
+    restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False)
+    restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False)
 
 
