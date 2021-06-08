@@ -1,20 +1,13 @@
 from Bio import SeqIO
-import logging
+from backend.service.CreateDigestion import digestSequence
 
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
-def readInFastaAndReturnOnlySequence(inputFasta):
+def readInFastaAndReturnOnlySequence(inputFasta, restrictionEnzyme1):
 
-    allSequencesOfFasta = ""
-    fasta_sequences = SeqIO.parse(inputFasta, 'fasta')
+    digestedDNA = []
+    fastaSequences = SeqIO.parse(inputFasta, 'fasta')
 
-    for fastaPart in fasta_sequences:
-        sequence = str(fastaPart.seq)
-        allSequencesOfFasta += sequence
+    for fastaPart in fastaSequences:
+        digestedDNA.append(digestSequence(str(fastaPart.seq.upper()), restrictionEnzyme1))
 
-    if allSequencesOfFasta == "":
-        logger.error("This fastafile could not be parsed (properly)")
-        raise
-    else:
-        return allSequencesOfFasta.upper()
+    return [fragment for fragments in digestedDNA for fragment in fragments]

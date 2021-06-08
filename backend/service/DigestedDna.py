@@ -23,6 +23,9 @@ class DigestedDna:
 
     lengthsOfFragments = list(map(len, self.fragments))
 
+    if(len(lengthsOfFragments) == 0):
+      return ""
+
     dfOfFragmentLength = pd.DataFrame({"fragmentLengths": lengthsOfFragments})
     ranges = np.arange(0, max(lengthsOfFragments)+10, 10)
     numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()

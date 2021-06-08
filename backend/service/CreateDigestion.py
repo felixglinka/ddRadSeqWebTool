@@ -3,20 +3,18 @@ import numpy as np
 from backend.service.DigestedDna import DigestedDna
 
 
-def digestDna(dnaSequence, restrictionEnzyme):
+def digestSequence(dnaSequence, restrictionEnzyme):
 
     restrictionEnzymeCutSite = restrictionEnzyme.cutSite5end + restrictionEnzyme.cutSite3end
     restrictionEnzymeCutSitePattern = restrictionEnzyme.cutSite5end + '|' + restrictionEnzyme.cutSite3end
 
-    dnaFragments = dnaSequence.replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
-
-    return DigestedDna(dnaFragments)
+    return str(dnaSequence).replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
 
 
-def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
 
-    digestedDnaByFirstCutter = digestDna(dnaSequence, restrictionEnzyme1)
-    digestedDnaBySecondCutter = digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme2)
+def doubleDigestDna(digestedDnaSequence, restrictionEnzyme1, restrictionEnzyme2):
+
+    digestedDnaBySecondCutter = digestEveryDnaFragment(digestedDnaSequence, restrictionEnzyme2)
 
     fragmentsFlankedByTwoSites = list(filter(
         lambda fragment: fragment.startswith(restrictionEnzyme1.cutSite3end) and fragment.endswith(
@@ -25,16 +23,16 @@ def doubleDigestDna(dnaSequence, restrictionEnzyme1, restrictionEnzyme2):
             restrictionEnzyme1.cutSite5end), digestedDnaBySecondCutter))
 
     finalDigestedDna = DigestedDna(fragmentsFlankedByTwoSites)
-    finalDigestedDna.setCutSizes(len(digestedDnaByFirstCutter.fragments) - 1, len(digestedDnaBySecondCutter) - len(digestedDnaByFirstCutter.fragments))
+    finalDigestedDna.setCutSizes(len(digestedDnaSequence) - 1, len(digestedDnaBySecondCutter) - len(digestedDnaSequence))
 
     return finalDigestedDna
 
-def digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme):
+def digestEveryDnaFragment(digestedDnaByFirstCutter, restrictionEnzyme2):
 
     allDigestedFragments = []
 
-    for fragment in digestedDnaByFirstCutter.fragments:
-        partiallyDigestedDnaBySecondCutter = digestDna(fragment, restrictionEnzyme)
-        allDigestedFragments.append(partiallyDigestedDnaBySecondCutter.fragments)
+    for fragment in digestedDnaByFirstCutter:
+        partiallyDigestedDnaBySecondCutter = digestSequence(fragment, restrictionEnzyme2)
+        allDigestedFragments.append(partiallyDigestedDnaBySecondCutter)
 
-    return list(np.concatenate(allDigestedFragments).flat)
+    return [fragment for fragments in allDigestedFragments for fragment in fragments]
