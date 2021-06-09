@@ -1,3 +1,13 @@
 Restrictionenzymes:
 	- three cutters
 	- uncertain/multiple cutsides
+
+
+	-adaptor contamination
+	    reads below 50
+	    sequence loss due adaptor contamination
+	    formula for
+    -sequencing overlapping reads
+        reads below 300
+        overlapping regions
+        formula for how much of the data is wasted
