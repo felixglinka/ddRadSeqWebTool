@@ -1,7 +1,7 @@
-import io
-import logging
+import io, logging, shutil
 
-from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes
+from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
+    handleDDRadSeqComparisonRequest
 from .forms import BasicInputDDRadDataForm
 
 from django.shortcuts import render, redirect
@@ -23,11 +23,18 @@ def webinterfaceViews(request):
 
             try:
                 readInputFasta = io.StringIO(request.FILES['fastaFile'].read().decode('utf-8'))
-                context["graph"] = handleDDRadSeqRequest(readInputFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])])
+
+                if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
+                    context["graph"] = handleDDRadSeqRequest(readInputFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])])
+                elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
+                    raise Exception
+                else:
+                    context["graph"] = handleDDRadSeqComparisonRequest(readInputFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])])
 
             except Exception as e:
                 logger.error(e)
-                messages.error(request, 'A valid fasta file has not been uploaded.')
+                messages.error(request, e)
 
         else:
             logger.error(inputForm.errors)

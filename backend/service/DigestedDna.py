@@ -30,10 +30,9 @@ class DigestedDna:
     ranges = np.arange(0, max(lengthsOfFragments)+10, 10)
     numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()
 
-    # numbersFragementsInBins.index = numbersFragementsInBins.index.astype(str)
-    # numbersFragementsInBins.to_dict()
+    return numbersFragementsInBins
 
-    numbersFragementsInBins.to_csv(os.path.join(STATIC_ROOT,'fragmentLength.csv'))
+    #numbersFragementsInBins.to_csv(os.path.join(STATIC_ROOT,'fragmentLength.csv'))
 
   def createHistogrammOfDistribution(self):
 
