@@ -21,13 +21,11 @@ class DigestedDna:
 
   def countFragmentInBins(self):
 
-    lengthsOfFragments = list(map(len, self.fragments))
-
-    if(len(lengthsOfFragments) == 0):
+    if(len(self.fragments) == 0):
       return ""
 
-    dfOfFragmentLength = pd.DataFrame({"fragmentLengths": lengthsOfFragments})
-    ranges = np.arange(0, max(lengthsOfFragments)+10, 10)
+    dfOfFragmentLength = pd.DataFrame({"fragmentLengths": self.fragments})
+    ranges = np.append(np.arange(0, 2010, 10), np.inf)
     numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()
 
     return numbersFragementsInBins
@@ -36,10 +34,8 @@ class DigestedDna:
 
   def createHistogrammOfDistribution(self):
 
-    lengthsOfFragments = list(map(len, self.fragments))
-
     plt.figure(figsize=(8, 6), dpi=80)
-    plt.hist(lengthsOfFragments, color="blue")
+    plt.hist(self.fragments, color="blue")
     #plt.xlim(0, max(lengthsOfFragments) + 10 if len(self.fragments) != 0 else 1)
     #plt.ylim(0, 0.4 * len(lengthsOfFragments) if len(self.fragments) != 0 else 1)
     plt.xlabel('Fragment size (bp)')

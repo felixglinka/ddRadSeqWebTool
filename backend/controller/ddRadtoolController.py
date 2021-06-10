@@ -1,25 +1,29 @@
-from backend.service.CreateDigestion import doubleDigestDna
+from backend.service.DigestedDna import DigestedDna
 from backend.service.DigestedDnaComparison import DigestedDnaComparison
 from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
 from backend.service.HandleFastafile import readInFastaAndReturnOnlyFragments
 
 def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2):
 
-    digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1)
-    doubleDigestedSequence = doubleDigestDna(digestedSequencesFromFasta, restrictionEnzyme1, restrictionEnzyme2)
+    digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2)
+    doubleDigestedDna = DigestedDna(digestedSequencesFromFasta['digestedDNA']["digestedFragments"])
+    doubleDigestedDna.setCutSizes(digestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], digestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
 
-    #doubleDigestedSequence.countFragmentInBins()
+    #doubleDigestedDna.countFragmentInBins()
 
-    return doubleDigestedSequence.createHistogrammOfDistribution()
+    return doubleDigestedDna.createHistogrammOfDistribution()
 
 def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4):
 
-    digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme3)
+    digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4)
 
-    doubleDigestedSequence1 = doubleDigestDna(digestedSequencesFromFasta['digestedDNA'], restrictionEnzyme1, restrictionEnzyme2)
-    doubleDigestedSequence2 = doubleDigestDna(digestedSequencesFromFasta['digestedDNA2'], restrictionEnzyme3, restrictionEnzyme4)
+    doubleDigestedDna1 = DigestedDna(digestedSequencesFromFasta['digestedDNA']['digestedFragments'])
+    doubleDigestedDna1.setCutSizes(digestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], digestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
+    doubleDigestedDna2 = DigestedDna(digestedSequencesFromFasta['digestedDNA2']['digestedFragments'])
+    doubleDigestedDna2.setCutSizes(digestedSequencesFromFasta['digestedDNA2']["cutByFirstRestrictionEnzyme"], digestedSequencesFromFasta['digestedDNA2']["cutBySecondRestrictionEnzyme"])
 
-    digestedDnaComparison = DigestedDnaComparison(doubleDigestedSequence1, doubleDigestedSequence2)
+
+    digestedDnaComparison = DigestedDnaComparison(doubleDigestedDna1, doubleDigestedDna2)
 
     return digestedDnaComparison.createLineChart({"restrictionEnzyme1": restrictionEnzyme1.name, "restrictionEnzyme2": restrictionEnzyme2.name,
                                                   "restrictionEnzyme3": restrictionEnzyme3.name, "restrictionEnzyme4": restrictionEnzyme4.name})

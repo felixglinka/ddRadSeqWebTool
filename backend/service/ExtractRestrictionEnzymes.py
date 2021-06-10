@@ -11,7 +11,11 @@ def extractRestrictionEnzymesFromNewEnglandList():
         csvDictReader = csv.DictReader(csvFile, delimiter=";")
         newEnglandEnzymeList = list(csvDictReader)
 
-    filteredNewEnglandEnzymeList = list(filter(lambda enzyme: enzyme["Enzyme"] != "" and enzyme["Cut Site"] != "" and all(character in "ACGT/" for character in enzyme["Cut Site"]), newEnglandEnzymeList))
+    filteredNewEnglandEnzymeList = list(filter(lambda enzyme: enzyme["Enzyme"] != "" and
+                                                              enzyme["Cut Site"] != "" and
+                                                              not enzyme["Cut Site"].startswith("/") and
+                                                              not enzyme["Cut Site"].endswith("/") and
+                                                              all(character in "ACGT/" for character in enzyme["Cut Site"]), newEnglandEnzymeList))
 
     allAvailableRestrictionEnzymes = list(map(lambda restrictionEnzyme: createRestrictionEnzymeObjectFromDictionary(restrictionEnzyme), filteredNewEnglandEnzymeList))
 

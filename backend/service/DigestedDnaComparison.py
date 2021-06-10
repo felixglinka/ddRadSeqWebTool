@@ -20,7 +20,8 @@ class DigestedDnaComparison:
     digestedDnaDf = pd.concat([digestedDna1Bins, digestedDna2Bins],axis=1)
 
     plt.figure(figsize=(8, 6), dpi=80)
-    #digestedDnaDf.plot.hist(bins=40, alpha=0.5)
+    #digestedDnaDf.plot.hist(bins = 20, alpha=0.5)
+    #digestedDnaDf.plot.bar(alpha=0.5)
     digestedDnaDf.plot.line()
 
     buffer = io.BytesIO()
