@@ -5,9 +5,9 @@ from backend.service.HandleFastafile import readInFastaAndReturnOnlyFragments
 
 def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2):
 
-    digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2)
-    doubleDigestedDna = DigestedDna(digestedSequencesFromFasta['digestedDNA']["digestedFragments"])
-    doubleDigestedDna.setCutSizes(digestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], digestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
+    doubleDigestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2)
+    doubleDigestedDna = DigestedDna(doubleDigestedSequencesFromFasta['digestedDNA']["digestedFragments"])
+    doubleDigestedDna.setCutSizes(doubleDigestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], doubleDigestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
 
     #doubleDigestedDna.countFragmentInBins()
 
