@@ -2,47 +2,51 @@ from Bio import SeqIO
 
 def readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3=None, restrictionEnzyme4=None):
 
-    countCutsByFirstRestrictionEnzyme = 0
-    countCutsBySecondRestrictionEnzyme = 0
-    digestedDNA = []
-    fastaSequences = SeqIO.parse(inputFasta, 'fasta')
-
-    if restrictionEnzyme3 != None and restrictionEnzyme4 != None:
-        countCutsByFirstRestrictionEnzyme2 = 0
-        countCutsBySecondRestrictionEnzyme2 = 0
-        digestedDNA2 = []
-
-    for fastaPart in fastaSequences:
+    try:
+        countCutsByFirstRestrictionEnzyme = 0
+        countCutsBySecondRestrictionEnzyme = 0
+        digestedDNA = []
+        fastaSequences = SeqIO.parse(inputFasta, 'fasta')
 
         if restrictionEnzyme3 != None and restrictionEnzyme4 != None:
-            tmpSeq = str(fastaPart.seq.upper())
-            digestedFastaSeq2 = digestFastaSeq(tmpSeq, restrictionEnzyme3, restrictionEnzyme4)
-            countCutsByFirstRestrictionEnzyme2 += digestedFastaSeq2["countCutsByFirstRestrictionEnzyme"]
-            countCutsBySecondRestrictionEnzyme2 += digestedFastaSeq2["countCutsBySecondRestrictionEnzyme"]
-            digestedDNA2.append(list(map(len, digestedFastaSeq2["fragmentsFlankedByTwoSites"])))
+            countCutsByFirstRestrictionEnzyme2 = 0
+            countCutsBySecondRestrictionEnzyme2 = 0
+            digestedDNA2 = []
 
-        digestedFastaSeq = digestFastaSeq(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
-        countCutsByFirstRestrictionEnzyme += digestedFastaSeq["countCutsByFirstRestrictionEnzyme"]
-        countCutsBySecondRestrictionEnzyme += digestedFastaSeq["countCutsBySecondRestrictionEnzyme"]
-        digestedDNA.append(list(map(len, digestedFastaSeq["fragmentsFlankedByTwoSites"])))
+        for fastaPart in fastaSequences:
 
-    doubleDigestedDnaFragments = [fragment for fragments in digestedDNA for fragment in fragments]
+            if restrictionEnzyme3 != None and restrictionEnzyme4 != None:
+                tmpSeq = str(fastaPart.seq.upper())
+                digestedFastaSeq2 = digestFastaSeq(tmpSeq, restrictionEnzyme3, restrictionEnzyme4)
+                countCutsByFirstRestrictionEnzyme2 += digestedFastaSeq2["countCutsByFirstRestrictionEnzyme"]
+                countCutsBySecondRestrictionEnzyme2 += digestedFastaSeq2["countCutsBySecondRestrictionEnzyme"]
+                digestedDNA2.append(list(map(len, digestedFastaSeq2["fragmentsFlankedByTwoSites"])))
 
-    if restrictionEnzyme3 != None and restrictionEnzyme4 != None:
-        doubleDigestedDnaFragments2 = [fragment for fragments in digestedDNA2 for fragment in fragments]
-        return {"digestedDNA": {
-            "digestedFragments": doubleDigestedDnaFragments,
-            "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme,
-            "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme},
-                "digestedDNA2": {
-            "digestedFragments": doubleDigestedDnaFragments2,
-            "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme2,
-            "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme2}}
-    else:
-        return {"digestedDNA": {
-            "digestedFragments": doubleDigestedDnaFragments,
-            "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme,
-            "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme}}
+            digestedFastaSeq = digestFastaSeq(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
+            countCutsByFirstRestrictionEnzyme += digestedFastaSeq["countCutsByFirstRestrictionEnzyme"]
+            countCutsBySecondRestrictionEnzyme += digestedFastaSeq["countCutsBySecondRestrictionEnzyme"]
+            digestedDNA.append(list(map(len, digestedFastaSeq["fragmentsFlankedByTwoSites"])))
+
+        doubleDigestedDnaFragments = [fragment for fragments in digestedDNA for fragment in fragments]
+
+        if restrictionEnzyme3 != None and restrictionEnzyme4 != None:
+            doubleDigestedDnaFragments2 = [fragment for fragments in digestedDNA2 for fragment in fragments]
+            return {"digestedDNA": {
+                "digestedFragments": doubleDigestedDnaFragments,
+                "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme,
+                "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme},
+                    "digestedDNA2": {
+                "digestedFragments": doubleDigestedDnaFragments2,
+                "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme2,
+                "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme2}}
+        else:
+            return {"digestedDNA": {
+                "digestedFragments": doubleDigestedDnaFragments,
+                "cutByFirstRestrictionEnzyme": countCutsByFirstRestrictionEnzyme,
+                "cutBySecondRestrictionEnzyme": countCutsBySecondRestrictionEnzyme}}
+
+    except Exception:
+        raise Exception("No proper fasta file has been uploaded")
 
 def digestSequence(dnaSequence, restrictionEnzyme):
 

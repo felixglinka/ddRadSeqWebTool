@@ -130,3 +130,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MAX_BINNING_LIMIT = 2000
+MAX_GRAPH_VIEW = 100
+

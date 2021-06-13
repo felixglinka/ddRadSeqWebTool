@@ -25,13 +25,22 @@ def webinterfaceViews(request):
                 readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
                 stringStreamFasta = io.StringIO(readInputFasta)
 
+                selectedMinSize = inputForm.cleaned_data["sizeSelectMin"]
+                selectedMaxSize = inputForm.cleaned_data["sizeSelectMax"]
+
+                if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
+                    raise Exception("Minimum value cannot exceed maximum value")
+
+                if selectedMaxSize != None and selectedMinSize == None or selectedMinSize != None and selectedMaxSize == None :
+                    raise Exception("A minimum and a maximum value needs to be chosen for the size selection")
+
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
-                    context["graph"] = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])])
+                    context["graph"] = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
                 elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
-                    raise Exception
+                    raise Exception("Two restriction enzymes for comparison has to be chosen")
                 else:
                     context["graph"] = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                                       restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])])
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])], selectedMinSize, selectedMaxSize)
 
             except Exception as e:
                 logger.error(e)

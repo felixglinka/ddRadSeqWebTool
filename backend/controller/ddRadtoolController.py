@@ -3,15 +3,15 @@ from backend.service.DigestedDnaComparison import DigestedDnaComparison
 from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
 from backend.service.HandleFastafile import readInFastaAndReturnOnlyFragments
 
-def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2):
+def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, selectedMinSize=None, selectedMaxSize=None):
 
     doubleDigestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2)
     doubleDigestedDna = DigestedDna(doubleDigestedSequencesFromFasta['digestedDNA']["digestedFragments"])
     doubleDigestedDna.setCutSizes(doubleDigestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], doubleDigestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
 
-    return doubleDigestedDna.createLineChart()
+    return doubleDigestedDna.createLineChart({"restrictionEnzyme1": restrictionEnzyme1.name, "restrictionEnzyme2": restrictionEnzyme2.name}, selectedMinSize, selectedMaxSize)
 
-def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4):
+def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4, selectedMinSize=None, selectedMaxSize=None):
 
     digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4)
 
@@ -24,7 +24,8 @@ def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionE
     digestedDnaComparison = DigestedDnaComparison(doubleDigestedDna1, doubleDigestedDna2)
 
     return digestedDnaComparison.createLineChart({"restrictionEnzyme1": restrictionEnzyme1.name, "restrictionEnzyme2": restrictionEnzyme2.name,
-                                                  "restrictionEnzyme3": restrictionEnzyme3.name, "restrictionEnzyme4": restrictionEnzyme4.name})
+                                                  "restrictionEnzyme3": restrictionEnzyme3.name, "restrictionEnzyme4": restrictionEnzyme4.name},
+                                                 selectedMinSize, selectedMaxSize)
 
 def requestRestrictionEnzymes():
 

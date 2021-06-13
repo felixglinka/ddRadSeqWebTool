@@ -1,8 +1,5 @@
 from django import forms
 
-from backend.controller.ddRadtoolController import requestRestrictionEnzymes
-
-
 class BasicInputDDRadDataForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -26,3 +23,6 @@ class BasicInputDDRadDataForm(forms.Form):
 
     restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False)
     restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False)
+
+    sizeSelectMin = forms.IntegerField(label="Minimum Size Selection", required=False)
+    sizeSelectMax = forms.IntegerField(label="Maximum Size Selection", required=False)
