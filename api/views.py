@@ -22,7 +22,7 @@ def webinterfaceViews(request):
         if inputForm.is_valid():
 
             try:
-                readInputFasta = request.FILES['fastaFile'].read().decode('UTF-8')
+                readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
                 stringStreamFasta = io.StringIO(readInputFasta)
 
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
@@ -30,7 +30,7 @@ def webinterfaceViews(request):
                 elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
                     raise Exception
                 else:
-                    context["graph"] = handleDDRadSeqComparisonRequest(readInputFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                    context["graph"] = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                                        restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])])
 
             except Exception as e:
