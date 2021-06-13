@@ -9,9 +9,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2):
     doubleDigestedDna = DigestedDna(doubleDigestedSequencesFromFasta['digestedDNA']["digestedFragments"])
     doubleDigestedDna.setCutSizes(doubleDigestedSequencesFromFasta['digestedDNA']["cutByFirstRestrictionEnzyme"], doubleDigestedSequencesFromFasta['digestedDNA']["cutBySecondRestrictionEnzyme"])
 
-    #doubleDigestedDna.countFragmentInBins()
-
-    return doubleDigestedDna.createHistogrammOfDistribution()
+    return doubleDigestedDna.createLineChart()
 
 def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4):
 

@@ -20,9 +20,12 @@ class DigestedDnaComparison:
     digestedDnaDf = pd.concat([digestedDna1Bins, digestedDna2Bins],axis=1)
 
     plt.figure(figsize=(8, 6), dpi=80)
+    plt.axvspan(300, 500, color='red', alpha=0.5)
     #digestedDnaDf.plot.hist(bins = 20, alpha=0.5)
     #digestedDnaDf.plot.bar(alpha=0.5)
     digestedDnaDf.plot.line()
+    plt.xlabel('Fragment size (bp)')
+    plt.ylabel('Number of digested fragments')
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')

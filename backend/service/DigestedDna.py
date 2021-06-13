@@ -32,10 +32,13 @@ class DigestedDna:
 
     #numbersFragementsInBins.to_csv(os.path.join(STATIC_ROOT,'fragmentLength.csv'))
 
-  def createHistogrammOfDistribution(self):
+  def createLineChart(self, restrictionEnzymeNames):
 
     plt.figure(figsize=(8, 6), dpi=80)
-    plt.hist(self.fragments, color="blue")
+    digestedDnaBins = self.countFragmentInBins()
+    digestedDnaBins = digestedDnaBins.rename(columns={'fragmentLengths': restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames["restrictionEnzyme2"]}, inplace=False)
+    digestedDnaBins.plot.line()
+    plt.axvspan(300, 500, color='red', alpha=0.5)
     #plt.xlim(0, max(lengthsOfFragments) + 10 if len(self.fragments) != 0 else 1)
     #plt.ylim(0, 0.4 * len(lengthsOfFragments) if len(self.fragments) != 0 else 1)
     plt.xlabel('Fragment size (bp)')

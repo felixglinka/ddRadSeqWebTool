@@ -26,5 +26,3 @@ class BasicInputDDRadDataForm(forms.Form):
 
     restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False)
     restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False)
-
-

@@ -53,14 +53,14 @@ def digestSequence(dnaSequence, restrictionEnzyme):
 
 def doubleDigestDnaFragments(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme):
 
-    digestedDnaFragmentsBySecondCutter = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
-    cutBySecondRestrictionEnzyme = len(digestedDnaFragmentsBySecondCutter) - len(digestedDnaFragments)
+    doubleDigestedDnaFragments = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
+    cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
     fragmentsFlankedByTwoSites = list(filter(
         lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
             secondRestrictionEnzyme.cutSite5end)
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
-            firstRestrictionEnzyme.cutSite5end), digestedDnaFragmentsBySecondCutter))
+            firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments))
 
     return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
 
