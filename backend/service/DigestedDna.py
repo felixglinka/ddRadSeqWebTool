@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import os
-from backend.settings import MAX_GRAPH_VIEW, MAX_BINNING_LIMIT
-
+from backend.settings import MAX_GRAPH_VIEW, MAX_BINNING_LIMIT, BINNING_STEPS
 
 class DigestedDna:
 
@@ -21,11 +19,12 @@ class DigestedDna:
 
   def countFragmentInBins(self):
 
+    ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), np.inf)
+
     if(len(self.fragments) == 0):
-      return ""
+      return pd.DataFrame(index=ranges, columns=['fragmentLengths'])
 
     dfOfFragmentLength = pd.DataFrame({"fragmentLengths": self.fragments})
-    ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+10, 10), np.inf)
     numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()
 
     return numbersFragementsInBins
@@ -49,7 +48,10 @@ class DigestedDna:
                labels=['0-10', '200-210', '400-410', '600-610', '800-810', '1000-1010'])
     plt.legend(bbox_to_anchor=(1.04, 1), loc='upper left')
 
-    if selectedMinSize != None and selectedMaxSize != None:
+    if selectedMinSize != None and selectedMaxSize != None and self.fragments != []:
+
+      if selectedMinSize > 1000:
+        selectedMinSize = 1000
 
       if selectedMaxSize > 1000:
         selectedMaxSize = 1000
@@ -57,7 +59,11 @@ class DigestedDna:
       if selectedMinSize < 0:
         selectedMinSize = 0
 
-      plt.text(MAX_GRAPH_VIEW + 12.5, 0.85*digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
+      if selectedMaxSize < 0:
+        selectedMaxSize = 0
+
+      plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
+               'Numbers of fragments \nwith a size of ' + str(selectedMinSize) + ' to ' + str(selectedMaxSize) + ' bp\n' +
                restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames[
                  "restrictionEnzyme2"] + ': ' + str(
                  self.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)),

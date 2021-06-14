@@ -22,11 +22,14 @@ def webinterfaceViews(request):
         if inputForm.is_valid():
 
             try:
-                readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
-                stringStreamFasta = io.StringIO(readInputFasta)
+                try:
+                    readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
+                    stringStreamFasta = io.StringIO(readInputFasta)
+                except UnicodeDecodeError:
+                    raise Exception('No proper fasta file has been uploaded')
 
-                selectedMinSize = inputForm.cleaned_data["sizeSelectMin"]
-                selectedMaxSize = inputForm.cleaned_data["sizeSelectMax"]
+                selectedMinSize = int(inputForm.cleaned_data["sizeSelectMin"])
+                selectedMaxSize = int(inputForm.cleaned_data["sizeSelectMax"])
 
                 if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
                     raise Exception("Minimum value cannot exceed maximum value")

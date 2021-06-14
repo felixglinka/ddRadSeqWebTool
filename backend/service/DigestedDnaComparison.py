@@ -32,7 +32,11 @@ class DigestedDnaComparison:
                labels=['0-10', '200-210', '400-410', '600-610', '800-810', '1000-1010'])
     plt.legend(bbox_to_anchor=(1.04, 1), loc='upper left')
 
-    if selectedMinSize !=None and selectedMaxSize != None:
+    if selectedMinSize !=None and selectedMaxSize != None \
+            and self.digestedDna2.fragments != [] and self.digestedDna1.fragments != []:
+
+      if selectedMinSize > 1000:
+        selectedMinSize = 1000
 
       if selectedMaxSize > 1000:
         selectedMaxSize = 1000
@@ -40,7 +44,11 @@ class DigestedDnaComparison:
       if selectedMinSize < 0:
         selectedMinSize = 0
 
-      plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*digestedDnaDf.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
+      if selectedMaxSize < 0:
+        selectedMaxSize = 0
+
+      plt.text(MAX_GRAPH_VIEW + 12.5, 0.65*digestedDnaDf.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
+               'Numbers of fragments \nwith a size of ' + str(selectedMinSize) + ' to ' + str(selectedMaxSize) + ' bp\n' +
                restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames[
                  "restrictionEnzyme2"] + ': ' + str(
                  self.digestedDna1.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)) + '\n' +
