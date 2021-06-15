@@ -51,17 +51,10 @@ class DigestedDna:
 
     if selectedMinSize != None and selectedMaxSize != None and self.fragments != []:
 
-      if selectedMinSize > MAX_GRAPH_RANGE:
-        selectedMinSize = MAX_GRAPH_RANGE + BINNING_STEPS
-
-      if selectedMaxSize > MAX_GRAPH_RANGE:
-        selectedMaxSize = MAX_GRAPH_RANGE + BINNING_STEPS
-
-      if selectedMinSize < 0:
-        selectedMinSize = 0
-
-      if selectedMaxSize < 0:
-        selectedMaxSize = 0
+      if selectedMinSize > MAX_GRAPH_RANGE: selectedMinSize = MAX_GRAPH_RANGE + BINNING_STEPS
+      if selectedMaxSize > MAX_GRAPH_RANGE: selectedMaxSize = MAX_GRAPH_RANGE + BINNING_STEPS
+      if selectedMinSize < 0: selectedMinSize = 0
+      if selectedMaxSize < 0: selectedMaxSize = 0
 
       plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
                'Numbers of fragments \nwith a size of ' + str(selectedMinSize) + ' to ' + str(selectedMaxSize) + ' bp\n' +
