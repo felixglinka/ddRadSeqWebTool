@@ -57,7 +57,7 @@ class DigestedDnaComparison:
                  self.digestedDna2.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)),
                bbox={'facecolor': 'khaki', 'alpha': 0.25})
 
-      plt.axvspan(round(selectedMinSize/10), round(selectedMaxSize/10), color='khaki', alpha=0.5)
+      plt.axvspan(selectedMinSize/10 - ((selectedMinSize/10)%10), selectedMaxSize/10 - ((selectedMaxSize/10)%10), color='khaki', alpha=0.5)
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png',bbox_inches='tight')
