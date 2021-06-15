@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW
+from backend.settings import MAX_GRAPH_VIEW, MAX_GRAPH_RANGE, BINNING_STEPS
 
 
 class DigestedDnaComparison:
@@ -35,11 +35,11 @@ class DigestedDnaComparison:
     if selectedMinSize !=None and selectedMaxSize != None \
             and self.digestedDna2.fragments != [] and self.digestedDna1.fragments != []:
 
-      if selectedMinSize > 1000:
-        selectedMinSize = 1000
+      if selectedMinSize > MAX_GRAPH_RANGE:
+        selectedMinSize = MAX_GRAPH_RANGE+BINNING_STEPS
 
-      if selectedMaxSize > 1000:
-        selectedMaxSize = 1000
+      if selectedMaxSize > MAX_GRAPH_RANGE:
+        selectedMaxSize = MAX_GRAPH_RANGE+BINNING_STEPS
 
       if selectedMinSize < 0:
         selectedMinSize = 0
@@ -57,8 +57,8 @@ class DigestedDnaComparison:
                  self.digestedDna2.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)),
                bbox={'facecolor': 'khaki', 'alpha': 0.25})
 
-      plt.axvspan(((selectedMinSize-1) - ((selectedMinSize-1)%10))/10 if selectedMinSize > 0 else 0,
-                  ((selectedMaxSize-1) - ((selectedMaxSize-1)%10))/10 if selectedMaxSize > 0 else 0,
+      plt.axvspan(((selectedMinSize-1) - ((selectedMinSize-1)%BINNING_STEPS))/10 if selectedMinSize > 0 else 0,
+                  ((selectedMaxSize-1) - ((selectedMaxSize-1)%BINNING_STEPS))/10 if selectedMaxSize > 0 else 0,
                   color='khaki', alpha=0.5)
 
     buffer = io.BytesIO()
