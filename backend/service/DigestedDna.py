@@ -46,7 +46,7 @@ class DigestedDna:
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')
     plt.xticks(np.arange(0, MAX_GRAPH_VIEW + 20, step=20),
-               labels=['0-10', '200-210', '400-410', '600-610', '800-810', '1000-1010'])
+               labels=['(0-10]', '(200-210]', '(400-410]', '(600-610]', '(800-810]', '(1000-1010]'])
     plt.legend(bbox_to_anchor=(1.04, 1), loc='upper left')
 
     if selectedMinSize != None and selectedMaxSize != None and self.fragments != []:
