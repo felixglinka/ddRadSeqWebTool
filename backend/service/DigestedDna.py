@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, MAX_BINNING_LIMIT, BINNING_STEPS
+from backend.settings import MAX_GRAPH_VIEW, MAX_BINNING_LIMIT, BINNING_STEPS, MAX_GRAPH_RANGE
+
 
 class DigestedDna:
 
@@ -50,11 +51,11 @@ class DigestedDna:
 
     if selectedMinSize != None and selectedMaxSize != None and self.fragments != []:
 
-      if selectedMinSize > 1000:
-        selectedMinSize = 1000
+      if selectedMinSize > MAX_GRAPH_RANGE:
+        selectedMinSize = MAX_GRAPH_RANGE + BINNING_STEPS
 
-      if selectedMaxSize > 1000:
-        selectedMaxSize = 1000
+      if selectedMaxSize > MAX_GRAPH_RANGE:
+        selectedMaxSize = MAX_GRAPH_RANGE + BINNING_STEPS
 
       if selectedMinSize < 0:
         selectedMinSize = 0
@@ -69,7 +70,9 @@ class DigestedDna:
                  self.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)),
                bbox={'facecolor': 'khaki', 'alpha': 0.25})
 
-      plt.axvspan(round(selectedMinSize / 10), round(selectedMaxSize / 10), color='khaki', alpha=0.5)
+      plt.axvspan(((selectedMinSize - 1) - ((selectedMinSize - 1) % BINNING_STEPS)) / 10 if selectedMinSize > 0 else 0,
+                  ((selectedMaxSize - 1) - ((selectedMaxSize - 1) % BINNING_STEPS)) / 10 if selectedMaxSize > 0 else 0,
+                  color='khaki', alpha=0.5)
 
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png',bbox_inches='tight')
