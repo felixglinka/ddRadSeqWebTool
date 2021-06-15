@@ -28,14 +28,18 @@ def webinterfaceViews(request):
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
-                selectedMinSize = int(inputForm.cleaned_data["sizeSelectMin"])
-                selectedMaxSize = int(inputForm.cleaned_data["sizeSelectMax"])
-
-                if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
-                    raise Exception("Minimum value cannot exceed maximum value")
-
-                if selectedMaxSize != None and selectedMinSize == None or selectedMinSize != None and selectedMaxSize == None :
+                if inputForm.cleaned_data["sizeSelectMax"] != "" and inputForm.cleaned_data["sizeSelectMin"] == "" or inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMax"] == "" :
                     raise Exception("A minimum and a maximum value needs to be chosen for the size selection")
+
+                selectedMinSize = None
+                selectedMaxSize = None
+
+                if inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMin"] != "":
+                    selectedMinSize = int(inputForm.cleaned_data["sizeSelectMin"])
+                    selectedMaxSize = int(inputForm.cleaned_data["sizeSelectMax"])
+
+                    if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
+                        raise Exception("Minimum value cannot exceed maximum value")
 
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
                     context["graph"] = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
