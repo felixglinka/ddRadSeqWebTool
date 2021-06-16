@@ -6,6 +6,11 @@ class BasicInputDDRadDataForm(forms.Form):
         self.restrictionEnzymes = kwargs.pop('restrictionEnzymes')
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control text-center'
+            visible.field.widget.attrs['placeholder'] = '.col-md-8'
+            visible.field.widget.attrs['style'] = "width:auto;"
+
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
         self.fields['restrictionEnzyme2'].choices = restrictionEnzymesChoices
@@ -19,6 +24,7 @@ class BasicInputDDRadDataForm(forms.Form):
 
         self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'autocomplete': 'off'})
         self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'autocomplete': 'off'})
+
 
     fastaFile = forms.FileField(label="")
     restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1")
