@@ -27,32 +27,48 @@
         </div>
         <div class="row justify-content-center form-group">
             <div class="form-inline right20">
-                <label class="right4"> <b>{{ form.restrictionEnzyme1.label_tag }}</b> </label>
+                <label class="right4"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
                 {{ form.restrictionEnzyme1 }}
             </div>
             <div class="form-inline">
-                <label class="right4"><b>{{ form.restrictionEnzyme2.label_tag }}</b> </label>
+                <label class="right4"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
                 {{ form.restrictionEnzyme2 }}
             </div>
         </div>
         <div class="row justify-content-center form-group">
             <div class="form-inline right20">
-                <label class="right4"> <b>{{ form.restrictionEnzyme3.label_tag }}</b> </label>
-                {{ form.restrictionEnzyme3 }}
+                <label class="bottom15 right4"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.restrictionEnzyme3 }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
             </div>
             <div class="form-inline">
-                <label class="right4"> <b>{{ form.restrictionEnzyme4.label_tag }}</b> </label>
-                {{ form.restrictionEnzyme4 }}
+                <label class="bottom15 right4"> <b>{{ form.restrictionEnzyme4.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.restrictionEnzyme4 }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
             </div>
         </div>
         <div class="row justify-content-center form-group">
             <div class="form-inline right20">
-                <label class="right4"> <b>{{ form.sizeSelectMin.label_tag }}</b> </label>
-                {{ form.sizeSelectMin }}
+                <label class="bottom15 right4"> <b>{{ form.sizeSelectMin.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.sizeSelectMin }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
             </div>
             <div class="form-inline">
-                <label class="right4"> <b>{{ form.sizeSelectMax.label_tag }}</b> </label>
-                {{ form.sizeSelectMax }}
+                <label class="bottom15 right4"> <b>{{ form.sizeSelectMax.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.sizeSelectMax }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
             </div>
         </div>
         <div class="row justify-content-center form-group">
