@@ -6,8 +6,8 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/webinterfaceStyle.css' %}">
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
     {% if messages %}
@@ -18,32 +18,40 @@
 
     <h1>Insert cool name</h1>
     <div></div>
-    <form class="col-lg-6 offset-lg-3" action='.' method="POST" enctype="multipart/form-data" >
+    <form class="container" action='.' method="POST" enctype="multipart/form-data" >
         {% csrf_token %}
-        <div class="row justify-content-center form-group">
-            <label> {{ form.fastaFile.label_tag }} </label> {{ form.fastaFile }}
+        <div class="row justify-content-center form-group ">
+            <div id="customFile" class="custom-file">
+                {{ form.fastaFile }} <label class="custom-file-label" for="{{ form.fastaFile.id_for_label }}"> Choose fasta file </label>
+            </div>
         </div>
         <div class="row justify-content-center form-group">
-            <div class="form-inline"> <label> <b>{{ form.restrictionEnzyme1.label_tag }}</b> </label>
-                        {{ form.restrictionEnzyme1 }}
+            <div class="form-inline right20">
+                <label class="right4"> <b>{{ form.restrictionEnzyme1.label_tag }}</b> </label>
+                {{ form.restrictionEnzyme1 }}
             </div>
-            <div class="form-inline"> <label> <b>{{ form.restrictionEnzyme2.label_tag }}</b> </label>
+            <div class="form-inline">
+                <label class="right4"><b>{{ form.restrictionEnzyme2.label_tag }}</b> </label>
                 {{ form.restrictionEnzyme2 }}
             </div>
         </div>
         <div class="row justify-content-center form-group">
-            <div class="form-inline"> <label> <b>{{ form.restrictionEnzyme3.label_tag }}</b> </label>
+            <div class="form-inline right20">
+                <label class="right4"> <b>{{ form.restrictionEnzyme3.label_tag }}</b> </label>
                 {{ form.restrictionEnzyme3 }}
             </div>
-            <div class="form-inline"> <label> <b>{{ form.restrictionEnzyme4.label_tag }}</b> </label>
+            <div class="form-inline">
+                <label class="right4"> <b>{{ form.restrictionEnzyme4.label_tag }}</b> </label>
                 {{ form.restrictionEnzyme4 }}
             </div>
         </div>
         <div class="row justify-content-center form-group">
-            <div class="form-inline"> <label> <b>{{ form.sizeSelectMin.label_tag }}</b> </label>
+            <div class="form-inline right20">
+                <label class="right4"> <b>{{ form.sizeSelectMin.label_tag }}</b> </label>
                 {{ form.sizeSelectMin }}
             </div>
-            <div class="form-inline"> <label> <b>{{ form.sizeSelectMax.label_tag }}</b> </label>
+            <div class="form-inline">
+                <label class="right4"> <b>{{ form.sizeSelectMax.label_tag }}</b> </label>
                 {{ form.sizeSelectMax }}
             </div>
         </div>
@@ -54,7 +62,7 @@
 
     {% if graph %}
     <div id="graph">
-        <img  class="center" src="{{ graph }}" width="900" height="500">
+        <img  class="center" src="{{ graph }}" width="900" height="{{ graphHeight }}">
     </div>
   {% endif %}
 

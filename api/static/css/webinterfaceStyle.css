@@ -2,6 +2,14 @@ h1 {
   text-align: center;
 }
 
+.right4{
+  margin-right:4px;
+}
+
+.right20 {
+  margin-right:20px;
+}
+
 .center {
   display: block;
   margin-left: auto;
@@ -9,6 +17,10 @@ h1 {
   width: 50%;
 }
 
-.form-inline .form-group {
-  margin-right:4px;
+select {
+    text-align-last: center;
+}
+
+#customFile {
+    width: 56%;
 }

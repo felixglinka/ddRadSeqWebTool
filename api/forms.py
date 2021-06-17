@@ -7,9 +7,10 @@ class BasicInputDDRadDataForm(forms.Form):
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control text-center'
-            visible.field.widget.attrs['placeholder'] = '.col-md-8'
+            visible.field.widget.attrs['class'] = 'form-control'
             visible.field.widget.attrs['style'] = "width:auto;"
+
+        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'class': 'custom-file-input', 'id': 'fastaFileUpload'})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
@@ -22,11 +23,11 @@ class BasicInputDDRadDataForm(forms.Form):
         self.initial['restrictionEnzyme3'] = ''
         self.initial['restrictionEnzyme4'] = ''
 
-        self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'autocomplete': 'off'})
-        self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'autocomplete': 'off'})
+        self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
 
-    fastaFile = forms.FileField(label="")
+    fastaFile = forms.FileField()
     restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1")
     restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2")
 

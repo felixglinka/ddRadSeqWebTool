@@ -15,6 +15,16 @@ function setInputFilter(textbox, inputFilter) {
   });
 }
 
+function changeNameOfFileInputField() {
+
+    document.getElementById("fastaFileUpload").addEventListener('change', function(e){
+            let fileName = e.target.files[0].name;
+            console.log(fileName)
+            document.getElementsByClassName('custom-file-label')[0].innerHTML = fileName;
+        });
+
+}
+
 window.onload = function(e){
 
   setInputFilter(document.getElementById("id_sizeSelectMin"), function(value) {
@@ -24,4 +34,6 @@ window.onload = function(e){
   setInputFilter(document.getElementById("id_sizeSelectMax"), function(value) {
     return /^\d*$/.test(value);
   });
+
+  changeNameOfFileInputField()
 }

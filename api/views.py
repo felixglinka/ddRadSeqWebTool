@@ -33,10 +33,12 @@ def webinterfaceViews(request):
 
                 selectedMinSize = None
                 selectedMaxSize = None
+                context["graphHeight"] = "500"
 
                 if inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMin"] != "":
                     selectedMinSize = int(inputForm.cleaned_data["sizeSelectMin"])
                     selectedMaxSize = int(inputForm.cleaned_data["sizeSelectMax"])
+                    context["graphHeight"] = "450"
 
                     if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
                         raise Exception("Minimum value cannot exceed maximum value")
@@ -48,6 +50,8 @@ def webinterfaceViews(request):
                 else:
                     context["graph"] = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                                        restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])], selectedMinSize, selectedMaxSize)
+
+
 
             except Exception as e:
                 logger.error(e)
