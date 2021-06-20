@@ -44,13 +44,17 @@ def webinterfaceViews(request):
                         raise Exception("Minimum value cannot exceed maximum value")
 
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
-                    context["graph"] = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
+                    ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
+                    context["graph"] = ddRadSeqresult['graph']
+                    context["dataFrame"] = ddRadSeqresult['dataFrame']
                 elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
                     raise Exception("Two restriction enzymes for comparison has to be chosen")
                 else:
-                    context["graph"] = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                    ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                                        restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])], selectedMinSize, selectedMaxSize)
-
+                    context["graph"] = ddRadSeqComparisonResult['graph']
+                    context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
+                    context["dataFrame2"] = ddRadSeqComparisonResult['dataFrame2']
 
 
             except Exception as e:

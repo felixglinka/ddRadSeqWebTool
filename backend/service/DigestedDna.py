@@ -18,17 +18,26 @@ class DigestedDna:
     self.cutByFirstRestrictionEnzyme = numberFragmentsCutByFirstRestrictionEnzyme
     self.cutBySecondRestrictionEnzyme = numberFragmentsCutBySecondRestrictionEnzyme
 
-  def countFragmentInBins(self):
+  def calculateIlluminaValues(self, restrictionEnzymeNames):
 
-    ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), np.inf)
+    ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
     if(len(self.fragments) == 0):
       return pd.DataFrame(index=ranges, columns=['fragmentLengths'])
 
-    dfOfFragmentLength = pd.DataFrame({"fragmentLengths": self.fragments})
-    numbersFragementsInBins = dfOfFragmentLength.groupby(pd.cut(dfOfFragmentLength.fragmentLengths, ranges)).count()
+    dfOfDDRadCalculation = pd.DataFrame({restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]: self.fragments})
+    dfOfDDRadCalculation = dfOfDDRadCalculation.groupby(pd.cut(dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]], ranges)).count()
 
-    return numbersFragementsInBins
+    multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
+    multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > 300] = 300
+    dfOfDDRadCalculation['numberSequencedBasesOfBin'] = dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
+    dfOfDDRadCalculation['sumAllBasesOfEveryBin'] = [dfOfDDRadCalculation['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
+    dfOfDDRadCalculation['sumAllFragmentsLengthsOfEveryBin'] = [dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]
+    dfOfDDRadCalculation['sequencingDepthOfBin'] = (500000000 / dfOfDDRadCalculation['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, 500000000)
+    dfOfDDRadCalculation['maxNumberOfSamplesToSequence'] = dfOfDDRadCalculation['sequencingDepthOfBin']/20
+    dfOfDDRadCalculation['numberBasesToBeSequenced'] = dfOfDDRadCalculation['sumAllBasesOfEveryBin'] * dfOfDDRadCalculation['maxNumberOfSamplesToSequence']
+
+    return dfOfDDRadCalculation
 
   def countFragmentsInGivenRange(self, selectedMinSize, selectedMaxSize):
 
@@ -37,11 +46,9 @@ class DigestedDna:
 
     return len(list(filter(lambda fragmentLength: fragmentLength >= selectedMinSize and fragmentLength <= selectedMaxSize, self.fragments)))
 
-  def createLineChart(self, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
+  def createLineChart(self, digestedDnaBins, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
 
-    digestedDnaBins = self.countFragmentInBins()
-    digestedDnaBins = digestedDnaBins.rename(columns={'fragmentLengths': restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames["restrictionEnzyme2"]}, inplace=False)
-    digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].plot.line()
+    digestedDnaBins.plot.line()
 
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')
@@ -58,8 +65,8 @@ class DigestedDna:
 
       plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
                'Numbers of fragments \nwith a size of ' + str(selectedMinSize) + ' to ' + str(selectedMaxSize) + ' bp\n' +
-               restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames[
-                 "restrictionEnzyme2"] + ': ' + str(
+               restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames[
+                 "secondRestrictionEnzyme"] + ': ' + str(
                  self.countFragmentsInGivenRange(selectedMinSize, selectedMaxSize)),
                bbox={'facecolor': 'khaki', 'alpha': 0.25})
 

@@ -19,7 +19,6 @@ function changeNameOfFileInputField() {
 
     document.getElementById("fastaFileUpload").addEventListener('change', function(e){
             let fileName = e.target.files[0].name;
-            console.log(fileName)
             document.getElementsByClassName('custom-file-label')[0].innerHTML = fileName;
         });
 

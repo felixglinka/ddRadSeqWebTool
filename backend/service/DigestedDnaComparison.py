@@ -12,19 +12,11 @@ class DigestedDnaComparison:
     self.digestedDna1 = DigestedDna1
     self.digestedDna2 = DigestedDna2
 
-  def createLineChart(self, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
-
-    digestedDna1Bins = self.digestedDna1.countFragmentInBins()
-    digestedDna1Bins = digestedDna1Bins.rename(columns={'fragmentLengths': restrictionEnzymeNames["restrictionEnzyme1"] + "+" + restrictionEnzymeNames["restrictionEnzyme2"]}, inplace=False)
-
-    digestedDna2Bins = self.digestedDna2.countFragmentInBins()
-    digestedDna2Bins = digestedDna2Bins.rename(columns={'fragmentLengths': restrictionEnzymeNames["restrictionEnzyme3"] + "+" + restrictionEnzymeNames["restrictionEnzyme4"]}, inplace=False)
+  def createLineChart(self, digestedDna1Bins, digestedDna2Bins, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
 
     digestedDnaDf = pd.concat([digestedDna1Bins, digestedDna2Bins],axis=1)
 
-    # digestedDnaDf.plot.hist(bins = 20, alpha=0.5)
-    # digestedDnaDf.plot.bar(alpha=0.5)
-    digestedDnaDf.iloc[0:MAX_GRAPH_VIEW+1,].plot.line()
+    digestedDnaDf.plot.line()
 
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')
