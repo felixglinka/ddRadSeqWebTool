@@ -101,7 +101,7 @@ function generateSlider(inputElement, tableId, idSliderOne, idSliderTwo, dataFra
     let resultTable = document.getElementById(tableId)
 
     fillSlider(firstSlider, secondSlider, '30', idSliderOne, slideOne, resultTable, dataFrame)
-    fillSlider(secondSlider, firstSlider, '70', idSliderTwo, slideTwo, resultTable, dataFrame)
+    fillSlider(secondSlider, firstSlider, '80', idSliderTwo, slideTwo, resultTable, dataFrame)
 
     sliderTrack.appendChild(firstSlider);
     sliderTrack.appendChild(secondSlider);
