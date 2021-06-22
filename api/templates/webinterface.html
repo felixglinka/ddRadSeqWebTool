@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/webinterfaceStyle.css' %}">
     <script type="text/javascript">
-        const dataFrameData = {{ dataFrame|safe }};
+        {% if dataFrame %}
+            const dataFrameData = {{ dataFrame|safe }};
+            const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
+        {% endif %}
 
+        {% if dataFrame1 and dataFrame2 %}
+            const dataFrame1Data = {{ dataFrame1|safe }};
+            const dataFrame2Data = {{ dataFrame2|safe }};
+            const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
+            const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
+        {% endif %}
     </script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
@@ -26,7 +35,7 @@
     <form class="container" action='.' method="POST" enctype="multipart/form-data" >
         {% csrf_token %}
         <div class="row justify-content-center form-group ">
-            <div id="customFile" class="custom-file">
+            <div id="customFile" class="custom-file" style="width: 55%;">
                 {{ form.fastaFile }} <label class="custom-file-label" for="{{ form.fastaFile.id_for_label }}"> Choose fasta file </label>
             </div>
         </div>
@@ -88,12 +97,18 @@
   {% endif %}
 
    {% if dataFrame %}
-    <div class="center" id="dataFrame">
-        <output id="output"></output>
-        <br>
-        <input type="range" min="0" max="100" step="1" value="30" id="dataFrameSlider" onchange="updateInput(this.value);" oninput="updateInput(this.value);">
-    </div>
+    <div id="dataFrame" class="center"></div>
+    <div style="padding-top: 30px;"></div>
+
   {% endif %}
 
+    {% if dataFrame1 and dataFrame2 %}
+        <div>
+            <div id="dataFrame1" class="left"></div>
+            <div id="dataFrame2" class="right"></div>
+        </div>
+        <div style="padding-top: 30px;"></div>
+
+  {% endif %}
 </body>
 </html>

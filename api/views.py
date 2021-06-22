@@ -47,6 +47,7 @@ def webinterfaceViews(request):
                     ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
                     context["graph"] = ddRadSeqresult['graph']
                     context["dataFrame"] = ddRadSeqresult['dataFrame']
+                    context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
                 elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
                     raise Exception("Two restriction enzymes for comparison has to be chosen")
                 else:
@@ -55,7 +56,8 @@ def webinterfaceViews(request):
                     context["graph"] = ddRadSeqComparisonResult['graph']
                     context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
                     context["dataFrame2"] = ddRadSeqComparisonResult['dataFrame2']
-
+                    context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
+                    context["secondChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])].name
 
             except Exception as e:
                 logger.error(e)

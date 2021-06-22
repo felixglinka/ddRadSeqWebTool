@@ -24,7 +24,7 @@ function changeNameOfFileInputField() {
 
 }
 
-window.onload = function(e){
+function initForm(e){
 
   setInputFilter(document.getElementById("id_sizeSelectMin"), function(value) {
     return /^\d*$/.test(value);
@@ -36,3 +36,5 @@ window.onload = function(e){
 
   changeNameOfFileInputField()
 }
+
+window.addEventListener('load', initForm)

@@ -23,7 +23,7 @@ class DigestedDna:
     ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
     if(len(self.fragments) == 0):
-      return pd.DataFrame(index=ranges, columns=['fragmentLengths'])
+      return pd.DataFrame(index=ranges, columns=[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]])
 
     dfOfDDRadCalculation = pd.DataFrame({restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]: self.fragments})
     dfOfDDRadCalculation = dfOfDDRadCalculation.groupby(pd.cut(dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]], ranges)).count()

@@ -2,6 +2,11 @@ h1 {
   text-align: center;
 }
 
+caption {
+    caption-side: top;
+    text-align: center;
+}
+
 .bottom15{
    padding-bottom: 1.5rem;
 }
@@ -21,10 +26,96 @@ h1 {
   width: 50%;
 }
 
-select {
-    text-align-last: center;
+.left {
+    float:left;
+    width:50%;
 }
 
-#customFile {
-    width: 56%;
+.right {
+    float:right;
+    width:50%;
+}
+
+.left .table{
+    margin-left: 15px;
+}
+
+.right .table{
+    margin-right: 15px;
+}
+
+.slider-track{
+    height: 5px;
+    margin: auto;
+    border-radius: 5px;
+    margin-top: 30px;
+    width: 50%;
+    background: linear-gradient(to right, #ff0000 0%, #ffff00 25%, #00ff00 35%, #00ff00 45%, #ffff00 100%);
+}
+
+input[type='range']{
+    --webkit-appearance: none;
+    --moz-appearance: none;
+    appearance: none;
+    outline: none;
+    position: absolute;
+    margin: auto;
+    background-color: transparent;
+    cursor: pointer;
+    pointer-events: none;
+    width: 25%;
+    margin-top: -7px;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    --webkit-appearance: none;
+    height: 5px;
+}
+
+input[type='range']::-moz-range-track{
+    --moz-appearance: none;
+    height: 5px;
+}
+
+input[type='range']::-ms-track{
+    appearance: none;
+    height: 5px;
+}
+
+input[type='range']::-webkit-slider-thumb{
+    --webkit-appearance: none;
+    height: 1.7em;
+    width: 1.7em;
+    background-color: #3264fe;
+    cursor: pointer;
+    border-radius: 10px;
+    pointer-events: auto;
+    margin-top: 2px;
+}
+
+input[type='range']::-moz-range-thumb{
+    border: 0;
+    height: 1.0em;
+    width: 1.0em;
+    margin-bottom: 25px;
+    background-color: #3264fe;
+    border-radius: 10px;
+    pointer-events: auto;
+}
+
+input[type='range']::-ms-thumb{
+    --webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    height: 1.7em;
+    width: 1.7em;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #3264fe;
+    pointer-events: auto;
+}
+
+input[type='range']:active::-webkit-slider-thumb{
+    background-color: #ffffff;
+    border: 3px solid #3264fe;
 }

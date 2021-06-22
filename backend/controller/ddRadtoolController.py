@@ -15,7 +15,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, se
 
     return {
         'graph': doubleDigestedDna.createLineChart(digestedDnaBins[[restrictionEnzyme1.name + '+' + restrictionEnzyme2.name]], restrictionEnzymeNames, selectedMinSize, selectedMaxSize),
-        'dataFrame': digestedDnaBins.iloc[:,2:].to_json()
+        'dataFrame': digestedDnaBins.iloc[:,2:].round().to_json()
     }
 
 
@@ -38,8 +38,8 @@ def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionE
                                                  {"restrictionEnzyme1": restrictionEnzyme1.name, "restrictionEnzyme2": restrictionEnzyme2.name,
                                                   "restrictionEnzyme3": restrictionEnzyme3.name, "restrictionEnzyme4": restrictionEnzyme4.name},
                                                  selectedMinSize, selectedMaxSize),
-        'dataFrame1': digestedDna1Bins.iloc[:,2:].to_json(),
-        'dataFrame2': digestedDna2Bins.iloc[:,2:].to_json()
+        'dataFrame1': digestedDna1Bins.iloc[:,2:].round().to_json(),
+        'dataFrame2': digestedDna2Bins.iloc[:,2:].round().to_json()
     }
 
 
