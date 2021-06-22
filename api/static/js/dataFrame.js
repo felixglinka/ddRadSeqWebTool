@@ -116,6 +116,7 @@ function fillSlider(selfSlider, otherSlider, startingValue, id, inputFunction, r
     selfSlider.value = startingValue;
     selfSlider.id = id;
     selfSlider.addEventListener('input', function() {inputFunction(selfSlider, otherSlider, resultTable, dataFrame)}, true);
+    selfSlider.addEventListener('change', function() {inputFunction(selfSlider, otherSlider, resultTable, dataFrame)}, true);
 }
 
 function buildUpDataFrame(inputElement, tableId, restrictionEnzymes, idSliderOne, idSliderTwo, dataFrame) {
