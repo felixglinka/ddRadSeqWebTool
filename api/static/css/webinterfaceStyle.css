@@ -26,22 +26,15 @@ caption {
   width: 50%;
 }
 
-.left {
-    float:left;
-    width:50%;
+.dataFrames {
+  width: 100%;
+  display: table;
+  border-spacing: 10px;
 }
 
-.right {
-    float:right;
-    width:50%;
-}
-
-.left .table{
-    margin-left: 15px;
-}
-
-.right .table{
-    margin-right: 15px;
+.left, .right {
+  display: table-cell;
+  width: 50%;
 }
 
 .slider-track{
