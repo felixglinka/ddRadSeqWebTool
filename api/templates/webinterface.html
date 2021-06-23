@@ -40,7 +40,7 @@
         {% csrf_token %}
         <div class="row justify-content-center form-group ">
             <div id="customFile" class="custom-file" style="width: 55%;">
-                {{ form.fastaFile }} <label class="custom-file-label" for="{{ form.fastaFile.id_for_label }}"> Choose fasta file </label>
+                {{ form.fastaFile }} <label id="file-upload-label" class="custom-file-label" for="{{ form.fastaFile.id_for_label }}"> Choose fasta file </label>
             </div>
         </div>
         <div class="row justify-content-center form-group">

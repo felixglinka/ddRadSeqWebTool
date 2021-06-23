@@ -19,7 +19,7 @@ function changeNameOfFileInputField() {
 
     document.getElementById("fastaFileUpload").addEventListener('change', function(e){
             let fileName = e.target.files[0].name;
-            document.getElementById('fastaFileUpload').innerHTML = fileName;
+            document.getElementById('file-upload-label').innerHTML = fileName;
         });
 
 }
