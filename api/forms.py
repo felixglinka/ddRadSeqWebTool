@@ -26,6 +26,9 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
+        self.fields['illuminaLimit'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+
 
     fastaFile = forms.FileField()
     restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1")
@@ -36,3 +39,6 @@ class BasicInputDDRadDataForm(forms.Form):
 
     sizeSelectMin = forms.CharField(label="Minimum Size Selection", required=False)
     sizeSelectMax = forms.CharField(label="Maximum Size Selection", required=False)
+
+    illuminaLimit = forms.CharField(label="Illumina Limit", required=False)
+    coverage = forms.CharField(label="Coverage", required=False)

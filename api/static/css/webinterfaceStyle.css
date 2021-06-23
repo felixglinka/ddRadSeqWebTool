@@ -1,13 +1,18 @@
-h1 {
+h1, h6 {
   text-align: center;
+}
+
+h6 {
+  font-weight: bold;
 }
 
 caption {
     caption-side: top;
     text-align: center;
+    font-weight: bold;
 }
 
-.bottom15{
+.bottom15, h6{
    padding-bottom: 1.5rem;
 }
 
@@ -35,6 +40,10 @@ caption {
 .left, .right {
   display: table-cell;
   width: 50%;
+}
+
+.left .table, .right .table {
+  margin: auto;
 }
 
 .slider-track{

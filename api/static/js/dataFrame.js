@@ -57,12 +57,21 @@ function updateSliderTwoResult(sliderOneValue, sliderTwoValue, resultTable, data
 
 function generateDataFrameTableHead(table, restrictionEnzymes) {
   tableCaption = table.createCaption()
-  tableCaption.innerHTML = restrictionEnzymes
+  tableCaption.innerHTML = restrictionEnzymes.concat("<br>Illumina Limit: ").concat(illuminaLimit).concat("&emsp;Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let row = thead.insertRow();
 
   for (let i = 0; i < 3; i++) {
     let th = document.createElement("th");
+    if(i == 0) {
+      th.style.width = '30%';
+    }
+    if (i == 1) {
+      th.style.width = '15%';
+    }
+    if(i == 2) {
+      th.style.width = '55%';
+    }
     row.appendChild(th);
   }
 
@@ -75,10 +84,13 @@ function generateDataframeTableRows(table){
     dataFrameTitles.forEach(function(title) {
         let row = tbody.insertRow();
         for (let i = 0; i < 3; i++) {
-          let cell = row.insertCell();
           if (i == 0) {
-            let titleText = document.createTextNode(title);
-            cell.appendChild(titleText);
+            th = document.createElement('th');
+            th.appendChild(document.createTextNode(title));
+            th.scope='row';
+            row.appendChild(th);
+          } else {
+            row.insertCell();
           }
        }
     })
@@ -87,7 +99,7 @@ function generateDataframeTableRows(table){
 function generateDataframeTable(dataFrameElement, tableId, restrictionEnzymes){
     let table = document.createElement("table");
     table.id = tableId
-    table.className = "table"
+    table.className = "table table-striped"
     dataFrameElement.appendChild(table);
     generateDataFrameTableHead(table, restrictionEnzymes);
     generateDataframeTableRows(table);

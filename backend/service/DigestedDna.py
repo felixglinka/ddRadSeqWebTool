@@ -1,10 +1,12 @@
-import io, urllib, base64
+import base64
+import io
+import urllib
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, MAX_BINNING_LIMIT, BINNING_STEPS, MAX_GRAPH_RANGE
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, MAX_GRAPH_RANGE
 
 
 class DigestedDna:
@@ -13,31 +15,33 @@ class DigestedDna:
     self.fragments = dnaFragments
     self.cutByFirstRestrictionEnzyme = 0
     self.cutBySecondRestrictionEnzyme = 0
+    self.fragmentCalculationDataframe = None
 
   def setCutSizes(self, numberFragmentsCutByFirstRestrictionEnzyme, numberFragmentsCutBySecondRestrictionEnzyme):
     self.cutByFirstRestrictionEnzyme = numberFragmentsCutByFirstRestrictionEnzyme
     self.cutBySecondRestrictionEnzyme = numberFragmentsCutBySecondRestrictionEnzyme
 
-  def calculateIlluminaValues(self, restrictionEnzymeNames):
-
-    ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+  def createBasicDataframeForGraph(self, restrictionEnzymeNames, ranges):
 
     if(len(self.fragments) == 0):
       return pd.DataFrame(index=ranges, columns=[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]])
 
-    dfOfDDRadCalculation = pd.DataFrame({restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]: self.fragments})
-    dfOfDDRadCalculation = dfOfDDRadCalculation.groupby(pd.cut(dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]], ranges)).count()
+    basicDataframeForGraph = pd.DataFrame({restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]: self.fragments})
+    basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]], ranges)).count()
+
+    self.fragmentCalculationDataframe = basicDataframeForGraph
+
+  def calculateBaseSequencingCosts(self, restrictionEnzymeNames, ranges, illuminaLimit, coverage):
 
     multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
     multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > 300] = 300
-    dfOfDDRadCalculation['numberSequencedBasesOfBin'] = dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
-    dfOfDDRadCalculation['sumAllBasesOfEveryBin'] = [dfOfDDRadCalculation['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
-    dfOfDDRadCalculation['sumAllFragmentsLengthsOfEveryBin'] = [dfOfDDRadCalculation[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]
-    dfOfDDRadCalculation['sequencingDepthOfBin'] = (500000000 / dfOfDDRadCalculation['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, 500000000)
-    dfOfDDRadCalculation['maxNumberOfSamplesToSequence'] = dfOfDDRadCalculation['sequencingDepthOfBin']/20
-    dfOfDDRadCalculation['numberBasesToBeSequenced'] = dfOfDDRadCalculation['sumAllBasesOfEveryBin'] * dfOfDDRadCalculation['maxNumberOfSamplesToSequence']
+    self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
+    self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] = [self.fragmentCalculationDataframe['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
+    self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin'] = [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]
+    self.fragmentCalculationDataframe['sequencingDepthOfBin'] = (illuminaLimit / self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, illuminaLimit)
+    self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence'] = self.fragmentCalculationDataframe['sequencingDepthOfBin'] / coverage
+    self.fragmentCalculationDataframe['numberBasesToBeSequenced'] = self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] * self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence']
 
-    return dfOfDDRadCalculation
 
   def countFragmentsInGivenRange(self, selectedMinSize, selectedMaxSize):
 
@@ -46,9 +50,9 @@ class DigestedDna:
 
     return len(list(filter(lambda fragmentLength: fragmentLength >= selectedMinSize and fragmentLength <= selectedMaxSize, self.fragments)))
 
-  def createLineChart(self, digestedDnaBins, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
+  def createLineChart(self, restrictionEnzymeNames, selectedMinSize=None, selectedMaxSize=None):
 
-    digestedDnaBins.plot.line()
+    self.fragmentCalculationDataframe.plot.line()
 
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')
@@ -63,7 +67,7 @@ class DigestedDna:
       if selectedMinSize < 0: selectedMinSize = 0
       if selectedMaxSize < 0: selectedMaxSize = 0
 
-      plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*digestedDnaBins.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
+      plt.text(MAX_GRAPH_VIEW + 12.5, 0.75*self.fragmentCalculationDataframe.iloc[0:MAX_GRAPH_VIEW+1,].to_numpy().max(),
                'Numbers of fragments \nwith a size of ' + str(selectedMinSize) + ' to ' + str(selectedMaxSize) + ' bp\n' +
                restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames[
                  "secondRestrictionEnzyme"] + ': ' + str(

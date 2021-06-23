@@ -34,6 +34,14 @@ function initForm(e){
     return /^\d*$/.test(value);
   });
 
+  setInputFilter(document.getElementById("id_illuminaLimit"), function(value) {
+    return /^\d*$/.test(value);
+  });
+
+  setInputFilter(document.getElementById("id_coverage"), function(value) {
+    return /^\d*$/.test(value);
+  });
+
   changeNameOfFileInputField()
 }
 

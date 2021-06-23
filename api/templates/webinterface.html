@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>You better work</title>
+    <title>Cool Name</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/webinterfaceStyle.css' %}">
@@ -10,6 +10,8 @@
         {% if dataFrame %}
             const dataFrameData = {{ dataFrame|safe }};
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
+            const illuminaLimit = "{{ illuminaLimit }}"
+            const coverage = "{{ coverage }}"
         {% endif %}
 
         {% if dataFrame1 and dataFrame2 %}
@@ -17,6 +19,8 @@
             const dataFrame2Data = {{ dataFrame2|safe }};
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
             const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
+            const illuminaLimit = "{{ illuminaLimit }}"
+            const coverage = "{{ coverage }}"
         {% endif %}
     </script>
     <script src="{% static 'js/form.js' %}"></script>
@@ -80,6 +84,25 @@
                 <label class="bottom15 right4"> <b>{{ form.sizeSelectMax.label }}: </b> </label>
                 <div class="col-xs-10">
                     {{ form.sizeSelectMax }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
+            </div>
+        </div>
+        <h6 class="center"> Sequence Calculation </h6>
+        <div class="row justify-content-center form-group">
+            <div class="form-inline right20">
+                <label class="bottom15 right4"> <b>{{ form.illuminaLimit.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.illuminaLimit }}
+                    <br>
+                    <small class="text-muted">Optional</small>
+                </div>
+            </div>
+            <div class="form-inline">
+                <label class="bottom15 right4"> <b>{{ form.coverage.label }}: </b> </label>
+                <div class="col-xs-10">
+                    {{ form.coverage }}
                     <br>
                     <small class="text-muted">Optional</small>
                 </div>
