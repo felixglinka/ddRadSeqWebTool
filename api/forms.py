@@ -10,7 +10,7 @@ class BasicInputDDRadDataForm(forms.Form):
             visible.field.widget.attrs['class'] = 'form-control'
             visible.field.widget.attrs['style'] = "width:auto;"
 
-        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'class': 'custom-file-input', 'id': 'fastaFileUpload'})
+        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'class': 'custom-file-input', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
