@@ -26,7 +26,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
-        self.fields['illuminaLimit'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
 
@@ -40,5 +40,5 @@ class BasicInputDDRadDataForm(forms.Form):
     sizeSelectMin = forms.CharField(label="Minimum Size Selection", required=False)
     sizeSelectMax = forms.CharField(label="Maximum Size Selection", required=False)
 
-    illuminaLimit = forms.CharField(label="Illumina Limit", required=False)
+    sequencingYield = forms.CharField(label="Sequencing Yield", required=False)
     coverage = forms.CharField(label="Coverage", required=False)

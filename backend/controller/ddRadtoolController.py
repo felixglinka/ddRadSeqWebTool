@@ -7,7 +7,7 @@ from backend.service.HandleFastafile import readInFastaAndReturnOnlyFragments
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS
 
 
-def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, selectedMinSize=None, selectedMaxSize=None, illuminaLimit=None, coverage=None):
+def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, selectedMinSize=None, selectedMaxSize=None, sequencingYield=None, coverage=None):
 
     restrictionEnzymeNames = {"firstRestrictionEnzyme": restrictionEnzyme1.name, "secondRestrictionEnzyme": restrictionEnzyme2.name}
 
@@ -18,20 +18,20 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, se
     ranges = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
     doubleDigestedDna.createBasicDataframeForGraph(restrictionEnzymeNames, ranges)
 
-    if illuminaLimit == None and coverage == None:
+    if sequencingYield == None and coverage == None:
         return {
             'graph': doubleDigestedDna.createLineChart(restrictionEnzymeNames, selectedMinSize, selectedMaxSize)
         }
     else:
         digestionGraph = doubleDigestedDna.createLineChart(restrictionEnzymeNames, selectedMinSize, selectedMaxSize)
-        doubleDigestedDna.calculateBaseSequencingCosts(restrictionEnzymeNames, ranges, illuminaLimit, coverage)
+        doubleDigestedDna.calculateBaseSequencingCosts(restrictionEnzymeNames, ranges, sequencingYield, coverage)
         return {
             'graph': digestionGraph,
             'dataFrame': doubleDigestedDna.fragmentCalculationDataframe.iloc[:,2:].round().to_json()
         }
 
 
-def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4, selectedMinSize=None, selectedMaxSize=None, illuminaLimit=None, coverage=None):
+def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4, selectedMinSize=None, selectedMaxSize=None, sequencingYield=None, coverage=None):
 
     digestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzyme1, restrictionEnzyme2, restrictionEnzyme3, restrictionEnzyme4)
     restrictionEnzymeNames = {"restrictionEnzyme1": restrictionEnzyme1.name, "restrictionEnzyme2": restrictionEnzyme2.name, "restrictionEnzyme3": restrictionEnzyme3.name, "restrictionEnzyme4": restrictionEnzyme4.name}
@@ -45,15 +45,17 @@ def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionE
     ranges = np.append(np.arange(0, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT + BINNING_STEPS)
     digestedDnaComparison.setFragmentCalculationDataframe(restrictionEnzymeNames, ranges)
 
-    if illuminaLimit == None and coverage == None:
+    if sequencingYield == None and coverage == None:
         return {
             'graph': digestedDnaComparison.createLineChart(restrictionEnzymeNames, selectedMinSize, selectedMaxSize)
         }
     else:
-        digestedDnaComparison.digestedDna1.calculateBaseSequencingCosts({"firstRestrictionEnzyme": restrictionEnzyme1.name, "secondRestrictionEnzyme": restrictionEnzyme2.name},
-                                                                        ranges, illuminaLimit, coverage)
-        digestedDnaComparison.digestedDna2.calculateBaseSequencingCosts({"firstRestrictionEnzyme": restrictionEnzyme3.name, "secondRestrictionEnzyme": restrictionEnzyme4.name},
-                                                                        ranges, illuminaLimit, coverage)
+        digestedDnaComparison.digestedDna1.calculateBaseSequencingCosts(
+            {"firstRestrictionEnzyme": restrictionEnzyme1.name, "secondRestrictionEnzyme": restrictionEnzyme2.name},
+            ranges, sequencingYield, coverage)
+        digestedDnaComparison.digestedDna2.calculateBaseSequencingCosts(
+            {"firstRestrictionEnzyme": restrictionEnzyme3.name, "secondRestrictionEnzyme": restrictionEnzyme4.name},
+            ranges, sequencingYield, coverage)
         return {
         'graph': digestedDnaComparison.createLineChart(restrictionEnzymeNames, selectedMinSize, selectedMaxSize),
         'dataFrame1': digestedDnaComparison.digestedDna1.fragmentCalculationDataframe.iloc[:,2:].round().to_json(),

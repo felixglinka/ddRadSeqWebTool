@@ -10,7 +10,7 @@
         {% if dataFrame %}
             const dataFrameData = {{ dataFrame|safe }};
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
-            const illuminaLimit = "{{ illuminaLimit }}"
+            const sequencingYield = "{{ sequencingYield }}"
             const coverage = "{{ coverage }}"
         {% endif %}
 
@@ -19,7 +19,7 @@
             const dataFrame2Data = {{ dataFrame2|safe }};
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
             const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
-            const illuminaLimit = "{{ illuminaLimit }}"
+            const sequencingYield = "{{ sequencingYield }}"
             const coverage = "{{ coverage }}"
         {% endif %}
     </script>
@@ -92,9 +92,9 @@
         <h6 class="center"> Sequence Calculation </h6>
         <div class="row justify-content-center form-group">
             <div class="form-inline right20">
-                <label class="bottom15 right4"> <b>{{ form.illuminaLimit.label }}: </b> </label>
+                <label class="bottom15 right4"> <b>{{ form.sequencingYield.label }}: </b> </label>
                 <div class="col-xs-10">
-                    {{ form.illuminaLimit }}
+                    {{ form.sequencingYield }}
                     <br>
                     <small class="text-muted">Optional</small>
                 </div>

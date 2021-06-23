@@ -31,7 +31,7 @@ def webinterfaceViews(request):
                 if inputForm.cleaned_data["sizeSelectMax"] != "" and inputForm.cleaned_data["sizeSelectMin"] == "" or inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMax"] == "" :
                     raise Exception("A minimum and a maximum value needs to be chosen for the size selection")
 
-                if inputForm.cleaned_data["illuminaLimit"] != "" and inputForm.cleaned_data["coverage"] == "" or inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["illuminaLimit"] == "":
+                if inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["sequencingYield"] == "":
                     raise Exception("Both parameters has to be chosen for calculation of sequence cost")
 
                 if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
@@ -51,16 +51,23 @@ def webinterfaceViews(request):
 
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
 
-                    if inputForm.cleaned_data['illuminaLimit'] != "" and inputForm.cleaned_data['coverage'] != "":
-                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize,
-                                                               int(inputForm.cleaned_data["illuminaLimit"]), int(inputForm.cleaned_data["coverage"]))
+                    if inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != "":
+                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
+                            int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
+                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                                                               selectedMinSize, selectedMaxSize,
+                                                               int(inputForm.cleaned_data["sequencingYield"]),
+                                                               int(inputForm.cleaned_data["coverage"]))
                         context["dataFrame"] = ddRadSeqresult['dataFrame']
                         context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
-                        context["illuminaLimit"] = inputForm.cleaned_data['illuminaLimit']
+                        context["sequencingYield"] = inputForm.cleaned_data['sequencingYield']
                         context["coverage"] = inputForm.cleaned_data['coverage']
 
                     else:
-                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])], selectedMinSize, selectedMaxSize)
+                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
+                            int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
+                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                                                               selectedMinSize, selectedMaxSize)
 
                     context["graph"] = ddRadSeqresult['graph']
 
@@ -69,20 +76,46 @@ def webinterfaceViews(request):
 
                 else:
 
-                    if inputForm.cleaned_data['illuminaLimit'] != "" and inputForm.cleaned_data['coverage'] != "":
-                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                                       restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])], selectedMinSize, selectedMaxSize,
-                                                                        int(inputForm.cleaned_data["illuminaLimit"]), int(inputForm.cleaned_data["coverage"]))
+                    if inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != "":
+                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta,
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme1'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme2'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme3'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme4'])],
+                                                                                   selectedMinSize, selectedMaxSize,
+                                                                                   int(inputForm.cleaned_data[
+                                                                                           "sequencingYield"]), int(
+                                inputForm.cleaned_data["coverage"]))
                         context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
                         context["dataFrame2"] = ddRadSeqComparisonResult['dataFrame2']
                         context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
                         context["secondChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])].name
-                        context["illuminaLimit"] = inputForm.cleaned_data['illuminaLimit']
+                        context["sequencingYield"] = inputForm.cleaned_data['sequencingYield']
                         context["coverage"] = inputForm.cleaned_data['coverage']
 
                     else:
-                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                                       restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])], restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])], selectedMinSize, selectedMaxSize)
+                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta,
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme1'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme2'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme3'])],
+                                                                                   restrictionEnzymes[int(
+                                                                                       inputForm.cleaned_data[
+                                                                                           'restrictionEnzyme4'])],
+                                                                                   selectedMinSize, selectedMaxSize)
 
                     context["graph"] = ddRadSeqComparisonResult['graph']
 

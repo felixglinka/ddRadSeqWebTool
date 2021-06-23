@@ -31,14 +31,14 @@ class DigestedDna:
 
     self.fragmentCalculationDataframe = basicDataframeForGraph
 
-  def calculateBaseSequencingCosts(self, restrictionEnzymeNames, ranges, illuminaLimit, coverage):
+  def calculateBaseSequencingCosts(self, restrictionEnzymeNames, ranges, sequencingYield, coverage):
 
     multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
     multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > 300] = 300
     self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
     self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] = [self.fragmentCalculationDataframe['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
     self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin'] = [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]
-    self.fragmentCalculationDataframe['sequencingDepthOfBin'] = (illuminaLimit / self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, 0)
+    self.fragmentCalculationDataframe['sequencingDepthOfBin'] = (sequencingYield / self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, 0)
     self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence'] = self.fragmentCalculationDataframe['sequencingDepthOfBin'] / coverage
     self.fragmentCalculationDataframe['numberBasesToBeSequenced'] = self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] * self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence']
 
