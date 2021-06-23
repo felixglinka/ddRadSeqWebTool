@@ -19,12 +19,14 @@ function changeNameOfFileInputField() {
 
     document.getElementById("fastaFileUpload").addEventListener('change', function(e){
             let fileName = e.target.files[0].name;
-            document.getElementsByClassName('custom-file-label')[0].innerHTML = fileName;
+            document.getElementById('fastaFileUpload').innerHTML = fileName;
         });
 
 }
 
 function initForm(e){
+
+  changeNameOfFileInputField()
 
   setInputFilter(document.getElementById("id_sizeSelectMin"), function(value) {
     return /^\d*$/.test(value);
@@ -42,7 +44,6 @@ function initForm(e){
     return /^\d*$/.test(value);
   });
 
-  changeNameOfFileInputField()
 }
 
 window.addEventListener('load', initForm)
