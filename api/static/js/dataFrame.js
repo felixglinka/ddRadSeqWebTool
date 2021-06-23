@@ -4,7 +4,7 @@ const sliderMaxValue = "100";
 //let sliderOne = null;
 //let sliderTwo = null;
 
-
+let columnNumber = 3
 let dataFrameTitles = ['# bases of fragments', '# fragments', '# samples multiplexed', '# bases to be sequenced']
 
 function slideOne(sliderOne, sliderTwo, resultTable, dataFrame) {
@@ -61,7 +61,7 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
   let thead = table.createTHead();
   let row = thead.insertRow();
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < columnNumber; i++) {
     let th = document.createElement("th");
     if(i == 0) {
       th.style.width = '30%';
@@ -83,7 +83,7 @@ function generateDataframeTableRows(table){
 
     dataFrameTitles.forEach(function(title) {
         let row = tbody.insertRow();
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < columnNumber; i++) {
           if (i == 0) {
             th = document.createElement('th');
             th.appendChild(document.createTextNode(title));
