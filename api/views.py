@@ -111,5 +111,5 @@ def webinterfaceViews(request):
         else:
             logger.error(inputForm.errors)
 
-    context["form"] = BasicInputDDRadDataForm(initial={'pairedEndChoice':'pairedEnd'}, restrictionEnzymes=restrictionEnzymes)
+    context["form"] = BasicInputDDRadDataForm(initial={'pairedEndChoice':'paired end'}, restrictionEnzymes=restrictionEnzymes)
     return render(request, "webinterface.html", context)
