@@ -12,16 +12,25 @@ caption {
     font-weight: bold;
 }
 
-.bottom15, h6{
+.bottom15, h1, h6{
    padding-bottom: 1.5rem;
 }
 
-.right4{
+.right4 {
   margin-right:4px;
 }
 
-.right20 {
-  margin-right:20px;
+.right10 {
+  margin-right:10px;
+}
+
+.left2 {
+  margin-left:2px;
+}
+
+.alignRadioButton {
+  margin-top: 7.2px;
+  margin-bottom: 6.8px;
 }
 
 .center {

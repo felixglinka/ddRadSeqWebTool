@@ -1,9 +1,6 @@
 const minGap = 1;
 const sliderMaxValue = "100";
 
-//let sliderOne = null;
-//let sliderTwo = null;
-
 let columnNumber = 3
 let dataFrameTitles = ['# bases of fragments', '# fragments', '# samples multiplexed', '# bases multiplied by samples to be sequenced']
 
@@ -57,7 +54,9 @@ function updateSliderTwoResult(sliderOneValue, sliderTwoValue, resultTable, data
 
 function generateDataFrameTableHead(table, restrictionEnzymes) {
   tableCaption = table.createCaption()
-  tableCaption.innerHTML = restrictionEnzymes.concat("<br>Sequencing Yield: ").concat(sequencingYield).concat("&emsp;Coverage: ").concat(coverage)
+  tableCaption.innerHTML = restrictionEnzymes.concat("<br>").concat(basepairLengthToBeSequenced).concat(" bp")
+  .concat("&nbsp;").concat(pairedEndChoice).concat("<br>Sequencing Yield: ").concat(sequencingYield)
+  .concat("&emsp;Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let row = thead.insertRow();
 
