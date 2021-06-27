@@ -111,6 +111,12 @@ function generateSlider(inputElement, tableId, idSliderOne, idSliderTwo, dataFra
     let secondSlider = document.createElement("input");
     let resultTable = document.getElementById(tableId)
 
+    if(pairedEndChoice === 'paired end') {
+        sliderTrack.style = 'background: linear-gradient(to right, #ff0000 0%, #ffff00 25%, #00ff00 35%, #00ff00 45%, #ffff00 100%);'
+    } else {
+        sliderTrack.style = 'background: linear-gradient(to right, #ff0000 0%, #ffff00 25%, #00ff00 35%, #00ff00 45%, #ffff00 100%);'
+    }
+
     fillSlider(firstSlider, secondSlider, '30', idSliderOne, slideOne, resultTable, dataFrame)
     fillSlider(secondSlider, firstSlider, '80', idSliderTwo, slideTwo, resultTable, dataFrame)
 
@@ -128,6 +134,40 @@ function fillSlider(selfSlider, otherSlider, startingValue, id, inputFunction, r
     selfSlider.id = id;
     selfSlider.addEventListener('input', function() {inputFunction(selfSlider, otherSlider, resultTable, dataFrame)}, true);
     selfSlider.addEventListener('change', function() {inputFunction(selfSlider, otherSlider, resultTable, dataFrame)}, true);
+}
+
+function addSliderMarkers(firstSliderId, basepairLengthToBeSequenced){
+
+    let markerPosition = basepairLengthToBeSequenced/10;
+
+    if(basepairLengthToBeSequenced > 1000) {
+        return ;
+    }
+
+    let line = document.createElement('div');
+    line.className = "line";
+    line.style = 'left:'.concat(String(markerPosition)).concat("%;")
+
+    let lineTick = document.createElement('label');
+    lineTick.className = "lineTick";
+    let lineTickText = document.createTextNode(String(basepairLengthToBeSequenced).concat(" bp"));
+    lineTick.appendChild(lineTickText);
+
+    sliderTrackDiv = document.getElementById(firstSliderId).parentElement;
+    line.append(lineTick)
+    sliderTrackDiv.append(line)
+}
+
+function alignMarkerText(markerPosition) {
+
+    if(markerPosition < 100) {
+        return String(markerPosition - 3);
+    } else if(markerPosition > 100) {
+        return String(markerPosition - 5);
+    } else {
+        return String(markerPosition - 4);
+    }
+
 }
 
 function buildUpDataFrame(inputElement, tableId, restrictionEnzymes, idSliderOne, idSliderTwo, dataFrame) {
@@ -150,6 +190,11 @@ function initDataframe() {
         let dataFrameTable = document.getElementById(dataFrameTableId)
         slideOne(sliderOne, sliderTwo, dataFrameTable, dataFrameData)
         slideTwo(sliderTwo, sliderOne, dataFrameTable, dataFrameData)
+
+        addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced))
+        if(pairedEndChoice === 'paired end') {
+            addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+        }
     }
 
     if(document.body.contains(document.getElementById("dataFrame1")) &&
@@ -167,6 +212,11 @@ function initDataframe() {
                slideOne(firstSliderOne, firstSliderTwo, firstDataFrameTable, dataFrame1Data)
                slideTwo(firstSliderTwo, firstSliderOne, firstDataFrameTable, dataFrame1Data)
 
+               addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced))
+               if(pairedEndChoice === 'paired end') {
+                addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+               }
+
                secondSliderOneId = "secondSlider-1"
                secondSliderTwoId = "secondSlider-2"
                secondDataFrameTableId = "secondDataFrameTable"
@@ -178,6 +228,11 @@ function initDataframe() {
                let secondDataFrameTable = document.getElementById(secondDataFrameTableId);
                slideOne(secondSliderOne, secondSliderTwo, secondDataFrameTable, dataFrame2Data)
                slideTwo(secondSliderTwo, secondSliderOne, secondDataFrameTable, dataFrame2Data)
+
+               addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced))
+               if(pairedEndChoice === 'paired end') {
+                addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+               }
     }
 }
 

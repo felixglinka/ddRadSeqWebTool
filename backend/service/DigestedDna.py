@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, MAX_GRAPH_RANGE
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, MAX_GRAPH_RANGE, PAIRED_END_ENDING
 
 
 class DigestedDna:
@@ -31,10 +31,13 @@ class DigestedDna:
 
     self.fragmentCalculationDataframe = basicDataframeForGraph
 
-  def calculateBaseSequencingCosts(self, restrictionEnzymeNames, ranges, sequencingYield, coverage):
+  def calculateBaseSequencingCosts(self, restrictionEnzymeNames, ranges, sequencingYield, coverage, sequenceLength, pairedEnd):
+
+    if(pairedEnd == PAIRED_END_ENDING):
+      sequenceLength = sequenceLength*2
 
     multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
-    multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > 300] = 300
+    multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > sequenceLength] = sequenceLength
     self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
     self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] = [self.fragmentCalculationDataframe['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
     self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin'] = [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]

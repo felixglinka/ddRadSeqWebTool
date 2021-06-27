@@ -1,5 +1,8 @@
 from django import forms
 
+from backend.settings import PAIRED_END_ENDING, SINGLE_END_ENDING
+
+
 class BasicInputDDRadDataForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -23,7 +26,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
         self.fields['basepairLengthToBeSequenced'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
-        self.fields['pairedEndChoice'].choices = [('paired end', 'Paired End'), ('single end', 'Single End')]
+        self.fields['pairedEndChoice'].choices = [(PAIRED_END_ENDING, 'Paired End'), (SINGLE_END_ENDING, 'Single End')]
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 

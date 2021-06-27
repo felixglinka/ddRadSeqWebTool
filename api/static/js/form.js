@@ -26,8 +26,11 @@ function changeNameOfFileInputField() {
 
 function initFileLabelField() {
 
-    let fileName = document.getElementById("fastaFileUpload").files[0].name;
-    document.getElementById('file-upload-label').innerHTML = fileName;
+    if( document.getElementById("fastaFileUpload").files.length != 0 ){
+        let fileName = document.getElementById("fastaFileUpload").files[0].name;
+        document.getElementById('file-upload-label').innerHTML = fileName;
+    }
+
 }
 
 function initForm(e){

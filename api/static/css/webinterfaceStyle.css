@@ -40,12 +40,6 @@ caption {
   width: 50%;
 }
 
-.dataFrames {
-  width: 100%;
-  display: table;
-  border-spacing: 10px;
-}
-
 .left, .right {
   display: table-cell;
   width: 50%;
@@ -55,13 +49,39 @@ caption {
   margin: auto;
 }
 
+.line {
+    position: relative;
+    display: inline-block;
+    top: -7.5px;
+    height: 20px;
+    width: 0.5px;
+    background: #3264fe;
+    margin: 0;
+    z-index: 1;
+}
+
+.lineTick {
+    position: relative;
+    top: -22.5px;
+    left: -17px;
+    font-size: 10px;
+    color: #3264fe;
+    width: 50px;
+    z-index: 1;
+}
+
 .slider-track{
     height: 5px;
     margin: auto;
     border-radius: 5px;
     margin-top: 30px;
     width: 50%;
-    background: linear-gradient(to right, #ff0000 0%, #ffff00 25%, #00ff00 35%, #00ff00 45%, #ffff00 100%);
+}
+
+.dataFrames {
+  width: 100%;
+  display: table;
+  border-spacing: 10px;
 }
 
 input[type='range']{
@@ -76,6 +96,7 @@ input[type='range']{
     pointer-events: none;
     width: 25%;
     margin-top: -7px;
+    z-index: 5;
 }
 
 input[type='range']::-webkit-slider-runnable-track {
