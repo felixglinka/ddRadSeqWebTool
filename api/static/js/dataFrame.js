@@ -140,13 +140,9 @@ function addSliderMarkers(firstSliderId, basepairLengthToBeSequenced){
 
     let markerPosition = basepairLengthToBeSequenced/10;
 
-    if(basepairLengthToBeSequenced > 1000) {
-        return ;
-    }
-
     let line = document.createElement('div');
     line.className = "line";
-    line.style = 'left:'.concat(String(markerPosition)).concat("%;")
+    line.style = 'left:'.concat(String(markerPosition > 20 ? markerPosition : markerPosition + 1)).concat("%;")
 
     let lineTick = document.createElement('label');
     lineTick.className = "lineTick";

@@ -46,10 +46,6 @@ function initForm(e){
     return /^\d*$/.test(value);
   });
 
-  setInputFilter(document.getElementById("id_basepairLengthToBeSequenced"), function(value) {
-    return /^\d*$/.test(value);
-  });
-
   setInputFilter(document.getElementById("id_sequencingYield"), function(value) {
     return /^\d*$/.test(value);
   });
