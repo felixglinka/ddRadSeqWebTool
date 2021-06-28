@@ -1,15 +1,14 @@
 const minGap = 1;
 const sliderMaxValue = "100";
 
-let columnNumber = 3
-let dataFrameTitles = ['# bases of fragments', '# fragments', '# samples multiplexed', '# bases multiplied by samples to be sequenced']
+let columnNumber = 2
+const dataFrameTitles = ['No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexed', 'No. basepairs sequenced in the lane', 'Adapter Contamination']
 
 function slideOne(sliderOne, sliderTwo, resultTable, dataFrame) {
 
     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
         sliderOne.value = parseInt(sliderTwo.value) - minGap;
     }
-    updateSliderOneResult(sliderOne.value, resultTable, dataFrame)
     updateSliderTwoResult(sliderOne.value, sliderTwo.value, resultTable, dataFrame)
 }
 
@@ -21,35 +20,35 @@ function slideTwo(sliderTwo, sliderOne, resultTable, dataFrame) {
     updateSliderTwoResult(sliderOne.value, sliderTwo.value, resultTable, dataFrame)
 }
 
-function updateSliderOneResult(sliderOneValue, resultTable, dataFrame) {
-   sumAllBasesOfEveryBin = dataFrame['sumAllBasesOfEveryBin'][Object.keys(dataFrame['sumAllBasesOfEveryBin'])[parseInt(sliderOneValue)]];
-   sumAllFragmentsLengthsOfEveryBin = dataFrame['sumAllFragmentsLengthsOfEveryBin'][Object.keys(dataFrame['sumAllFragmentsLengthsOfEveryBin'])[parseInt(sliderOneValue)]];
-   maxNumberOfPossibleSamples = dataFrame['maxNumberOfSamplesToSequence'][Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderOneValue)]];
-   numberBasesToBeSequenced = dataFrame['numberBasesToBeSequenced'][Object.keys(dataFrame['numberBasesToBeSequenced'])[parseInt(sliderOneValue)]];
-
-   resultTable.tHead.rows[0].cells[1].innerText = Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderOneValue)];
-   resultTable.tBodies[0].rows[0].cells[1].innerText = sumAllBasesOfEveryBin;
-   resultTable.tBodies[0].rows[1].cells[1].innerText = sumAllFragmentsLengthsOfEveryBin;
-   resultTable.tBodies[0].rows[2].cells[1].innerText = maxNumberOfPossibleSamples;
-   resultTable.tBodies[0].rows[3].cells[1].innerText = numberBasesToBeSequenced;
-}
-
 function updateSliderTwoResult(sliderOneValue, sliderTwoValue, resultTable, dataFrame) {
-   sumAllBasesOfEveryBinSliderOne = dataFrame['sumAllBasesOfEveryBin'][Object.keys(dataFrame['sumAllBasesOfEveryBin'])[parseInt(sliderOneValue)]];
    sumAllFragmentsLengthsOfEveryBinSliderOne = dataFrame['sumAllFragmentsLengthsOfEveryBin'][Object.keys(dataFrame['sumAllFragmentsLengthsOfEveryBin'])[parseInt(sliderOneValue)]];
+   sumAllBasesOfEveryBinSliderOne = dataFrame['sumAllBasesOfEveryBin'][Object.keys(dataFrame['sumAllBasesOfEveryBin'])[parseInt(sliderOneValue)]];
    maxNumberOfPossibleSamplesSliderOne = dataFrame['maxNumberOfSamplesToSequence'][Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderOneValue)]];
    numberBasesToBeSequencedSliderOne = dataFrame['numberBasesToBeSequenced'][Object.keys(dataFrame['numberBasesToBeSequenced'])[parseInt(sliderOneValue)]];
+   adaptorContaminationSliderOne = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderOneValue)]];
 
-   sumAllBasesOfEveryBinSliderTwo = dataFrame['sumAllBasesOfEveryBin'][Object.keys(dataFrame['sumAllBasesOfEveryBin'])[parseInt(sliderTwoValue)]];
    sumAllFragmentsLengthsOfEveryBinSliderTwo = dataFrame['sumAllFragmentsLengthsOfEveryBin'][Object.keys(dataFrame['sumAllFragmentsLengthsOfEveryBin'])[parseInt(sliderTwoValue)]];
+   sumAllBasesOfEveryBinSliderTwo = dataFrame['sumAllBasesOfEveryBin'][Object.keys(dataFrame['sumAllBasesOfEveryBin'])[parseInt(sliderTwoValue)]];
    maxNumberOfPossibleSamplesSliderTwo = dataFrame['maxNumberOfSamplesToSequence'][Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderTwoValue)]];
    numberBasesToBeSequencedSliderTwo = dataFrame['numberBasesToBeSequenced'][Object.keys(dataFrame['numberBasesToBeSequenced'])[parseInt(sliderTwoValue)]];
+   adaptorContaminationSliderTwo = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderTwoValue)]];
 
-   resultTable.tHead.rows[0].cells[2].innerText = "Difference from Interval ".concat(Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderTwoValue)])
-   resultTable.tBodies[0].rows[0].cells[2].innerText = sumAllBasesOfEveryBinSliderOne - sumAllBasesOfEveryBinSliderTwo;
-   resultTable.tBodies[0].rows[1].cells[2].innerText = sumAllFragmentsLengthsOfEveryBinSliderOne - sumAllFragmentsLengthsOfEveryBinSliderTwo;
-   resultTable.tBodies[0].rows[2].cells[2].innerText = maxNumberOfPossibleSamplesSliderTwo - maxNumberOfPossibleSamplesSliderOne;
-   resultTable.tBodies[0].rows[3].cells[2].innerText = numberBasesToBeSequencedSliderTwo - numberBasesToBeSequencedSliderOne;
+   resultTable.tHead.rows[0].cells[1].innerText = "Difference from Interval ".concat(Object.keys(dataFrame['maxNumberOfSamplesToSequence'])[parseInt(sliderTwoValue)])
+   resultTable.tBodies[0].rows[0].cells[1].innerText = sumAllFragmentsLengthsOfEveryBinSliderOne - sumAllFragmentsLengthsOfEveryBinSliderTwo;
+   resultTable.tBodies[0].rows[1].cells[1].innerText = sumAllBasesOfEveryBinSliderOne - sumAllBasesOfEveryBinSliderTwo;
+   resultTable.tBodies[0].rows[2].cells[1].innerText = maxNumberOfPossibleSamplesSliderTwo - maxNumberOfPossibleSamplesSliderOne;
+   resultTable.tBodies[0].rows[3].cells[1].innerText = numberBasesToBeSequencedSliderTwo - numberBasesToBeSequencedSliderOne;
+   adaptorContaminationPercentage = String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/sumAllFragmentsLengthsOfEveryBinSliderOne*100));
+   resultTable.tBodies[0].rows[4].cells[1].innerText = String(adaptorContaminationSliderOne - adaptorContaminationSliderTwo).concat(' [')
+                                                            .concat(adaptorContaminationPercentage).concat('%]');
+
+   if(pairedEndChoice === 'paired end') {
+       overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
+       overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
+       overlapPercentage = String(Math.round((overlapsSliderOne - overlapsSliderTwo)/sumAllFragmentsLengthsOfEveryBinSliderOne*100));
+       resultTable.tBodies[0].rows[5].cells[1].innerText = String(overlapsSliderOne - overlapsSliderTwo).concat().concat(' [')
+                                                            .concat(overlapPercentage).concat('%]');
+    }
 }
 
 function generateDataFrameTableHead(table, restrictionEnzymes) {
@@ -63,12 +62,9 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
   for (let i = 0; i < columnNumber; i++) {
     let th = document.createElement("th");
     if(i == 0) {
-      th.style.width = '30%';
+      th.style.width = '45%';
     }
-    if (i == 1) {
-      th.style.width = '15%';
-    }
-    if(i == 2) {
+    if(i == 1) {
       th.style.width = '55%';
     }
     row.appendChild(th);
@@ -76,17 +72,23 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
 
 }
 
-function generateDataframeTableRows(table){
+function generateDataframeTableRows(table) {
 
     let tbody = table.createTBody();
 
-    dataFrameTitles.forEach(function(title) {
+    dataFrameTitles.forEach( function(title) {
         let row = tbody.insertRow();
         for (let i = 0; i < columnNumber; i++) {
           if (i == 0) {
+
             th = document.createElement('th');
             th.appendChild(document.createTextNode(title));
             th.scope='row';
+
+            if( title === 'Adapter Contamination' || title === "Overlapping Fragments") {
+                th.style="color:red;"
+            }
+
             row.appendChild(th);
           } else {
             row.insertCell();
@@ -138,11 +140,15 @@ function fillSlider(selfSlider, otherSlider, startingValue, id, inputFunction, r
 
 function addSliderMarkers(firstSliderId, basepairLengthToBeSequenced){
 
+    if(basepairLengthToBeSequenced > 1000){
+        return;
+    }
+
     let markerPosition = basepairLengthToBeSequenced/10;
 
     let line = document.createElement('div');
     line.className = "line";
-    line.style = 'left:'.concat(String(markerPosition > 20 ? markerPosition : markerPosition + 1)).concat("%;")
+    line.style = 'left:'.concat(String(markerPosition > 18 ? markerPosition : markerPosition + 1)).concat("%;")
 
     let lineTick = document.createElement('label');
     lineTick.className = "lineTick";
@@ -175,6 +181,10 @@ function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame")))  {
 
+        if(pairedEndChoice === 'paired end') {
+            dataFrameTitles.push("Overlapping Fragments");
+        }
+
         sliderOneId = "slider-1"
         sliderTwoId = "slider-2"
         dataFrameTableId = "dataFrameTable"
@@ -195,6 +205,10 @@ function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame1")) &&
        document.body.contains(document.getElementById("dataFrame2")))  {
+
+               if(pairedEndChoice === 'paired end') {
+                    dataFrameTitles.push("Overlapping Fragments");
+                }
 
                firstSliderOneId = "firstSlider-1"
                firstSliderTwoId = "firstSlider-2"

@@ -81,7 +81,7 @@ caption {
 .dataFrames {
   width: 100%;
   display: table;
-  border-spacing: 10px;
+  border-spacing: 7.5px;
 }
 
 input[type='range']{

@@ -25,7 +25,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
-        self.fields['basepairLengthToBeSequenced'].choices = [(100, '100'), (150, '150')]
+        self.fields['basepairLengthToBeSequenced'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['pairedEndChoice'].choices = [(PAIRED_END_ENDING, 'Paired End'), (SINGLE_END_ENDING, 'Single End')]
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
@@ -41,7 +41,7 @@ class BasicInputDDRadDataForm(forms.Form):
     sizeSelectMin = forms.CharField(label="Minimum Size Selection", required=False)
     sizeSelectMax = forms.CharField(label="Maximum Size Selection", required=False)
 
-    basepairLengthToBeSequenced = forms.ChoiceField(choices=[], label="Read pairs to be sequenced", widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
+    basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
     sequencingYield = forms.CharField(label="Sequencing Yield", required=False)
     coverage = forms.CharField(label="Coverage", required=False)

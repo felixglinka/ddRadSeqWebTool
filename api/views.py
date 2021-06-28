@@ -32,9 +32,16 @@ def webinterfaceViews(request):
                 if inputForm.cleaned_data["sizeSelectMax"] != "" and inputForm.cleaned_data["sizeSelectMin"] == "" or inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMax"] == "" :
                     raise Exception("A minimum and a maximum value needs to be chosen for the size selection")
 
-                if (inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
-                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == ""):
-                    raise Exception("All sequence calculation parameters have to be chosen for calculation of sequence cost")
+                if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
+                    inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
+                    inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
+                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == "" or
+                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == "" or
+                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] != "" or
+                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == "" or
+                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" or
+                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != ""):
+                    raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
 
                 if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
                     raise Exception("Coverage cannot be 0")
@@ -117,5 +124,5 @@ def webinterfaceViews(request):
         else:
             logger.error(inputForm.errors)
 
-    context["form"] = BasicInputDDRadDataForm(initial={'basepairLengthToBeSequenced': ILLUMINA_150, 'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
+    context["form"] = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
     return render(request, "webinterface.html", context)
