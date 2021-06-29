@@ -27,7 +27,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzyme1, restrictionEnzyme2, se
         doubleDigestedDna.calculateBaseSequencingCosts(restrictionEnzymeNames, ranges, sequencingYield, coverage, sequenceLength, pairedEnd)
         return {
             'graph': digestionGraph,
-            'dataFrame': doubleDigestedDna.fragmentCalculationDataframe.iloc[:,2:].round().to_json()
+            'dataFrame': doubleDigestedDna.fragmentCalculationDataframe.round().to_json()
         }
 
 
@@ -58,8 +58,8 @@ def handleDDRadSeqComparisonRequest(inputFasta, restrictionEnzyme1, restrictionE
             ranges, sequencingYield, coverage, sequenceLength, pairedEnd)
         return {
         'graph': digestedDnaComparison.createLineChart(restrictionEnzymeNames, selectedMinSize, selectedMaxSize),
-        'dataFrame1': digestedDnaComparison.digestedDna1.fragmentCalculationDataframe.iloc[:,2:].round().to_json(),
-        'dataFrame2': digestedDnaComparison.digestedDna2.fragmentCalculationDataframe.iloc[:,2:].round().to_json()
+        'dataFrame1': digestedDnaComparison.digestedDna1.fragmentCalculationDataframe.round().to_json(),
+        'dataFrame2': digestedDnaComparison.digestedDna2.fragmentCalculationDataframe.round().to_json()
         }
 
 

@@ -25,6 +25,8 @@
             const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
         {% endif %}
     </script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/overlay.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -36,7 +38,18 @@
         {% endfor %}
   {% endif %}
 
+    <div class="eduIcon" onclick="on()"></div>
     <h1>Insert cool name</h1>
+
+    <div id="overlay">
+        <div class="eduIcon" onclick="off()"></div>
+        <div class="dropdown">
+          <span>Mouse over me</span>
+          <div class="dropdown-content">
+            <p>Give me a Mojito!</p>
+          </div>
+        </div>
+    </div>
     <div class="container">
         <form  action='.' method="POST" enctype="multipart/form-data" >
             {% csrf_token %}

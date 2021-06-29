@@ -6,6 +6,51 @@ h6 {
   font-weight: bold;
 }
 
+.eduIcon {
+    background: url('../icons/education.svg');
+    height: 20px;
+    width: 20px;
+    display: block;
+    float: right;
+    position: relative;
+    top: 20px;
+    left: -150px;
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.dropdown {
+  position: relative;
+  margin: auto;
+  width: 50%;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+
 caption {
     caption-side: top;
     text-align: center;

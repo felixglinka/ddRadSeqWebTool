@@ -41,13 +41,7 @@ class DigestedDna:
     multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
     multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > sequencingThreshold] = sequencingThreshold
     self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
-    self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] = [self.fragmentCalculationDataframe['numberSequencedBasesOfBin'].iloc[row:].sum() for row in range(0, 101)]
-    self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin'] = [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:].sum() for row in range(0, 101)]
-    self.fragmentCalculationDataframe['sequencingDepthOfBin'] = (sequencingYield / self.fragmentCalculationDataframe['sumAllFragmentsLengthsOfEveryBin']).replace(np.inf, 0)
-    self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence'] = self.fragmentCalculationDataframe['sequencingDepthOfBin'] / coverage
-    self.fragmentCalculationDataframe['numberBasesToBeSequenced'] = self.fragmentCalculationDataframe['sumAllBasesOfEveryBin'] * self.fragmentCalculationDataframe['maxNumberOfSamplesToSequence']
-
-    self.fragmentCalculationDataframe['adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength)
+    self.fragmentCalculationDataframe['adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength if sequenceLength < 1000 else 1000)
     if (pairedEnd == PAIRED_END_ENDING):
       self.fragmentCalculationDataframe['overlaps'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength*2 if sequenceLength<505 else 1000)
 
