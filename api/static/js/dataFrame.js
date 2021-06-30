@@ -21,6 +21,7 @@ function slideTwo(sliderTwo, sliderOne, resultTable, dataFrame, restrictionEnzym
 }
 
 function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFrame, restrictionEnzymes) {
+
    sumAllFragmentsLengths = sumUpFragmentLengths(Object.values(dataFrame[restrictionEnzymes]).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(dataFrame['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(sumAllFragmentsLengths, sequencingYield, coverage);
@@ -28,6 +29,11 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
 
    adaptorContaminationSliderOne = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderOneValue)]];
    adaptorContaminationSliderTwo = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderTwoValue)]];
+   adaptorContamination = adaptorContaminationSliderOne - adaptorContaminationSliderTwo
+
+   fragmentLengthUntilBin = parseInt(sliderOneValue) > 0 ? sumUpFragmentLengths(Object.values(dataFrame[restrictionEnzymes]).slice(0, parseInt(sliderOneValue)))[0] : Object.values(dataFrame[restrictionEnzymes])[0]
+
+   experimentalAdaptorContamination = experimentalEstimation(fragmentLengthUntilBin, 0.4424, parseInt(sliderOneValue), basepairLengthToBeSequenced, adaptorContamination)
 
    resultTable.tHead.rows[0].cells[1].innerText = "Sequencing calculation from ".concat(Object.keys(dataFrame[restrictionEnzymes])[parseInt(sliderOneValue)].split(",")[0].substring(1))
                                                                                 .concat(" to ")
@@ -37,16 +43,28 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
    resultTable.tBodies[0].rows[1].cells[1].innerText = sumAllBasesOfEveryBin;
    resultTable.tBodies[0].rows[2].cells[1].innerText = maxNumberOfPossibleSamples;
    resultTable.tBodies[0].rows[3].cells[1].innerText = numberBasesToBeSequenced;
+
    adaptorContaminationPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/sumAllFragmentsLengths*100));
-   resultTable.tBodies[0].rows[4].cells[1].innerText = String(adaptorContaminationSliderOne - adaptorContaminationSliderTwo).concat(' [')
-                                                            .concat(adaptorContaminationPercentage).concat('%]');
+   experimentalAdaptorContaminationPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((experimentalAdaptorContamination)/sumAllFragmentsLengths*100));
+
+   resultTable.tBodies[0].rows[4].cells[1].innerText = String(adaptorContamination).concat(' [')
+                                                            .concat(adaptorContaminationPercentage).concat('%] → ')
+                                                            .concat(String(experimentalAdaptorContamination))
+                                                            .concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
    if(pairedEndChoice === 'paired end') {
        overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
        overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
+       overlaps = overlapsSliderOne - overlapsSliderTwo
+       experimentalOverlaps = experimentalEstimation(dataFrame[restrictionEnzymes][Object.keys(dataFrame[restrictionEnzymes])[parseInt(sliderOneValue)]], 0.5797, parseInt(sliderOneValue), basepairLengthToBeSequenced*2, overlaps)
+
        overlapPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/sumAllFragmentsLengths*100));
+       experimentalOverlapPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((experimentalOverlaps)/sumAllFragmentsLengths*100));
+
        resultTable.tBodies[0].rows[5].cells[1].innerText = String(overlapsSliderOne - overlapsSliderTwo).concat().concat(' [')
-                                                            .concat(overlapPercentage).concat('%]');
+                                                            .concat(overlapPercentage).concat('%] → ')
+                                                            .concat(String(experimentalOverlaps))
+                                                            .concat(' [').concat(experimentalOverlapPercentage).concat('%]');
     }
 }
 
