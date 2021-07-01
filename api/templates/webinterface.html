@@ -27,6 +27,7 @@
     </script>
     <script src="{% static 'js/util.js' %}"></script>
     <script src="{% static 'js/overlay.js' %}"></script>
+    <script src="{% static 'js/popovers.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -50,6 +51,7 @@
           </div>
         </div>
     </div>
+
     <div class="container">
         <form  action='.' method="POST" enctype="multipart/form-data" >
             {% csrf_token %}
@@ -70,6 +72,7 @@
                     <div class="form-inline">
                     <label class="right4"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
                     {{ form.restrictionEnzyme2 }}
+                    <div id='restrictionHelp' data-toggle="popover" class="questionIcon" ></div>
                     </div>
                 </div>
             </div>
