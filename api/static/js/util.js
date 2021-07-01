@@ -15,10 +15,13 @@ function calculateSamplesToBeMultiplexed(totalFragmentLength, sequencingYield, c
     return Math.round(sequencingDepth/coverage);
 }
 
-function experimentalEstimation(selectedFragmentLength, slope, sliderOneValue, sequenceLength, contaminationValue) {
+function experimentalEstimation(fragmentLengths, slope, sliderOneValue, sequenceLength, contaminationValue) {
+
+    selectedFragmentLength = parseInt(sliderOneValue) == 0 ? Object.values(fragmentLengths)[0] :
+                             parseInt(sliderOneValue) <= sequenceLength/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
+                             sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, sequenceLength/10))[0]
 
     numberOfAdaptorContamination = Math.round(selectedFragmentLength*slope)
-    console.log(numberOfAdaptorContamination)
 
     if( sliderOneValue <= sequenceLength/10) {
         return contaminationValue + numberOfAdaptorContamination;

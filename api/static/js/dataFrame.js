@@ -1,5 +1,7 @@
 const minGap = 1;
 const sliderMaxValue = "100";
+const adaptorContaminationSlope = 0.4424;
+const overlapSlope = 0.5797;
 
 let columnNumber = 2
 const dataFrameTitles = ['No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexed', 'No. basepairs sequenced in the lane', 'Adapter Contamination']
@@ -22,30 +24,28 @@ function slideTwo(sliderTwo, sliderOne, resultTable, dataFrame, restrictionEnzym
 
 function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFrame, restrictionEnzymes) {
 
-   sumAllFragmentsLengths = sumUpFragmentLengths(Object.values(dataFrame[restrictionEnzymes]).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
+   currentSelectedFragmentSize = sumUpFragmentLengths(Object.values(dataFrame[restrictionEnzymes]).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(dataFrame['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
-   maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(sumAllFragmentsLengths, sequencingYield, coverage);
+   maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
 
    adaptorContaminationSliderOne = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderOneValue)]];
    adaptorContaminationSliderTwo = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderTwoValue)]];
    adaptorContamination = adaptorContaminationSliderOne - adaptorContaminationSliderTwo
+   adaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/currentSelectedFragmentSize*100));
 
-   fragmentLengthUntilBin = parseInt(sliderOneValue) > 0 ? sumUpFragmentLengths(Object.values(dataFrame[restrictionEnzymes]).slice(0, parseInt(sliderOneValue)))[0] : Object.values(dataFrame[restrictionEnzymes])[0]
-
-   experimentalAdaptorContamination = experimentalEstimation(fragmentLengthUntilBin, 0.4424, parseInt(sliderOneValue), basepairLengthToBeSequenced, adaptorContamination)
+   experimentalAdaptorContamination = experimentalEstimation(dataFrame[restrictionEnzymes], adaptorContaminationSlope, sliderOneValue, basepairLengthToBeSequenced, adaptorContamination)
+   experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/currentSelectedFragmentSize)*100));
 
    resultTable.tHead.rows[0].cells[1].innerText = "Sequencing calculation from ".concat(Object.keys(dataFrame[restrictionEnzymes])[parseInt(sliderOneValue)].split(",")[0].substring(1))
                                                                                 .concat(" to ")
                                                                                 .concat(Object.keys(dataFrame[restrictionEnzymes])[parseInt(sliderTwoValue)].split(",")[1].slice(0, -1))
                                                                                 .concat(" bp");
-   resultTable.tBodies[0].rows[0].cells[1].innerText = sumAllFragmentsLengths;
+                                                                                
+   resultTable.tBodies[0].rows[0].cells[1].innerText = currentSelectedFragmentSize;
    resultTable.tBodies[0].rows[1].cells[1].innerText = sumAllBasesOfEveryBin;
    resultTable.tBodies[0].rows[2].cells[1].innerText = maxNumberOfPossibleSamples;
    resultTable.tBodies[0].rows[3].cells[1].innerText = numberBasesToBeSequenced;
-
-   adaptorContaminationPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/sumAllFragmentsLengths*100));
-   experimentalAdaptorContaminationPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((experimentalAdaptorContamination)/sumAllFragmentsLengths*100));
 
    resultTable.tBodies[0].rows[4].cells[1].innerText = String(adaptorContamination).concat(' [')
                                                             .concat(adaptorContaminationPercentage).concat('%] → ')
@@ -56,10 +56,9 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
        overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
        overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
        overlaps = overlapsSliderOne - overlapsSliderTwo
-       experimentalOverlaps = experimentalEstimation(dataFrame[restrictionEnzymes][Object.keys(dataFrame[restrictionEnzymes])[parseInt(sliderOneValue)]], 0.5797, parseInt(sliderOneValue), basepairLengthToBeSequenced*2, overlaps)
-
-       overlapPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/sumAllFragmentsLengths*100));
-       experimentalOverlapPercentage = sumAllFragmentsLengths === 0 ? 0 : String(Math.round((experimentalOverlaps)/sumAllFragmentsLengths*100));
+       overlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/currentSelectedFragmentSize*100));
+       experimentalOverlaps = experimentalEstimation(dataFrame[restrictionEnzymes], overlapSlope, sliderOneValue, basepairLengthToBeSequenced*2, overlaps)
+       experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps)/currentSelectedFragmentSize*100));
 
        resultTable.tBodies[0].rows[5].cells[1].innerText = String(overlapsSliderOne - overlapsSliderTwo).concat().concat(' [')
                                                             .concat(overlapPercentage).concat('%] → ')
