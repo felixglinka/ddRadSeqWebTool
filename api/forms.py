@@ -9,7 +9,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.restrictionEnzymes = kwargs.pop('restrictionEnzymes')
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
-        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'class': 'custom-file-input', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
+        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': "",'class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true", 'style': "width: 40%;"})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
@@ -32,11 +32,11 @@ class BasicInputDDRadDataForm(forms.Form):
 
 
     fastaFile = forms.FileField()
-    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1", widget=forms.Select(attrs={'class':'form-control'}))
-    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2", widget=forms.Select(attrs={'class':'form-control'}))
+    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1", widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
+    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2", widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
 
-    restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False, widget=forms.Select(attrs={'class':'form-control'}))
-    restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False, widget=forms.Select(attrs={'class':'form-control'}))
+    restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False, widget=forms.Select(attrs={'class':'form-select'}))
+    restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False, widget=forms.Select(attrs={'class':'form-select'}))
 
     sizeSelectMin = forms.CharField(label="Minimum Size Selection", required=False)
     sizeSelectMax = forms.CharField(label="Maximum Size Selection", required=False)

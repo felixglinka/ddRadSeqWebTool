@@ -26,7 +26,6 @@
         {% endif %}
     </script>
     <script src="{% static 'js/util.js' %}"></script>
-    <script src="{% static 'js/overlay.js' %}"></script>
     <script src="{% static 'js/popovers.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
@@ -39,86 +38,64 @@
         {% endfor %}
   {% endif %}
 
-    <div class="eduIcon" onclick="on()"></div>
     <h1>Insert cool name</h1>
 
-    <div id="overlay">
-        <div class="eduIcon" onclick="off()"></div>
-        <div class="dropdown">
-          <span>Mouse over me</span>
-          <div class="dropdown-content">
-            <p>Give me a Mojito!</p>
-          </div>
-        </div>
-    </div>
-
-    <div class="container">
+    <div class="container-sm">
         <form  action='.' method="POST" enctype="multipart/form-data" >
             {% csrf_token %}
-            <div class="row justify-content-center form-group ">
-                <div id="customFile" class="custom-file" style="width: 55%;">
-                    {{ form.fastaFile }} <label id="file-upload-label" class="custom-file-label" for="{{ form.fastaFile.id_for_label }}"> Choose fasta file </label>
+            <div class="row form-group">
+                <div id="customFile" class="col-12 d-flex justify-content-center">
+                    <label class="col-form-label right4" for="{{ form.fastaFile.id_for_label }}"> <b> Input Fasta file: </b> </label>
+                    {{ form.fastaFile }}
                 </div>
             </div>
 
-            <div class="row justify-content-center form-group">
-                <div class="col">
-                    <div class="form-inline float-right">
-                        <label class="right4"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
-                    {{ form.restrictionEnzyme1 }}
+            <div class="row form-group">
+                <div class="col-6 d-flex justify-content-end text-center">
+                    <label class="right4 col-form-label"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.restrictionEnzyme1 }}
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-inline">
-                    <label class="right4"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
-                    {{ form.restrictionEnzyme2 }}
+                <div class="col-6 d-flex text-center">
+                    <label class="right4 col-form-label"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.restrictionEnzyme2 }}
+                    </div>
                     <div id='restrictionHelp' data-toggle="popover" class="questionIcon" ></div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-6 d-flex justify-content-end">
+                    <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.restrictionEnzyme3 }}
+                        <small class="text-muted">Optional</small>
+                    </div>
+                </div>
+                <div class="col-6 d-flex">
+                    <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme4.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.restrictionEnzyme4 }}
+                        <small class="text-muted">Optional</small>
                     </div>
                 </div>
             </div>
 
-            <div class="row justify-content-center form-group">
-                <div class="col">
-                    <div class="form-inline float-right">
-                        <label class="bottom15 right4"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme3 }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
+            <div class="row form-group">
+                <div class="col-6 d-flex justify-content-end">
+                    <label class="bottom15 right4 col-form-label"> <b> {{ form.sizeSelectMin.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.sizeSelectMin }}
+                        <small class="text-muted">Optional</small>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-inline">
-                        <label class="bottom15 right4"> <b>{{ form.restrictionEnzyme4.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme4 }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row justify-content-center form-group">
-                <div class="col">
-                    <div class="form-inline float-right">
-                        <label class="bottom15 right4"> <b>{{ form.sizeSelectMin.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.sizeSelectMin }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-inline">
-                        <label class="bottom15 right4"> <b>{{ form.sizeSelectMax.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.sizeSelectMax }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
+                <div class="col-6 d-flex">
+                    <label class="bottom15 right4 col-form-label"> <b>{{ form.sizeSelectMax.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.sizeSelectMax }}
+                        <small class="text-muted">Optional</small>
                     </div>
                 </div>
             </div>
@@ -130,19 +107,15 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center form-group">
-                <div class="col">
-                    <div class="form-inline float-right">
-                        <label class="bottom15 right4"> <b>{{ form.basepairLengthToBeSequenced.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.basepairLengthToBeSequenced }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
+            <div class="row form-group">
+                <div class="col-6 d-flex justify-content-end">
+                    <label class="bottom15 right4 col-form-label"> <b>{{ form.basepairLengthToBeSequenced.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.basepairLengthToBeSequenced }}
+                        <small class="text-muted">Optional</small>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-inline">
+                <div class="col-6 d-flex">
                         <div class="col-xs-10" style="margin-left: 62px; height: 62px;">
                             <div class="alignRadioButton">
                                 {% for choice in form.pairedEndChoice %}
@@ -151,38 +124,32 @@
                             </div>
 <!--                            <small class="text-muted">Optional</small>-->
                         </div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-6 d-flex justify-content-end">
+                    <label class="bottom15 right4 col-form-label"> <b>{{ form.sequencingYield.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.sequencingYield }}
+                        <small class="text-muted">Optional</small>
+                    </div>
+                </div>
+
+                <div class="col-6 d-flex">
+                    <label class="bottom15 right4 col-form-label"> <b>{{ form.coverage.label }}: </b> </label>
+                    <div class="col-xs-10">
+                        {{ form.coverage }}
+                        <small class="text-muted">Optional</small>
                     </div>
                 </div>
             </div>
 
-            <div class="row justify-content-center form-group">
-                <div class="col">
-                    <div class="form-inline float-right">
-                        <label class="bottom15 right4"> <b>{{ form.sequencingYield.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.sequencingYield }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="form-inline">
-                        <label class="bottom15 right4"> <b>{{ form.coverage.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.coverage }}
-                            <br>
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
+            <div class="row form-group">
+                <div class="col-12 d-flex justify-content-center">
+                    <input class="btn btn-primary" type="submit" value="Submit">
                 </div>
             </div>
-
-            <div class="row justify-content-center form-group">
-                <input class="btn btn-primary" type="submit" value="Submit">
-            </div>
-
         </form>
     </div>
 

@@ -30,13 +30,12 @@ function initFileLabelField() {
         let fileName = document.getElementById("fastaFileUpload").files[0].name;
         document.getElementById('file-upload-label').innerHTML = fileName;
     }
-
 }
 
 function initForm(e){
 
-  changeNameOfFileInputField()
-  initFileLabelField()
+//  changeNameOfFileInputField()
+//  initFileLabelField()
 
   setInputFilter(document.getElementById("id_sizeSelectMin"), function(value) {
     return /^\d*$/.test(value);
