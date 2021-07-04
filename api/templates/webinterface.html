@@ -45,8 +45,11 @@
             {% csrf_token %}
             <div class="row form-group">
                 <div id="customFile" class="col-12 d-flex justify-content-center">
-                    <label class="col-form-label right4" for="{{ form.fastaFile.id_for_label }}"> <b> Input Fasta file: </b> </label>
-                    {{ form.fastaFile }}
+                    <div class="input-group" style="width: 50%;">
+                            <!--                    <label class="col-form-label right4" for="{{ form.fastaFile.id_for_label }}"> <b> Input Fasta file: </b> </label>-->
+                        {{ form.fastaFile }}
+                        <label class="input-group-text" for="{{ form.fastaFile.id_for_label }}">Insert Fasta file</label>
+                    </div>
                 </div>
             </div>
 

@@ -9,7 +9,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.restrictionEnzymes = kwargs.pop('restrictionEnzymes')
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
-        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': "",'class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true", 'style': "width: 40%;"})
+        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': "",'class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
