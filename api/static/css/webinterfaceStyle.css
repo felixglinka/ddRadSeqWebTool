@@ -1,3 +1,5 @@
+/* headers */
+
 h1 {
   text-align: center;
 }
@@ -7,26 +9,13 @@ h1 {
   text-align: center;
 }
 
-.questionIcon {
-    background: url('../icons/question.svg');
-    height: 15px;
-    width: 15px;
-    display: block;
-    margin-top: 13px;
-    margin-left: 10px;
-}
-
-.dropdown {
-  position: relative;
-  margin: auto;
-  width: 50%;
-}
-
 caption {
     caption-side: top;
     text-align: center;
     font-weight: bold;
 }
+
+/* form spacing */
 
 .bottom15, h1, h6{
    padding-bottom: 1.5rem;
@@ -60,6 +49,42 @@ caption {
   width: 50%;
 }
 
+/* Popover and icons */
+
+.questionIcon {
+    background: url('../icons/question.svg');
+    height: 15px;
+    width: 15px;
+    display: block;
+    margin-top: 13px;
+    margin-left: 10px;
+}
+
+.popover {
+   border: 1px #0d6efd solid;
+}
+
+.popover>.popover-arrow {
+    border-width: 1px;
+}
+
+.bs-popover-end>.popover-arrow::before{
+    border-left-color: #0d6efd;
+    border-right-color: #0d6efd;
+}
+
+.bs-popover-bottom>.popover-arrow::before{
+    border-bottom-color: #0d6efd;
+}
+
+/* Data frama and table */
+
+.dataFrames {
+  width: 100%;
+  display: table;
+  border-spacing: 7.5px;
+}
+
 .left, .right {
   display: table-cell;
   width: 50%;
@@ -67,6 +92,17 @@ caption {
 
 .left .table, .right .table {
   margin: auto;
+}
+
+/* Slider, tack and ticks */
+
+.slider-track{
+    height: 5px;
+    margin: auto;
+    border-radius: 5px;
+    margin-top: 30px;
+    width: 50%;
+    z-index: 1;
 }
 
 .line {
@@ -90,22 +126,7 @@ caption {
     z-index: 1;
 }
 
-.dataFrames {
-  width: 100%;
-  display: table;
-  border-spacing: 7.5px;
-}
-
-.slider-track{
-    height: 5px;
-    margin: auto;
-    border-radius: 5px;
-    margin-top: 30px;
-    width: 50%;
-    z-index: 1;
-}
-
-input[type='range']{
+input[type='range'] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

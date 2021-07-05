@@ -71,7 +71,7 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
   tableCaption = table.createCaption()
   tableCaption.innerHTML = restrictionEnzymes.concat("<br>").concat(basepairLengthToBeSequenced).concat(" bp")
   .concat("&nbsp;").concat(pairedEndChoice).concat("<br>Sequencing Yield: ").concat(sequencingYield)
-  .concat("&emsp;Coverage: ").concat(coverage)
+  .concat(" bp - Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let row = thead.insertRow();
 
