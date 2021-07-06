@@ -1,10 +1,13 @@
-function createTip(){
-    let restrictionHelpTooltipElement = document.getElementById('restrictionHelp');
-    new bootstrap.Popover(restrictionHelpTooltipElement);
+function createIcon(id){
+    questionIcon = document.createElement('div');
+    questionIcon.id = id;
+    questionIcon.className = "questionIcon";
+    questionIcon.setAttribute('data-bs-toggle', 'popover');
+    questionIcon.title = "Popover title";
+    questionIcon.setAttribute('data-bs-content', "And here's some amazing content. It's very engaging. Right?");
 
-
+    return questionIcon
 }
-
 
 function initPopovers() {
 
@@ -15,7 +18,6 @@ function initPopovers() {
         container: popoverTriggerEl,
         html: true,
         trigger: 'hover focus',
-
         placement: 'right'}
         )
     })

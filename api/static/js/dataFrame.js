@@ -45,7 +45,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
    resultTable.tBodies[0].rows[0].cells[1].innerText = currentSelectedFragmentSize;
    resultTable.tBodies[0].rows[1].cells[1].innerText = sumAllBasesOfEveryBin;
    resultTable.tBodies[0].rows[2].cells[1].innerText = maxNumberOfPossibleSamples;
-   resultTable.tBodies[0].rows[3].cells[1].innerText = numberBasesToBeSequenced;
+   resultTable.tBodies[0].rows[3].cells[1].innerText = (numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
 
    resultTable.tBodies[0].rows[4].cells[1].innerText = String(adaptorContamination).concat(' [')
                                                             .concat(adaptorContaminationPercentage).concat('%] → ')
@@ -98,8 +98,20 @@ function generateDataframeTableRows(table) {
           if (i == 0) {
 
             th = document.createElement('th');
-            th.appendChild(document.createTextNode(title));
+            th.style = 'display: flex;'
+            titleElement = document.createElement('span');
+            titleElement.className = 'right4'
+            titleElement.appendChild(document.createTextNode(title));
+            th.appendChild(titleElement);
             th.scope='row';
+
+            if( title === 'No. samples multiplexed') {
+                th.appendChild(createIcon("samplesMultiplexedHelp"));
+            }
+
+            if(title === "No. basepairs sequenced in the lane") {
+                th.appendChild(createIcon("basepairsSequencedHelp"));
+            }
 
             if( title === 'Adapter Contamination' || title === "Overlapping Fragments") {
                 th.style="color:red;"
