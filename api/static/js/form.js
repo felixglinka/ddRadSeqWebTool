@@ -37,14 +37,6 @@ function initForm(e){
 //  changeNameOfFileInputField()
 //  initFileLabelField()
 
-  setInputFilter(document.getElementById("id_sizeSelectMin"), function(value) {
-    return /^\d*$/.test(value);
-  });
-
-  setInputFilter(document.getElementById("id_sizeSelectMax"), function(value) {
-    return /^\d*$/.test(value);
-  });
-
   setInputFilter(document.getElementById("id_basepairLengthToBeSequenced"), function(value) {
     return /^\d*$/.test(value);
   });

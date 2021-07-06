@@ -29,9 +29,6 @@ def webinterfaceViews(request):
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
-                if inputForm.cleaned_data["sizeSelectMax"] != "" and inputForm.cleaned_data["sizeSelectMin"] == "" or inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMax"] == "" :
-                    raise Exception("A minimum and a maximum value needs to be chosen for the size selection")
-
                 if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
                     inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
                     inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
@@ -46,17 +43,8 @@ def webinterfaceViews(request):
                 if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
                     raise Exception("Coverage cannot be 0")
 
-                selectedMinSize = None
-                selectedMaxSize = None
                 context["graphHeight"] = "500"
 
-                if inputForm.cleaned_data["sizeSelectMin"] != "" and inputForm.cleaned_data["sizeSelectMin"] != "":
-                    selectedMinSize = int(inputForm.cleaned_data["sizeSelectMin"])
-                    selectedMaxSize = int(inputForm.cleaned_data["sizeSelectMax"])
-                    context["graphHeight"] = "450"
-
-                    if selectedMaxSize != None and selectedMinSize != None and selectedMaxSize < selectedMinSize:
-                        raise Exception("Minimum value cannot exceed maximum value")
 
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
 
@@ -64,7 +52,6 @@ def webinterfaceViews(request):
                         ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
                             int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
                                                                    int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                               selectedMinSize, selectedMaxSize,
                                                                int(inputForm.cleaned_data["sequencingYield"]),
                                                                int(inputForm.cleaned_data["coverage"]),
                                                                int(inputForm.cleaned_data['basepairLengthToBeSequenced']),
@@ -79,8 +66,7 @@ def webinterfaceViews(request):
                     else:
                         ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
                             int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
-                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                               selectedMinSize, selectedMaxSize)
+                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])])
 
                     context["graph"] = ddRadSeqresult['graph']
 
@@ -93,9 +79,7 @@ def webinterfaceViews(request):
                         ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])],
                                                     restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                     restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])],
-                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])],
-                                                    selectedMinSize, selectedMaxSize,
-                                                    int(inputForm.cleaned_data["sequencingYield"]), int(inputForm.cleaned_data["coverage"]),
+                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])],                                                    int(inputForm.cleaned_data["sequencingYield"]), int(inputForm.cleaned_data["coverage"]),
                                                     int(inputForm.cleaned_data['basepairLengthToBeSequenced']), inputForm.cleaned_data['pairedEndChoice'])
 
                         context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
@@ -112,8 +96,7 @@ def webinterfaceViews(request):
                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])],
                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])],
-                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])],
-                                                    selectedMinSize, selectedMaxSize)
+                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])])
 
                     context["graph"] = ddRadSeqComparisonResult['graph']
 

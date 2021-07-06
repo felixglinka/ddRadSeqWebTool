@@ -22,9 +22,6 @@ class BasicInputDDRadDataForm(forms.Form):
         self.initial['restrictionEnzyme3'] = ''
         self.initial['restrictionEnzyme4'] = ''
 
-        self.fields['sizeSelectMin'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
-        self.fields['sizeSelectMax'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
-
         self.fields['basepairLengthToBeSequenced'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['pairedEndChoice'].choices = [(PAIRED_END_ENDING, 'Paired End'), (SINGLE_END_ENDING, 'Single End')]
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
@@ -38,8 +35,6 @@ class BasicInputDDRadDataForm(forms.Form):
     restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False, widget=forms.Select(attrs={'class':'form-select'}))
     restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False, widget=forms.Select(attrs={'class':'form-select'}))
 
-    sizeSelectMin = forms.CharField(label="Minimum Size Selection", required=False)
-    sizeSelectMax = forms.CharField(label="Maximum Size Selection", required=False)
 
     basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
