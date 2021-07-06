@@ -63,6 +63,10 @@ caption {
    border: 1px #0d6efd solid;
 }
 
+.popover-header {
+   color: black;
+}
+
 .popover>.popover-arrow {
     border-width: 1px;
 }
