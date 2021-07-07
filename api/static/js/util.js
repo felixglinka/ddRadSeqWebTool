@@ -63,13 +63,13 @@ function calculateExperimentalOverlaps(fragmentLengths, slope, sliderOneValue, s
 
     console.log(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))
 
-    selectedFragmentLength = parseInt(sliderOneValue) < parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
+    selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
 
     numberOfOverlaps = Math.round(selectedFragmentLength*slope)
 
-    if(sliderOneValue <= parseInt(sequenceLength)/10 || sliderOneValue > parseInt(sequenceLength*2)/10) {
+    if(sliderOneValue < parseInt(sequenceLength)/10 || sliderOneValue >= parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;
     } else {
         return overlapValue + numberOfOverlaps;
