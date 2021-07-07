@@ -41,16 +41,17 @@ class DigestedDna:
     multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
     multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > sequencingThreshold] = sequencingThreshold
     self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].multiply(multiplyVectorForSequencedBasesCalculation)
-    self.fragmentCalculationDataframe['adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength if sequenceLength < 1000 else 1000)
+    self.fragmentCalculationDataframe['adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeNames, 0, sequenceLength if sequenceLength < 1000 else 1000)
     if (pairedEnd == PAIRED_END_ENDING):
-      self.fragmentCalculationDataframe['overlaps'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength*2 if sequenceLength<505 else 1000)
+      self.fragmentCalculationDataframe['overlaps'] = self.sumColumnUntilLimit(restrictionEnzymeNames, sequenceLength, sequenceLength*2 if sequenceLength<505 else 1000)
 
-  def sumColumnUntilLimit(self, restrictionEnzymeNames, sequenceLength):
+  def sumColumnUntilLimit(self, restrictionEnzymeNames, minSequenceLimit, maxSequenceLimit):
 
     contaminationList = [-1] * 101
-    contaminationList[:int((sequenceLength + 1) / 10)] = [idx for idx in range(int((sequenceLength + 1) / 10))]
+    contaminationList[:int((maxSequenceLimit + 1) / 10)] = [idx for idx in range(0, int((maxSequenceLimit + 1) / 10))]
+    contaminationList[:int((minSequenceLimit + 1) / 10)] = [int((minSequenceLimit) / 10) for idx in range(0, int((minSequenceLimit + 1) / 10))]
 
-    return [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:int((sequenceLength + 1) / 10)].sum() for row in contaminationList]
+    return [self.fragmentCalculationDataframe[restrictionEnzymeNames["firstRestrictionEnzyme"] + "+" + restrictionEnzymeNames["secondRestrictionEnzyme"]].iloc[row:int((maxSequenceLimit + 1) / 10)].sum() for row in contaminationList]
 
   def countFragmentsInGivenRange(self, selectedMinSize, selectedMaxSize):
 
