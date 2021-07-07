@@ -71,6 +71,9 @@ class DigestedDna:
                labels=['(0-10]', '(200-210]', '(400-410]', '(600-610]', '(800-810]', '(1000-1010]'])
     plt.legend(bbox_to_anchor=(1.04, 1), loc='upper left')
 
+    for linePosition in range(0, MAX_GRAPH_VIEW+BINNING_STEPS, BINNING_STEPS):
+      plt.axvline(x=linePosition, c=(.83, .83, .83, 0.5))
+
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png',bbox_inches='tight')
     buffer.seek(0)

@@ -1,7 +1,5 @@
 const minGap = 1;
 const sliderMaxValue = "100";
-const adaptorContaminationSlope = 0.4424;
-const overlapSlope = 0.5797;
 
 let columnNumber = 3
 const dataFrameTitles = ['No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
@@ -36,14 +34,14 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
    adaptorContaminationValues = calculateAdaptorContamination(sliderOneValue, sliderTwoValue, dataFrame, currentSelectedFragmentSize)
    theoreticalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, restrictionEnzymes, currentSelectedFragmentSize,0,0)
 
-   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(dataFrame[restrictionEnzymes], adaptorContaminationSlope, sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
-   experimentalSelectedFragmentSize = sliderOneValue > basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? currentSelectedFragmentSize + experimentalAdaptorContamination : 0 : currentSelectedFragmentSize
+   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(dataFrame[restrictionEnzymes], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
+   experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? currentSelectedFragmentSize + experimentalAdaptorContamination : 0 : currentSelectedFragmentSize
 
    experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSelectedFragmentSize)
-    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(dataFrame[restrictionEnzymes], overlapSlope, sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
-    experimentalSelectedFragmentSize = sliderOneValue > basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + experimentalOverlaps : 0 : experimentalSelectedFragmentSize
+    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(dataFrame[restrictionEnzymes], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
+    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + experimentalOverlaps : 0 : experimentalSelectedFragmentSize
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps)/experimentalSelectedFragmentSize*100));
 
     resultTable.tBodies[0].rows[5].cells[1].innerText = String(overlapValues.overlaps).concat().concat(' [')
@@ -81,7 +79,7 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
   tableCaption = table.createCaption()
   tableCaption.innerHTML = restrictionEnzymes.concat("<br>").concat(basepairLengthToBeSequenced).concat(" bp")
   .concat("&nbsp;").concat(pairedEndChoice).concat("<br>Sequencing Yield: ").concat(sequencingYield)
-  .concat(" bp - Coverage: ").concat(coverage)
+  .concat(" reads - Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let firstHeaderRow = thead.insertRow();
   let secondHeaderRow = thead.insertRow();
@@ -111,7 +109,7 @@ function generateDataFrameTableHead(table, restrictionEnzymes) {
     secondHeaderRow.appendChild(th);
   }
   secondHeaderRow.cells[1].innerText = "theoretical"
-  secondHeaderRow.cells[2].innerText = "experimental"
+  secondHeaderRow.cells[2].innerText = "prediction"
 }
 
 function generateDataframeTableRows(table) {
@@ -131,7 +129,7 @@ function generateDataframeTableRows(table) {
             th.appendChild(titleElement);
             th.scope='row';
 
-            if( title === 'No. samples multiplexed') {
+            if( title === 'No. samples multiplexable') {
                 th.appendChild(createIcon("samplesMultiplexedHelp"));
             }
 

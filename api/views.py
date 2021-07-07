@@ -1,8 +1,8 @@
-import io, logging, shutil
+import io, logging
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handleDDRadSeqComparisonRequest
-from backend.settings import PAIRED_END_ENDING, ILLUMINA_150
+from backend.settings import PAIRED_END_ENDING, ILLUMINA_150, SEQUENCING_YIELD_MULTIPLIER
 from .forms import BasicInputDDRadDataForm
 
 from django.shortcuts import render
@@ -23,6 +23,7 @@ def webinterfaceViews(request):
         if inputForm.is_valid():
 
             try:
+
                 try:
                     readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
                     stringStreamFasta = io.StringIO(readInputFasta)
@@ -43,16 +44,13 @@ def webinterfaceViews(request):
                 if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
                     raise Exception("Coverage cannot be 0")
 
-                context["graphHeight"] = "500"
-
-
                 if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
 
-                    if (inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
+                    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
                         ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
                             int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
                                                                    int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                               int(inputForm.cleaned_data["sequencingYield"]),
+                                                               int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER,
                                                                int(inputForm.cleaned_data["coverage"]),
                                                                int(inputForm.cleaned_data['basepairLengthToBeSequenced']),
                                                                inputForm.cleaned_data['pairedEndChoice'])
@@ -60,7 +58,7 @@ def webinterfaceViews(request):
                         context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
                         context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
                         context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
-                        context["sequencingYield"] = inputForm.cleaned_data['sequencingYield']
+                        context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER
                         context["coverage"] = inputForm.cleaned_data['coverage']
 
                     else:
@@ -75,7 +73,7 @@ def webinterfaceViews(request):
 
                 else:
 
-                    if (inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
+                    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
                         ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])],
                                                     restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
                                                     restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])],
@@ -88,7 +86,7 @@ def webinterfaceViews(request):
                         context["secondChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])].name
                         context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
                         context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
-                        context["sequencingYield"] = inputForm.cleaned_data['sequencingYield']
+                        context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER
                         context["coverage"] = inputForm.cleaned_data['coverage']
 
                     else:
@@ -104,8 +102,12 @@ def webinterfaceViews(request):
                 logger.error(e)
                 messages.error(request, e)
 
+
         else:
             logger.error(inputForm.errors)
 
-    context["form"] = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
+    else:
+        inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
+
+    context["form"] = inputForm
     return render(request, "webinterface.html", context)

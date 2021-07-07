@@ -1,3 +1,6 @@
+const adaptorContaminationSlope = 0.4508;
+const overlapSlope =  0.7055;
+
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(dataFrame['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
@@ -44,13 +47,14 @@ function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSel
    }
 }
 
-function calculateExperimentalAdapterContamination(fragmentLengths, slope, sliderOneValue, sequenceLength, contaminationValue) {
+function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneValue, sequenceLength, contaminationValue) {
 
     selectedFragmentLength = parseInt(sliderOneValue) == 0 ? Object.values(fragmentLengths)[0] :
                              parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
 
-    numberOfAdaptorContamination = Math.round(selectedFragmentLength*slope)
+    numberOfAdaptorContamination = Math.round(selectedFragmentLength*adaptorContaminationSlope)
+    console.log(selectedFragmentLength)
 
     if( sliderOneValue <= parseInt(sequenceLength)/10) {
         return contaminationValue + numberOfAdaptorContamination;
@@ -59,13 +63,13 @@ function calculateExperimentalAdapterContamination(fragmentLengths, slope, slide
     }
 }
 
-function calculateExperimentalOverlaps(fragmentLengths, slope, sliderOneValue, sequenceLength, overlapValue) {
+function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequenceLength, overlapValue) {
 
     selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
 
-    numberOfOverlaps = Math.round(selectedFragmentLength*slope)
+    numberOfOverlaps = Math.round(selectedFragmentLength*overlapSlope)
 
     if(sliderOneValue >= parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;
