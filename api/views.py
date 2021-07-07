@@ -30,73 +30,8 @@ def webinterfaceViews(request):
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
-                if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
-                    inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
-                    inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
-                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == "" or
-                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == "" or
-                    inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] != "" or
-                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == "" or
-                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" or
-                    inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != ""):
-                    raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
+                context = expertInputRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
 
-                if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
-                    raise Exception("Coverage cannot be 0")
-
-                if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
-
-                    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
-                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
-                            int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
-                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                               int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER,
-                                                               int(inputForm.cleaned_data["coverage"]),
-                                                               int(inputForm.cleaned_data['basepairLengthToBeSequenced']),
-                                                               inputForm.cleaned_data['pairedEndChoice'])
-                        context["dataFrame"] = ddRadSeqresult['dataFrame']
-                        context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
-                        context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
-                        context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
-                        context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER
-                        context["coverage"] = inputForm.cleaned_data['coverage']
-
-                    else:
-                        ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
-                            int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
-                                                                   int(inputForm.cleaned_data['restrictionEnzyme2'])])
-
-                    context["graph"] = ddRadSeqresult['graph']
-
-                elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
-                    raise Exception("Two restriction enzymes for comparison has to be chosen")
-
-                else:
-
-                    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data['sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
-                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])],
-                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])],
-                                                    restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])],                                                    int(inputForm.cleaned_data["sequencingYield"]), int(inputForm.cleaned_data["coverage"]),
-                                                    int(inputForm.cleaned_data['basepairLengthToBeSequenced']), inputForm.cleaned_data['pairedEndChoice'])
-
-                        context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
-                        context["dataFrame2"] = ddRadSeqComparisonResult['dataFrame2']
-                        context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
-                        context["secondChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])].name + '+' + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])].name
-                        context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
-                        context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
-                        context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"])*SEQUENCING_YIELD_MULTIPLIER
-                        context["coverage"] = inputForm.cleaned_data['coverage']
-
-                    else:
-                        ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta,
-                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])],
-                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])],
-                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme3'])],
-                                                   restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme4'])])
-
-                    context["graph"] = ddRadSeqComparisonResult['graph']
 
             except Exception as e:
                 logger.error(e)
@@ -107,7 +42,114 @@ def webinterfaceViews(request):
             logger.error(inputForm.errors)
 
     else:
+        context["mode"] = 'none'
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
 
     context["form"] = inputForm
     return render(request, "webinterface.html", context)
+
+def expertInputRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
+
+    if inputForm.cleaned_data["restrictionEnzyme1"] == "" or inputForm.cleaned_data["restrictionEnzyme2"] == "":
+        raise Exception("The first pair of Enzymes has to be chosen!")
+
+    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+        "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
+            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] != "" or
+            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and
+            inputForm.cleaned_data["sequencingYield"] == "" or
+            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and
+            inputForm.cleaned_data["sequencingYield"] == "" or
+            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and
+            inputForm.cleaned_data["sequencingYield"] != ""):
+        raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
+
+    if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
+        raise Exception("Coverage cannot be 0")
+
+    if inputForm.cleaned_data['restrictionEnzyme3'] == "" and inputForm.cleaned_data['restrictionEnzyme4'] == "":
+
+        if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+            'sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
+            ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
+                int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
+                                                       int(inputForm.cleaned_data['restrictionEnzyme2'])],
+                                                   int(inputForm.cleaned_data[
+                                                           "sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER,
+                                                   int(inputForm.cleaned_data["coverage"]),
+                                                   int(inputForm.cleaned_data['basepairLengthToBeSequenced']),
+                                                   inputForm.cleaned_data['pairedEndChoice'])
+            context["dataFrame"] = ddRadSeqresult['dataFrame']
+            context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(
+                inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[
+                                                           int(inputForm.cleaned_data['restrictionEnzyme2'])].name
+            context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
+            context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
+            context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
+            context["coverage"] = inputForm.cleaned_data['coverage']
+
+        else:
+            ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, restrictionEnzymes[
+                int(inputForm.cleaned_data['restrictionEnzyme1'])], restrictionEnzymes[
+                                                       int(inputForm.cleaned_data['restrictionEnzyme2'])])
+
+        context["graph"] = ddRadSeqresult['graph']
+
+    elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
+        raise Exception("Two restriction enzymes for comparison has to be chosen")
+
+    else:
+
+        if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+            'sequencingYield'] != "" and inputForm.cleaned_data['coverage'] != ""):
+            ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta, restrictionEnzymes[
+                int(inputForm.cleaned_data['restrictionEnzyme1'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme2'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme3'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme4'])],
+                                                                       int(inputForm.cleaned_data["sequencingYield"]),
+                                                                       int(inputForm.cleaned_data["coverage"]),
+                                                                       int(inputForm.cleaned_data[
+                                                                               'basepairLengthToBeSequenced']),
+                                                                       inputForm.cleaned_data['pairedEndChoice'])
+
+            context["dataFrame1"] = ddRadSeqComparisonResult['dataFrame1']
+            context["dataFrame2"] = ddRadSeqComparisonResult['dataFrame2']
+            context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(
+                inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' + restrictionEnzymes[
+                                                           int(inputForm.cleaned_data['restrictionEnzyme2'])].name
+            context["secondChosenRestrictionEnzymes"] = restrictionEnzymes[int(
+                inputForm.cleaned_data['restrictionEnzyme3'])].name + '+' + restrictionEnzymes[
+                                                            int(inputForm.cleaned_data['restrictionEnzyme4'])].name
+            context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
+            context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
+            context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
+            context["coverage"] = inputForm.cleaned_data['coverage']
+
+        else:
+            ddRadSeqComparisonResult = handleDDRadSeqComparisonRequest(stringStreamFasta,
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme1'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme2'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme3'])],
+                                                                       restrictionEnzymes[int(inputForm.cleaned_data[
+                                                                                                  'restrictionEnzyme4'])])
+
+        context["graph"] = ddRadSeqComparisonResult['graph']
+    context["mode"] = 'expert'
+
+    return context

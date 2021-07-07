@@ -29,8 +29,8 @@ class BasicInputDDRadDataForm(forms.Form):
 
 
     fastaFile = forms.FileField()
-    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1", widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
-    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2", widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
+    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1", required=False, widget=forms.Select(attrs={'title': '', 'class':'form-select'}))
+    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2", required=False, widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
 
     restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False, widget=forms.Select(attrs={'class':'form-select'}))
     restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False, widget=forms.Select(attrs={'class':'form-select'}))

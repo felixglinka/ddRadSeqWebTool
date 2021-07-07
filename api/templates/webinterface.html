@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/webinterfaceStyle.css' %}">
     <script type="text/javascript">
+
+        const mode ="{{ mode }}"
+
         {% if dataFrame or dataFrame1 and dataFrame2 %}
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
             const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
@@ -48,7 +51,6 @@
             <div class="row form-group">
                 <div id="customFile" class="col-12 d-flex justify-content-center">
                     <div class="input-group" style="width: 50%;">
-                            <!--                    <label class="col-form-label right4" for="{{ form.fastaFile.id_for_label }}"> <b> Input Fasta file: </b> </label>-->
                         {{ form.fastaFile }}
                         <label class="input-group-text" for="{{ form.fastaFile.id_for_label }}">Insert Fasta file</label>
                     </div>
@@ -56,37 +58,68 @@
             </div>
 
             <div class="row form-group">
-                <div class="col-6 d-flex justify-content-end text-center">
-                    <label class="right4 col-form-label"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
-                    <div class="col-xs-10">
-                        {{ form.restrictionEnzyme1 }}
+                <div id="buttonCard" class="col-12 d-flex justify-content-center">
+                    <div class="card text-center" style="width: 50%;">
+                      <div class="card-body">
+                            <h5 class="card-title">So, you know how to ddRad?</h5>
+                            <p class="card-text">Here are the different ways depending on your expertise of the project. Have fun!</p>
+                            <button id="beginnerButton" type="button" class="btn btn-outline-danger right10">I have no idea!</button>
+                            <button id="tryoutButton" type="button" class="btn btn-outline-warning right10">Lemme try out!</button>
+                            <button id="expertButton" type="button" class="btn btn-outline-success">Yes, I know what I wanna do!</button>
+                      </div>
                     </div>
-                </div>
-                <div class="col-6 d-flex text-center">
-                    <label class="right4 col-form-label"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
-                    <div class="col-xs-10">
-                        {{ form.restrictionEnzyme2 }}
-                    </div>
-                    <div id='restrictionHelp' class="questionIcon" style="margin-top:13px; margin-left: 10px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
                 </div>
             </div>
 
-            <div class="row form-group">
-                <div class="col-6 d-flex justify-content-end">
-                    <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
-                    <div class="col-xs-10">
-                        {{ form.restrictionEnzyme3 }}
-                        <small class="text-muted">Optional</small>
-                    </div>
-                </div>
-                <div class="col-6 d-flex">
-                    <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme4.label }}: </b> </label>
-                    <div class="col-xs-10">
-                        {{ form.restrictionEnzyme4 }}
-                        <small class="text-muted">Optional</small>
-                    </div>
-                </div>
+            <div id="beginnerForm" style="display: none;">
+                <hr/>
+                <h1>Under Construction</h1>
+                <hr/>
             </div>
+
+            <div id="tryOutForm" style="display: none;">
+                <hr/>
+                <h1>Under Construction</h1>
+                <hr/>
+            </div>
+
+            <div id="expertForm" style="display: none;">
+                <hr/>
+                <div class="row form-group">
+                    <div class="col-6 d-flex justify-content-end text-center">
+                        <label class="right4 col-form-label"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
+                        <div class="col-xs-10">
+                            {{ form.restrictionEnzyme1 }}
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex text-center">
+                        <label class="right4 col-form-label"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
+                        <div class="col-xs-10">
+                            {{ form.restrictionEnzyme2 }}
+                        </div>
+                        <div id='restrictionHelp' class="questionIcon" style="margin-top:13px; margin-left: 10px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-6 d-flex justify-content-end">
+                        <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
+                        <div class="col-xs-10">
+                            {{ form.restrictionEnzyme3 }}
+                            <small class="text-muted">Optional</small>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme4.label }}: </b> </label>
+                        <div class="col-xs-10">
+                            {{ form.restrictionEnzyme4 }}
+                            <small class="text-muted">Optional</small>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+
 
             <div class="row form-group">
                  <div class="center h6"> Sequence Calculation

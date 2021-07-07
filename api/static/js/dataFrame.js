@@ -2,8 +2,8 @@ const minGap = 1;
 const sliderMaxValue = "100";
 
 let columnNumber = 3
-const dataFrameTitles = ['No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
-const overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
+const dataFrameTitles = []
+const overlapTitle = ""
 
 function slideOne(sliderOne, sliderTwo, resultTable, dataFrame, restrictionEnzymes) {
 
@@ -237,6 +237,12 @@ function buildUpDataFrame(inputElement, tableId, restrictionEnzymes, idSliderOne
 }
 
 function initDataframe() {
+
+    if(document.body.contains(document.getElementById("dataFrame")) || document.body.contains(document.getElementById("dataFrame1"))) {
+        const dataFrameTitles = ['No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
+        const overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
+    }
+
 
     if(document.body.contains(document.getElementById("dataFrame")))  {
 
