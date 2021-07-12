@@ -35,13 +35,13 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, resultTable, dataFra
    theoreticalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, restrictionEnzymes, currentSelectedFragmentSize,0,0)
 
    experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(dataFrame[restrictionEnzymes], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
-   experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? currentSelectedFragmentSize + experimentalAdaptorContamination : 0 : currentSelectedFragmentSize
+   experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
 
    experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSelectedFragmentSize)
     experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(dataFrame[restrictionEnzymes], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
-    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + experimentalOverlaps : 0 : experimentalSelectedFragmentSize
+    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps)/experimentalSelectedFragmentSize*100));
 
     resultTable.tBodies[0].rows[5].cells[1].innerText = String(overlapValues.overlaps).concat().concat(' [')

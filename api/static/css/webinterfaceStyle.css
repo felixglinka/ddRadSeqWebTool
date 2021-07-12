@@ -51,12 +51,33 @@ caption {
 
 /* Popover and icons */
 
+.extendIcon {
+    background: url('../icons/add-solid.svg');
+    margin-top: 11px;
+    margin-right: 10px;
+    height: 17px;
+    width: 17px;
+    cursor: pointer;
+}
+
+.removeIcon {
+    background: url('../icons/minus-solid.svg');
+    margin-top: 11px;
+    margin-right: 10px;
+    height: 17px;
+    width: 17px;
+    cursor: pointer;
+}
+
 .questionIcon {
     background: url('../icons/question.svg');
     height: 15px;
     width: 15px;
-    display: block;
     margin-top: 6px;
+}
+
+.questionIcon, .extendIcon {
+    display: block;
 }
 
 .popover {

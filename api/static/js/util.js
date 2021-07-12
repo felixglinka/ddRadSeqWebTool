@@ -1,17 +1,23 @@
 const adaptorContaminationSlope = 0.4508;
 const overlapSlope =  0.7055;
 
+function createIcon(id){
+    questionIcon = document.createElement('div');
+    questionIcon.id = id;
+    questionIcon.className = "questionIcon";
+    questionIcon.setAttribute('data-bs-toggle', 'popover');
+    questionIcon.title = "Popover title";
+    questionIcon.setAttribute('data-bs-content', "And here's some amazing content. It's very engaging. Right?");
+
+    return questionIcon
+}
+
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(dataFrame['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
    sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalAdaptorContamination*(2/3)*parseInt(basepairLengthToBeSequenced) + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced))
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
-
-   adaptorContaminationSliderOne = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderOneValue)]];
-   adaptorContaminationSliderTwo = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderTwoValue)]];
-   adaptorContamination = adaptorContaminationSliderOne - adaptorContaminationSliderTwo
-   adaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/currentSelectedFragmentSize*100));
 
    return {
         'currentSelectedFragmentSize': currentSelectedFragmentSize,

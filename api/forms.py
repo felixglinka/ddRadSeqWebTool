@@ -1,6 +1,6 @@
 from django import forms
 
-from backend.settings import PAIRED_END_ENDING, SINGLE_END_ENDING
+from backend.settings import PAIRED_END_ENDING, SINGLE_END_ENDING, MAX_NUMBER_SELECTFIELDS
 
 
 class BasicInputDDRadDataForm(forms.Form):
@@ -12,15 +12,9 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': "",'class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
-        self.fields['restrictionEnzyme1'].choices = restrictionEnzymesChoices
-        self.fields['restrictionEnzyme2'].choices = restrictionEnzymesChoices
-        self.initial['restrictionEnzyme1'] = ''
-        self.initial['restrictionEnzyme2'] = ''
-
-        self.fields['restrictionEnzyme3'].choices = restrictionEnzymesChoices
-        self.fields['restrictionEnzyme4'].choices = restrictionEnzymesChoices
-        self.initial['restrictionEnzyme3'] = ''
-        self.initial['restrictionEnzyme4'] = ''
+        for number in range(1, MAX_NUMBER_SELECTFIELDS):
+            self.fields['restrictionEnzyme' + str(number)].choices = restrictionEnzymesChoices
+            self.initial['restrictionEnzyme' + str(number)] = ''
 
         self.fields['basepairLengthToBeSequenced'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['pairedEndChoice'].choices = [(PAIRED_END_ENDING, 'Paired End'), (SINGLE_END_ENDING, 'Single End')]
@@ -29,12 +23,9 @@ class BasicInputDDRadDataForm(forms.Form):
 
 
     fastaFile = forms.FileField()
-    restrictionEnzyme1 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.1", required=False, widget=forms.Select(attrs={'title': '', 'class':'form-select'}))
-    restrictionEnzyme2 = forms.ChoiceField(choices=[], label="Restriction Enzyme 1.2", required=False, widget=forms.Select(attrs={'title': "", 'class':'form-select'}))
 
-    restrictionEnzyme3 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.1", required=False, widget=forms.Select(attrs={'class':'form-select'}))
-    restrictionEnzyme4 = forms.ChoiceField(choices=[], label="Restriction Enzyme 2.2", required=False, widget=forms.Select(attrs={'class':'form-select'}))
-
+    for number in range(1, MAX_NUMBER_SELECTFIELDS):
+        locals()[f"restrictionEnzyme{number}"] = forms.ChoiceField(choices=[], label="Restriction Enzyme "+str(int(number/2) if number % 2 == 0 else int(-(-(number/2) // 1)))+str('.')+str(2 if number % 2 == 0 else 1), required=False, widget=forms.Select(attrs={'class':'form-select'}))
 
     basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))

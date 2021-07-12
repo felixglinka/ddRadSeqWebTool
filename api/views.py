@@ -1,5 +1,7 @@
 import io, logging
 
+from django.http import JsonResponse
+
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handleDDRadSeqComparisonRequest
 from backend.settings import PAIRED_END_ENDING, ILLUMINA_150, SEQUENCING_YIELD_MULTIPLIER
@@ -14,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": ""}
+    context = {"graph": "", "mode": "none"}
     restrictionEnzymes = requestRestrictionEnzymes()
 
     if request.method == "POST":
@@ -42,7 +44,6 @@ def webinterfaceViews(request):
             logger.error(inputForm.errors)
 
     else:
-        context["mode"] = 'none'
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
 
     context["form"] = inputForm

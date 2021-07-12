@@ -32,8 +32,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{% static 'js/util.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
-    <script src="{% static 'js/popovers.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
+    <script src="{% static 'js/popovers.js' %}"></script>
 </head>
 <body>
     {% if messages %}
@@ -79,7 +79,13 @@
 
             <div id="tryOutForm" style="display: none;">
                 <hr/>
-                <h1>Under Construction</h1>
+
+                {% for field in form %}
+                    {% if 'Restriction Enzyme ' in  field.label %}
+                    <label>{{ field.label }}</label> {{ field }}
+                    {% endif %}
+                {% endfor %}
+
                 <hr/>
             </div>
 
@@ -97,7 +103,7 @@
                         <div class="col-xs-10">
                             {{ form.restrictionEnzyme2 }}
                         </div>
-                        <div id='restrictionHelp' class="questionIcon" style="margin-top:13px; margin-left: 10px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                        <div id='expertRestrictionHelp' class="questionIcon" style="margin-top:13px; margin-left: 10px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
                     </div>
                 </div>
 

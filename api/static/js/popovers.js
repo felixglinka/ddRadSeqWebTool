@@ -1,14 +1,3 @@
-function createIcon(id){
-    questionIcon = document.createElement('div');
-    questionIcon.id = id;
-    questionIcon.className = "questionIcon";
-    questionIcon.setAttribute('data-bs-toggle', 'popover');
-    questionIcon.title = "Popover title";
-    questionIcon.setAttribute('data-bs-content', "And here's some amazing content. It's very engaging. Right?");
-
-    return questionIcon
-}
-
 function initPopovers() {
 
     let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
@@ -18,8 +7,8 @@ function initPopovers() {
         container: popoverTriggerEl,
         html: true,
         trigger: 'hover focus',
-        placement: 'right'}
-        )
+        placement: 'right'
+        })
     })
 
 }
