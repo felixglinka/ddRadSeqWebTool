@@ -10,23 +10,18 @@
 
         const mode ="{{ mode }}"
 
-        {% if dataFrame or dataFrame1 and dataFrame2 %}
+        {% if dataFrames %}
             const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
             const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
             const pairedEndChoice = "{{ pairedEndChoice }}"
             const sequencingYield = "{{ sequencingYield }}"
             const coverage = "{{ coverage }}"
-        {% endif %}
 
-        {% if dataFrame %}
-            const dataFrameData = {{ dataFrame|safe }};
-        {% endif %}
 
-        {% if dataFrame1 and dataFrame2 %}
-            const dataFrame1Data = {{ dataFrame1|safe }};
-            const dataFrame2Data = {{ dataFrame2|safe }};
+            const dataFrameData = {{ dataFrames|safe }};
             const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
         {% endif %}
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -192,12 +187,12 @@
     </div>
   {% endif %}
 
-   {% if dataFrame %}
+   {% if dataFrames %}
     <div id="dataFrame" class="center"></div>
     <div style="padding-top: 30px;"></div>
   {% endif %}
 
-    {% if dataFrame1 and dataFrame2 %}
+    {% if dataFrames %}
     <div id="dataFrames" class="dataFrames">
         <div id="dataFrame1" class="left"></div>
         <div id="dataFrame2" class="right"></div>

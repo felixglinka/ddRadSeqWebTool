@@ -244,69 +244,75 @@ function initDataframe() {
     }
 
 
-    if(document.body.contains(document.getElementById("dataFrame")))  {
-
-        if(pairedEndChoice === 'paired end') {
-            dataFrameTitles.push(overlapTitle);
-        }
-
-        sliderOneId = "slider-1"
-        sliderTwoId = "slider-2"
-        dataFrameTableId = "dataFrameTable"
-
-        buildUpDataFrame(document.getElementById("dataFrame"), dataFrameTableId, firstChosenRestrictionEnzymes, sliderOneId, sliderTwoId, dataFrameData)
-
-        let sliderOne = document.getElementById(sliderOneId);
-        let sliderTwo = document.getElementById(sliderTwoId);
-        let dataFrameTable = document.getElementById(dataFrameTableId)
-        slideOne(sliderOne, sliderTwo, dataFrameTable, dataFrameData, firstChosenRestrictionEnzymes)
-        slideTwo(sliderTwo, sliderOne, dataFrameTable, dataFrameData, firstChosenRestrictionEnzymes)
-
-        addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced))
-        if(pairedEndChoice === 'paired end') {
-            addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced)*2)
-        }
-    }
-
     if(document.body.contains(document.getElementById("dataFrames")))  {
 
-               if(pairedEndChoice === 'paired end') {
-                    dataFrameTitles.push(overlapTitle);
-                }
+        if(dataFrameData.length === 1) {
 
-               firstSliderOneId = "firstSlider-1"
-               firstSliderTwoId = "firstSlider-2"
-               firstDataFrameTableId = "firstDataFrameTable"
+         if(pairedEndChoice === 'paired end') {
+            dataFrameTitles.push(overlapTitle);
+         }
 
-               buildUpDataFrame(document.getElementById("dataFrame1"), firstDataFrameTableId, firstChosenRestrictionEnzymes, firstSliderOneId, firstSliderTwoId, dataFrame1Data)
+         sliderOneId = "slider-1"
+         sliderTwoId = "slider-2"
+         dataFrameTableId = "dataFrameTable"
 
-               let firstSliderOne = document.getElementById(firstSliderOneId);
-               let firstSliderTwo = document.getElementById(firstSliderTwoId);
-               let firstDataFrameTable = document.getElementById(firstDataFrameTableId);
-               slideOne(firstSliderOne, firstSliderTwo, firstDataFrameTable, dataFrame1Data, firstChosenRestrictionEnzymes)
-               slideTwo(firstSliderTwo, firstSliderOne, firstDataFrameTable, dataFrame1Data, firstChosenRestrictionEnzymes)
+         buildUpDataFrame(document.getElementById("dataFrame"), dataFrameTableId, firstChosenRestrictionEnzymes, sliderOneId, sliderTwoId, dataFrameData[0])
 
-               addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced))
-               if(pairedEndChoice === 'paired end') {
-                addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
-               }
+         let sliderOne = document.getElementById(sliderOneId);
+         let sliderTwo = document.getElementById(sliderTwoId);
+         let dataFrameTable = document.getElementById(dataFrameTableId)
+         slideOne(sliderOne, sliderTwo, dataFrameTable, dataFrameData[0], firstChosenRestrictionEnzymes)
+         slideTwo(sliderTwo, sliderOne, dataFrameTable, dataFrameData[0], firstChosenRestrictionEnzymes)
 
-               secondSliderOneId = "secondSlider-1"
-               secondSliderTwoId = "secondSlider-2"
-               secondDataFrameTableId = "secondDataFrameTable"
+         addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced))
+         if(pairedEndChoice === 'paired end') {
+            addSliderMarkers(sliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+           }
+        }
 
-               buildUpDataFrame(document.getElementById("dataFrame2"), secondDataFrameTableId, secondChosenRestrictionEnzymes, secondSliderOneId, secondSliderTwoId, dataFrame2Data)
+        if(dataFrameData.length === 2) {
 
-               let secondSliderOne = document.getElementById(secondSliderOneId);
-               let secondSliderTwo = document.getElementById(secondSliderTwoId);
-               let secondDataFrameTable = document.getElementById(secondDataFrameTableId);
-               slideOne(secondSliderOne, secondSliderTwo, secondDataFrameTable, dataFrame2Data, secondChosenRestrictionEnzymes)
-               slideTwo(secondSliderTwo, secondSliderOne, secondDataFrameTable, dataFrame2Data, secondChosenRestrictionEnzymes)
+            console.log(firstChosenRestrictionEnzymes)
+            console.log(dataFrameData)
 
-               addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced))
-               if(pairedEndChoice === 'paired end') {
-                addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
-               }
+           if(pairedEndChoice === 'paired end') {
+              dataFrameTitles.push(overlapTitle);
+           }
+
+           firstSliderOneId = "firstSlider-1"
+           firstSliderTwoId = "firstSlider-2"
+           firstDataFrameTableId = "firstDataFrameTable"
+
+           buildUpDataFrame(document.getElementById("dataFrame1"), firstDataFrameTableId, firstChosenRestrictionEnzymes, firstSliderOneId, firstSliderTwoId, dataFrameData[0])
+
+           let firstSliderOne = document.getElementById(firstSliderOneId);
+           let firstSliderTwo = document.getElementById(firstSliderTwoId);
+           let firstDataFrameTable = document.getElementById(firstDataFrameTableId);
+           slideOne(firstSliderOne, firstSliderTwo, firstDataFrameTable, dataFrameData[0], firstChosenRestrictionEnzymes)
+           slideTwo(firstSliderTwo, firstSliderOne, firstDataFrameTable, dataFrameData[0], firstChosenRestrictionEnzymes)
+
+           addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced))
+           if(pairedEndChoice === 'paired end') {
+            addSliderMarkers(firstSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+           }
+
+           secondSliderOneId = "secondSlider-1"
+           secondSliderTwoId = "secondSlider-2"
+           secondDataFrameTableId = "secondDataFrameTable"
+
+           buildUpDataFrame(document.getElementById("dataFrame2"), secondDataFrameTableId, secondChosenRestrictionEnzymes, secondSliderOneId, secondSliderTwoId, dataFrameData[1])
+
+           let secondSliderOne = document.getElementById(secondSliderOneId);
+           let secondSliderTwo = document.getElementById(secondSliderTwoId);
+           let secondDataFrameTable = document.getElementById(secondDataFrameTableId);
+           slideOne(secondSliderOne, secondSliderTwo, secondDataFrameTable, dataFrameData[1], secondChosenRestrictionEnzymes)
+           slideTwo(secondSliderTwo, secondSliderOne, secondDataFrameTable, dataFrameData[1], secondChosenRestrictionEnzymes)
+
+           addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced))
+           if(pairedEndChoice === 'paired end') {
+            addSliderMarkers(secondSliderOneId, parseInt(basepairLengthToBeSequenced)*2)
+           }
+        }
     }
 }
 

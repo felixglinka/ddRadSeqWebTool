@@ -61,6 +61,7 @@ function tryOutFormRowExtras(row, leftSelect, rightSelect){
 function buildTryOutDiv() {
 
     let tryOutFormSelections = Array.from(document.getElementById('tryOutForm').children).slice(1, -1)
+    let lastElementIndexWithSelection = 0;
 
     for (let tryOutIndex = 0; tryOutIndex < tryOutFormSelections.length; tryOutIndex+=4) {
         newSelectRow = buildFormRow(tryOutFormSelections[tryOutIndex].textContent, tryOutFormSelections[tryOutIndex+1],
@@ -70,6 +71,45 @@ function buildTryOutDiv() {
         newSelectRow.parentNode.removeChild(tryOutFormSelections[tryOutIndex+2]);
     };
 
+    if(mode === 'tryOut') {
+        lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
+    }
+
+    initExtendIconsTryOutForm(lastElementIndexWithSelection)
+}
+
+function extendTryOutFormUntilLastSelection() {
+
+    let tryOutFormSelections = Array.from(document.getElementById('tryOutForm').children).slice(1, -1)
+    let lastElementIndexWithSelection = 0
+    tryOutFormSelections.forEach(function (selectRow, index) {
+        firstRestrictionEnzyme = selectRow.firstElementChild.lastElementChild.firstElementChild.value
+        secondRestrictionEnzyme = selectRow.lastElementChild.getElementsByTagName('div')[0].firstElementChild.value
+        if(firstRestrictionEnzyme != "" && secondRestrictionEnzyme != ""){
+            lastElementIndexWithSelection = index
+        }
+    });
+
+    for (let tryOutIndex = 0; tryOutIndex <= lastElementIndexWithSelection; tryOutIndex++) {
+        tryOutFormSelections[tryOutIndex].style.display = "flex"
+    };
+
+    return lastElementIndexWithSelection
+}
+
+function initExtendIconsTryOutForm(lastElementIndexWithSelection) {
+
+    console.log(lastElementIndexWithSelection)
+    let tryOutFormSelections = Array.from(document.getElementById('tryOutForm').children).slice(1, -1)
+
+    if(lastElementIndexWithSelection === 0) {
+        tryOutFormSelections[0].firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(tryOutFormSelections[0])}), tryOutFormSelections[0].firstElementChild.firstElementChild);
+    } else if(lastElementIndexWithSelection === tryOutFormSelections.length-1) {
+        tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.insertBefore(createRemoveIcon(function() {toggleOff(tryOutFormSelections[lastElementIndexWithSelection])}), tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.firstElementChild);
+    } else {
+        tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.insertBefore(createRemoveIcon(function() {toggleOff(tryOutFormSelections[lastElementIndexWithSelection])}), tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.firstElementChild);
+        tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(tryOutFormSelections[lastElementIndexWithSelection])}), tryOutFormSelections[lastElementIndexWithSelection].firstElementChild.firstElementChild);
+    }
 }
 
 function createExtendIcon(toggleOn) {
@@ -126,12 +166,6 @@ function toggleOff(currentRow) {
         currentRow.previousElementSibling.firstElementChild.insertBefore(createRemoveIcon(function() {toggleOff(currentRow.previousElementSibling)}), currentRow.previousElementSibling.firstElementChild.firstElementChild)
      }
      currentRow.previousElementSibling.firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(currentRow.previousElementSibling)}), currentRow.previousElementSibling.firstElementChild.firstElementChild)
-}
-
-function initExtendIconsTryOutForm() {
-
-    let tryOutFormSelections = document.getElementById('tryOutForm').children
-    tryOutFormSelections[1].firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(tryOutFormSelections[1])}), tryOutFormSelections[1].firstElementChild.firstElementChild);
 }
 
 function toggleDataform(id, otherId1, otherId2) {
@@ -191,7 +225,6 @@ function setInputFilter(textbox, inputFilter) {
   });
 }
 
-
 function initForm(e){
 
   initDataform()
@@ -200,7 +233,6 @@ function initForm(e){
   document.getElementById("expertButton").addEventListener('click', function() {toggleDataform("expertForm", "beginnerForm", "tryOutForm"), true})
 
   buildTryOutDiv()
-  initExtendIconsTryOutForm()
 
   setInputFilter(document.getElementById("id_basepairLengthToBeSequenced"), function(value) {
     return /^\d*$/.test(value);

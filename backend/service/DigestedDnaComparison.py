@@ -8,22 +8,21 @@ from backend.settings import MAX_GRAPH_VIEW, MAX_GRAPH_RANGE, BINNING_STEPS, MAX
 
 class DigestedDnaComparison:
 
-  def __init__(self, DigestedDna1, DigestedDna2):
-    self.digestedDna1 = DigestedDna1
-    self.digestedDna2 = DigestedDna2
-    self.fragmentCalculationComparisonDataframe = None
+  def __init__(self, DigestedDnaCollection):
+    self.DigestedDnaCollection = DigestedDnaCollection
+    self.digestedDnaCollectionDataframe = None
 
-  def setFragmentCalculationDataframe(self, restrictionEnzymeNames, ranges):
+  def setFragmentCalculationDataframe(self, ranges):
 
-    self.digestedDna1.createBasicDataframeForGraph({"firstRestrictionEnzyme": restrictionEnzymeNames["restrictionEnzyme1"], "secondRestrictionEnzyme": restrictionEnzymeNames["restrictionEnzyme2"]}, ranges)
-    self.digestedDna2.createBasicDataframeForGraph({"firstRestrictionEnzyme": restrictionEnzymeNames["restrictionEnzyme3"], "secondRestrictionEnzyme": restrictionEnzymeNames["restrictionEnzyme4"]}, ranges)
+    for doubleDigestedDna in self.DigestedDnaCollection:
+      doubleDigestedDna.createBasicDataframeForGraph(ranges)
 
-    self.fragmentCalculationComparisonDataframe = pd.concat([self.digestedDna1.fragmentCalculationDataframe, self.digestedDna2.fragmentCalculationDataframe], axis=1)
+    self.digestedDnaCollectionDataframe = pd.concat([digestedDna.fragmentCalculationDataframe for digestedDna in self.DigestedDnaCollection], axis=1) if len(self.DigestedDnaCollection) > 1 else self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
 
-  def createLineChart(self, restrictionEnzymeNames):
+  def createLineChart(self):
 
-    self.fragmentCalculationComparisonDataframe.plot.line()
+    self.digestedDnaCollectionDataframe.plot.line()
 
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')
