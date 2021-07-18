@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": "", "mode": "tryOut"}
+    context = {"graph": "", "mode": "none"}
     restrictionEnzymes = requestRestrictionEnzymes()
 
     if request.method == "POST":

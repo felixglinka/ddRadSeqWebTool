@@ -59,8 +59,7 @@
                             <h5 class="card-title">So, you know how to ddRad?</h5>
                             <p class="card-text">Here are the different ways depending on your expertise of the project. Have fun!</p>
                             <button id="beginnerButton" type="button" class="btn btn-outline-danger right10">I have no idea!</button>
-                            <button id="tryoutButton" type="button" class="btn btn-outline-warning right10">Lemme try out!</button>
-                            <button id="expertButton" type="button" class="btn btn-outline-success">Yes, I know what I wanna do!</button>
+                            <button id="tryoutButton" type="button" class="btn btn-outline-success right10">Lemme try out!</button>
                       </div>
                     </div>
                 </div>
@@ -74,7 +73,6 @@
 
             <div id="tryOutForm" style="display: none;">
                 <hr/>
-
                 {% for field in form %}
                     {% if 'Restriction Enzyme ' in  field.label %}
                     <label>{{ field.label }}</label> {{ field }}
@@ -83,44 +81,6 @@
 
                 <hr/>
             </div>
-
-            <div id="expertForm" style="display: none;">
-                <hr/>
-                <div class="row form-group">
-                    <div class="col-6 d-flex justify-content-end text-center">
-                        <label class="right4 col-form-label"> <b>{{ form.restrictionEnzyme1.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme1 }}
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex text-center">
-                        <label class="right4 col-form-label"><b>{{ form.restrictionEnzyme2.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme2 }}
-                        </div>
-                        <div id='expertRestrictionHelp' class="questionIcon" style="margin-top:13px; margin-left: 10px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                    </div>
-                </div>
-
-                <div class="row form-group">
-                    <div class="col-6 d-flex justify-content-end">
-                        <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme3.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme3 }}
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex">
-                        <label class="bottom15 right4 col-form-label"> <b> {{ form.restrictionEnzyme4.label }}: </b> </label>
-                        <div class="col-xs-10">
-                            {{ form.restrictionEnzyme4 }}
-                            <small class="text-muted">Optional</small>
-                        </div>
-                    </div>
-                </div>
-                <hr/>
-            </div>
-
 
             <div class="row form-group">
                  <div class="center h6"> Sequence Calculation

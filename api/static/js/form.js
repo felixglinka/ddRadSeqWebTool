@@ -99,7 +99,6 @@ function extendTryOutFormUntilLastSelection() {
 
 function initExtendIconsTryOutForm(lastElementIndexWithSelection) {
 
-    console.log(lastElementIndexWithSelection)
     let tryOutFormSelections = Array.from(document.getElementById('tryOutForm').children).slice(1, -1)
 
     if(lastElementIndexWithSelection === 0) {
@@ -168,16 +167,14 @@ function toggleOff(currentRow) {
      currentRow.previousElementSibling.firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(currentRow.previousElementSibling)}), currentRow.previousElementSibling.firstElementChild.firstElementChild)
 }
 
-function toggleDataform(id, otherId1, otherId2) {
+function toggleDataform(id, otherId1) {
 
   var formSpace = document.getElementById(id);
   var otherFormSpace1 = document.getElementById(otherId1);
-  var otherFormSpace2 = document.getElementById(otherId2);
 
   if (formSpace.style.display === "none") {
     formSpace.style.display = "block";
     otherFormSpace1.style.display = "none";
-    otherFormSpace2.style.display = "none";
   } else {
     formSpace.style.display = "none";
   }
@@ -185,21 +182,18 @@ function toggleDataform(id, otherId1, otherId2) {
 
 function checkOpenDataform(){
 
-    expertInputs = document.getElementById('expertForm').getElementsByTagName("select")
-    for (let expertInput of expertInputs) {
-         if(expertInput.value === '') {
-            document.getElementById('expertForm').style.display = "none"
+    tryOutInputs = document.getElementById('tryOutForm').getElementsByTagName("select")
+    for (let tryOutInput of tryOutInputs) {
+         if(tryOutInput.value === '') {
+            document.getElementById('tryOutForm').style.display = "none"
         } else {
-            document.getElementById('expertForm').style.display = "block"
+            document.getElementById('tryOutForm').style.display = "block"
             break;
     }
   }
 }
 
 function initDataform() {
-    if(mode === 'expert') {
-        document.getElementById('expertForm').style.display = "block"
-    }
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
     }
@@ -228,9 +222,8 @@ function setInputFilter(textbox, inputFilter) {
 function initForm(e){
 
   initDataform()
-  document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginnerForm", "tryOutForm", "expertForm")}, true)
-  document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOutForm", "beginnerForm", "expertForm")}, true)
-  document.getElementById("expertButton").addEventListener('click', function() {toggleDataform("expertForm", "beginnerForm", "tryOutForm"), true})
+  document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginnerForm", "tryOutForm")}, true)
+  document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOutForm", "beginnerForm")}, true)
 
   buildTryOutDiv()
 
