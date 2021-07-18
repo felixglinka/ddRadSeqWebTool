@@ -1,4 +1,8 @@
+import logging
+
 from Bio import SeqIO
+
+logger = logging.getLogger(__name__)
 
 def readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzymePairList):
 
@@ -19,7 +23,8 @@ def readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzymePairList):
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
-    except Exception:
+    except Exception as e:
+        logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
 
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
@@ -37,7 +42,6 @@ def digestSequence(dnaSequence, restrictionEnzyme):
 def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme):
 
     doubleDigestedDnaFragments = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
-    cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
     fragmentsFlankedByTwoSites = list(filter(
         lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
@@ -45,7 +49,7 @@ def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRes
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
             firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments))
 
-    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
+    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites}
 
 def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
@@ -63,8 +67,6 @@ def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestriction
     secondDigestion = doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme)
 
     return {
-        "countCutsByFirstRestrictionEnzyme": len(firstDigestion) - 1,
-        "countCutsBySecondRestrictionEnzyme": secondDigestion["cutBySecondRestrictionEnzyme"],
         "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
     }
 
