@@ -14,10 +14,11 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": "", "mode": "none"}
+    context = {"graph": "", 'mode': 'none'}
     restrictionEnzymes = requestRestrictionEnzymes()
 
     if request.method == "POST":
+
         inputForm = BasicInputDDRadDataForm(request.POST, request.FILES, restrictionEnzymes=restrictionEnzymes)
 
         if inputForm.is_valid():
@@ -30,7 +31,10 @@ def webinterfaceViews(request):
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
-                context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
+                context["mode"] = inputForm.cleaned_data['formMode']
+
+                if(inputForm.cleaned_data['formMode'] == 'tryOut'):
+                    context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
 
             except Exception as e:
                 logger.error(e)
@@ -43,6 +47,7 @@ def webinterfaceViews(request):
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
 
     context["form"] = inputForm
+
     return render(request, "webinterface.html", context)
 
 def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
@@ -68,12 +73,6 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
     context["coverage"] = inputForm.cleaned_data['coverage'] if inputForm.cleaned_data["coverage"] != "" else None
 
-    #TODO rewrite! PLUS assurance of not counting the same pair twice
-    # elif inputForm.cleaned_data['restrictionEnzyme3'] == "" or inputForm.cleaned_data['restrictionEnzyme4'] == "":
-    #     raise Exception("Two restriction enzymes for comparison has to be chosen")
-
-    context["mode"] = 'tryOut'
-
     return context
 
 def checkCorrectSequenceCalculationFields(inputForm):
@@ -97,12 +96,16 @@ def checkCorrectSequenceCalculationFields(inputForm):
             inputForm.cleaned_data["sequencingYield"] != ""):
         raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
 
-
 def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
 
     chosenRestrictionEnzymePairs = []
 
     for firstRestrictionEnzyme, secondRestrictionEnzyme in zip(range(1, MAX_NUMBER_SELECTFIELDS, 2), range(2, MAX_NUMBER_SELECTFIELDS, 2)):
+
+        if inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] == '' and inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] != '' \
+            or inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] == '' and inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] != "":
+
+            raise Exception("Please ensure the every Restriction Enzyme has a partner.")
 
         if(inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] != "" and
            inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] != ""):

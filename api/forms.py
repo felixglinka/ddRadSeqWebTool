@@ -9,7 +9,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.restrictionEnzymes = kwargs.pop('restrictionEnzymes')
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
-        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': "",'class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
+        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': '','class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         for number in range(1, MAX_NUMBER_SELECTFIELDS):
@@ -21,8 +21,9 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
-
     fastaFile = forms.FileField()
+    formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
+
 
     for number in range(1, MAX_NUMBER_SELECTFIELDS):
         locals()[f"restrictionEnzyme{number}"] = forms.ChoiceField(choices=[], label="Restriction Enzyme "+str(int(number/2) if number % 2 == 0 else int(-(-(number/2) // 1)))+str('.')+str(2 if number % 2 == 0 else 1), required=False, widget=forms.Select(attrs={'class':'form-select'}))

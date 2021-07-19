@@ -85,7 +85,7 @@ function extendTryOutFormUntilLastSelection() {
     tryOutFormSelections.forEach(function (selectRow, index) {
         firstRestrictionEnzyme = selectRow.firstElementChild.lastElementChild.firstElementChild.value
         secondRestrictionEnzyme = selectRow.lastElementChild.getElementsByTagName('div')[0].firstElementChild.value
-        if(firstRestrictionEnzyme != "" && secondRestrictionEnzyme != ""){
+        if(firstRestrictionEnzyme != "" || secondRestrictionEnzyme != ""){
             lastElementIndexWithSelection = index
         }
     });
@@ -169,14 +169,17 @@ function toggleOff(currentRow) {
 
 function toggleDataform(id, otherId1) {
 
-  var formSpace = document.getElementById(id);
-  var otherFormSpace1 = document.getElementById(otherId1);
+  let formSpace = document.getElementById(id.concat('Form'));
+  let otherFormSpace1 = document.getElementById(otherId1);
+  let forModeInput = document.getElementById('id_formMode');
 
   if (formSpace.style.display === "none") {
     formSpace.style.display = "block";
+    forModeInput.value = id
     otherFormSpace1.style.display = "none";
   } else {
     formSpace.style.display = "none";
+    forModeInput.value = 'none'
   }
 }
 
@@ -222,8 +225,8 @@ function setInputFilter(textbox, inputFilter) {
 function initForm(e){
 
   initDataform()
-  document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginnerForm", "tryOutForm")}, true)
-  document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOutForm", "beginnerForm")}, true)
+  document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginner", "tryOutForm")}, true)
+  document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOut", "beginnerForm")}, true)
 
   buildTryOutDiv()
 
