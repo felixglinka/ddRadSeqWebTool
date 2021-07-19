@@ -13,19 +13,12 @@ function buildFormCol(selectElementLabel, selectElement, className){
     col.appendChild(label)
     col.appendChild(smallCol)
 
-    tryOutFormColExtras(selectElement, smallCol, col)
+    tryOutFormColExtras(selectElement, col)
 
     return col
 }
 
-function tryOutFormColExtras(selectElement, smallCol, col){
-
-   if(selectElement.name != 'restrictionEnzyme1' && selectElement.name != 'restrictionEnzyme2'){
-        let smallOptional = document.createElement("small");
-        smallOptional.className = 'text-muted';
-        smallOptional.innerHTML = 'Optional'
-        smallCol.appendChild(smallOptional)
-    }
+function tryOutFormColExtras(selectElement, col){
 
    if (selectElement.name === 'restrictionEnzyme2') {
         popover = createIcon('tryOutRestrictionHelp');

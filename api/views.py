@@ -52,9 +52,6 @@ def webinterfaceViews(request):
 
 def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 
-    if inputForm.cleaned_data["restrictionEnzyme1"] == "" or inputForm.cleaned_data["restrictionEnzyme2"] == "":
-        raise Exception("The first pair of Enzymes has to be chosen!")
-
     if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
         raise Exception("Coverage cannot be 0")
 
@@ -66,8 +63,6 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 
     context["graph"] = ddRadSeqresult['graph']
     if "dataFrames" in ddRadSeqresult: context["dataFrames"] = ddRadSeqresult['dataFrames']
-    context["firstChosenRestrictionEnzymes"] = restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme1'])].name + '+' \
-                                               + restrictionEnzymes[int(inputForm.cleaned_data['restrictionEnzyme2'])].name
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
