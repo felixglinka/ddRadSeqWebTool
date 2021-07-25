@@ -12,10 +12,8 @@ def extractRestrictionEnzymesFromNewEnglandList():
         newEnglandEnzymeList = list(csvDictReader)
 
     filteredNewEnglandEnzymeList = list(filter(lambda enzyme: enzyme["Enzyme"] != "" and
-                                                              enzyme["Cut Site"] != "" and
-                                                              not enzyme["Cut Site"].startswith("/") and
-                                                              not enzyme["Cut Site"].endswith("/") and
-                                                              all(character in "ACGT/" for character in enzyme["Cut Site"]), newEnglandEnzymeList))
+                                                              enzyme["Sequence"] != "" and
+                                                              all(character in "ACGT/" for character in enzyme["Sequence"]), newEnglandEnzymeList))
 
     allAvailableRestrictionEnzymes = list(map(lambda restrictionEnzyme: createRestrictionEnzymeObjectFromDictionary(restrictionEnzyme), filteredNewEnglandEnzymeList))
 
@@ -23,8 +21,8 @@ def extractRestrictionEnzymesFromNewEnglandList():
 
 def createRestrictionEnzymeObjectFromDictionary(dictionaryOfRestrictionEnzyme):
 
-    cutSites = dictionaryOfRestrictionEnzyme["Cut Site"].split("/")
+    cutSites = dictionaryOfRestrictionEnzyme["Sequence"].split("/") if "/" in dictionaryOfRestrictionEnzyme["Sequence"] else [dictionaryOfRestrictionEnzyme["Sequence"][:int(len(dictionaryOfRestrictionEnzyme["Sequence"])/2)], dictionaryOfRestrictionEnzyme["Sequence"][int(len(dictionaryOfRestrictionEnzyme["Sequence"])/2):]]
     cutSite5end = cutSites[0]
-    cutSite3end = cutSites[1]
+    cutSite3end = cutSites[1] if cutSites[1] != "" else ""
 
     return RestrictionEnzyme(dictionaryOfRestrictionEnzyme["Enzyme"], cutSite5end, cutSite3end)

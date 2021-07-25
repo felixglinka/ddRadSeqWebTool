@@ -11,15 +11,12 @@
         const mode ="{{ mode }}"
 
         {% if dataFrames %}
-            const firstChosenRestrictionEnzymes = "{{ firstChosenRestrictionEnzymes }}"
             const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
             const pairedEndChoice = "{{ pairedEndChoice }}"
             const sequencingYield = "{{ sequencingYield }}"
             const coverage = "{{ coverage }}"
 
-
             const dataFrameData = {{ dataFrames|safe }};
-            const secondChosenRestrictionEnzymes = "{{ secondChosenRestrictionEnzymes }}"
         {% endif %}
 
     </script>
@@ -149,17 +146,10 @@
   {% endif %}
 
    {% if dataFrames %}
-    <div id="dataFrame" class="center"></div>
+    <div id="dataFrame" class="tablePositioning"></div>
     <div style="padding-top: 30px;"></div>
   {% endif %}
 
-    {% if dataFrames %}
-    <div id="dataFrames" class="dataFrames">
-        <div id="dataFrame1" class="left"></div>
-        <div id="dataFrame2" class="right"></div>
-    </div>
-    <div style="padding-top: 30px;"></div>
-  {% endif %}
 
 </body>
 </html>

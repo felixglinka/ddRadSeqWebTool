@@ -10,29 +10,29 @@ class DigestedDna:
     self.fragments = dnaFragments
     self.fragmentCalculationDataframe = None
 
-  def createBasicDataframeForGraph(self, ranges):
+  def createBasicDataframeForGraph(self, binningSizes):
 
     if(len(self.fragments) == 0):
-      self.fragmentCalculationDataframe = pd.DataFrame(index=ranges, columns=[self.restrictionEnzymeCombination])
+      self.fragmentCalculationDataframe = pd.DataFrame(index=binningSizes, columns=[self.restrictionEnzymeCombination])
 
     basicDataframeForGraph = pd.DataFrame({self.restrictionEnzymeCombination: self.fragments})
-    basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[self.restrictionEnzymeCombination], ranges)).count()
+    basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[self.restrictionEnzymeCombination], binningSizes)).count()
 
     self.fragmentCalculationDataframe = basicDataframeForGraph
 
-  def calculateBaseSequencingCosts(self, ranges, sequenceLength, pairedEnd):
+  def calculateBaseSequencingCosts(self, binningSizes, sequenceLength, pairedEnd):
 
     sequencingThreshold = sequenceLength
 
     if(pairedEnd == PAIRED_END_ENDING):
       sequencingThreshold = sequenceLength * 2
 
-    multiplyVectorForSequencedBasesCalculation = ranges[:101] + 10
+    multiplyVectorForSequencedBasesCalculation = binningSizes[:101] + 10
     multiplyVectorForSequencedBasesCalculation[multiplyVectorForSequencedBasesCalculation > sequencingThreshold] = sequencingThreshold
     self.fragmentCalculationDataframe['numberSequencedBasesOfBin'] = self.fragmentCalculationDataframe[self.restrictionEnzymeCombination].multiply(multiplyVectorForSequencedBasesCalculation)
     self.fragmentCalculationDataframe['adaptorContamination'] = self.sumColumnUntilLimit(0, sequenceLength if sequenceLength < 1000 else 1000)
     if (pairedEnd == PAIRED_END_ENDING):
-      self.fragmentCalculationDataframe['overlaps'] = self.sumColumnUntilLimit(sequenceLength, sequenceLength*2 if sequenceLength<505 else 1000)
+      self.fragmentCalculationDataframe['overlaps'] = self.sumColumnUntilLimit(sequenceLength, sequenceLength * 2 if sequenceLength < 505 else 1000)
 
   def sumColumnUntilLimit(self, minSequenceLimit, maxSequenceLimit):
 

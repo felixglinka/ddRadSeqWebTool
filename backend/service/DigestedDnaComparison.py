@@ -12,17 +12,18 @@ class DigestedDnaComparison:
     self.DigestedDnaCollection = DigestedDnaCollection
     self.digestedDnaCollectionDataframe = None
 
-  def setFragmentCalculationDataframe(self, ranges):
+  def setFragmentCalculationDataframe(self, binningSizes, sequenceLength, pairedEnd):
 
     for doubleDigestedDna in self.DigestedDnaCollection:
-      doubleDigestedDna.createBasicDataframeForGraph(ranges)
+      doubleDigestedDna.createBasicDataframeForGraph(binningSizes)
+      if sequenceLength != None: doubleDigestedDna.calculateBaseSequencingCosts(binningSizes, sequenceLength, pairedEnd)
 
     self.digestedDnaCollectionDataframe = pd.concat([digestedDna.fragmentCalculationDataframe for digestedDna in self.DigestedDnaCollection], axis=1) if len(self.DigestedDnaCollection) > 1 else self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
-
   def createLineChart(self):
 
-    self.digestedDnaCollectionDataframe.plot.line()
+    lineChartDataFrame = [columnName for columnName in self.digestedDnaCollectionDataframe.columns if '+' in columnName]
+    self.digestedDnaCollectionDataframe[lineChartDataFrame].plot.line()
 
     plt.xlabel('Fragment size bin (bp)')
     plt.ylabel('Number of digested fragments')

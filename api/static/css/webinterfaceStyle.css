@@ -110,6 +110,19 @@ caption {
 
 /* Data frama and table */
 
+.tablePositioning {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+}
+
+.tableCell {
+  text-align: center;
+  vertical-align: middle;
+  display: block;
+}
+
 .dataFrames {
   width: 100%;
   display: table;
@@ -131,8 +144,8 @@ caption {
     height: 5px;
     margin: auto;
     border-radius: 5px;
-    margin-top: 30px;
-    width: 50%;
+    margin-top: 25px;
+    width: 100%;
     z-index: 1;
 }
 
@@ -167,7 +180,7 @@ input[type='range'] {
     background-color: transparent;
     cursor: pointer;
     pointer-events: none;
-    width: 25%;
+    width: 18%;
     margin-top: -9.5px;
     z-index: 0;
 }
@@ -192,8 +205,8 @@ input[type='range']::-ms-track{
 
 input[type='range']::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 1.0em;
-    width: 1.0em;
+    height: 0.8em;
+    width: 0.8em;
     background-color: #3264fe;
     border-radius: 10px;
     pointer-events: auto;
@@ -203,8 +216,8 @@ input[type='range']::-webkit-slider-thumb{
 
 input[type='range']::-moz-range-thumb{
     border: 0;
-    height: 1.0em;
-    width: 1.0em;
+    height: 0.8em;
+    width: 0.8em;
     margin-bottom: 25px;
     background-color: #3264fe;
     border-radius: 10px;
@@ -216,8 +229,8 @@ input[type='range']::-ms-thumb{
     --webkit-appearance: none;
     appearance: none;
     border: 0;
-    height: 1.7em;
-    width: 1.7em;
+    height: 0.8em;
+    width: 0.8em;
     cursor: pointer;
     border-radius: 50%;
     background-color: #3264fe;

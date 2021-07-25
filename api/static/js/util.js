@@ -12,9 +12,9 @@ function createIcon(id){
     return questionIcon
 }
 
-function calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
+function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
-   sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(dataFrame['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
+   sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
    sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalAdaptorContamination*(2/3)*parseInt(basepairLengthToBeSequenced) + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced))
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
@@ -27,10 +27,10 @@ function calculateDataFrameValues(sliderOneValue, sliderTwoValue, dataFrame, res
    }
 }
 
-function calculateAdaptorContamination(sliderOneValue, sliderTwoValue, dataFrame, currentSelectedFragmentSize) {
+function calculateAdaptorContamination(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize) {
 
-   adaptorContaminationSliderOne = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderOneValue)]];
-   adaptorContaminationSliderTwo = dataFrame['adaptorContamination'][Object.keys(dataFrame['adaptorContamination'])[parseInt(sliderTwoValue)]];
+   adaptorContaminationSliderOne = enzymeData['adaptorContamination'][Object.keys(enzymeData['adaptorContamination'])[parseInt(sliderOneValue)]];
+   adaptorContaminationSliderTwo = enzymeData['adaptorContamination'][Object.keys(enzymeData['adaptorContamination'])[parseInt(sliderTwoValue)]];
    adaptorContamination = adaptorContaminationSliderOne - adaptorContaminationSliderTwo
    adaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((adaptorContaminationSliderOne - adaptorContaminationSliderTwo)/currentSelectedFragmentSize*100));
 

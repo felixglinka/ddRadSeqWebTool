@@ -13,7 +13,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
     doubleDigestedSequencesFromFasta = readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzymePairList)
     doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
     digestedDnaComparison = DigestedDnaComparison(doubleDigestedDnaCollection)
-    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes)
+    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
 
     if sequencingYield == None and coverage == None:
         return {
