@@ -192,6 +192,7 @@ function checkOpenDataform(){
 function initDataform() {
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
+        extendTryOutFormUntilLastSelection()
     }
     if(mode === 'none') {
         checkOpenDataform()

@@ -1,5 +1,6 @@
 import io, urllib, base64
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import numpy as np
 import pandas as pd
 
