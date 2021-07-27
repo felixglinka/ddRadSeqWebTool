@@ -15,7 +15,6 @@ def readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzymePairList):
         for fastaPart in fastaSequences:
 
             for restrictionEnzymePair in restrictionEnzymePairList:
-                doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1])
                 digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].append(doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1]))
 
         for restrictionEnzymePair in digestedDNAFragmentsByRestrictionEnzymes.keys():
@@ -69,4 +68,3 @@ def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestriction
     return {
         "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
     }
-
