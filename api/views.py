@@ -107,4 +107,7 @@ def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
             chosenRestrictionEnzymePairs.append((restrictionEnzymes[int(inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)])],
                                                  restrictionEnzymes[int(inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)])]))
 
+    if not chosenRestrictionEnzymePairs:
+        raise Exception("Please select at least one pair, if you use this option")
+
     return chosenRestrictionEnzymePairs

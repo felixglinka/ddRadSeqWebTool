@@ -64,11 +64,6 @@ function buildTryOutDiv() {
         newSelectRow.parentNode.removeChild(tryOutFormSelections[tryOutIndex+2]);
     };
 
-    if(mode === 'tryOut') {
-        lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
-    }
-
-    initExtendIconsTryOutForm(lastElementIndexWithSelection)
 }
 
 function extendTryOutFormUntilLastSelection() {
@@ -129,10 +124,6 @@ function removeExtendRemoveIcons(firstColumnElements) {
         }
 }
 
-function resetSelectChoiceField(selectElement) {
-    selecElement.selectedIndex = 0;
-}
-
 function toggleOn(currentRow) {
     firstColumnElements = currentRow.firstElementChild.childNodes
 
@@ -160,15 +151,15 @@ function toggleOff(currentRow) {
      currentRow.previousElementSibling.firstElementChild.insertBefore(createExtendIcon(function() {toggleOn(currentRow.previousElementSibling)}), currentRow.previousElementSibling.firstElementChild.firstElementChild)
 }
 
-function toggleDataform(id, otherId1) {
+function toggleDataform(mode, otherMode) {
 
-  let formSpace = document.getElementById(id.concat('Form'));
-  let otherFormSpace1 = document.getElementById(otherId1);
+  let formSpace = document.getElementById(mode.concat('Form'));
+  let otherFormSpace1 = document.getElementById(otherMode);
   let forModeInput = document.getElementById('id_formMode');
 
   if (formSpace.style.display === "none") {
     formSpace.style.display = "block";
-    forModeInput.value = id
+    forModeInput.value = mode
     otherFormSpace1.style.display = "none";
   } else {
     formSpace.style.display = "none";
@@ -176,26 +167,13 @@ function toggleDataform(id, otherId1) {
   }
 }
 
-function checkOpenDataform(){
-
-    tryOutInputs = document.getElementById('tryOutForm').getElementsByTagName("select")
-    for (let tryOutInput of tryOutInputs) {
-         if(tryOutInput.value === '') {
-            document.getElementById('tryOutForm').style.display = "none"
-        } else {
-            document.getElementById('tryOutForm').style.display = "block"
-            break;
-    }
-  }
-}
-
 function initDataform() {
+
+    let lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
+    initExtendIconsTryOutForm(lastElementIndexWithSelection)
+
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
-        extendTryOutFormUntilLastSelection()
-    }
-    if(mode === 'none') {
-        checkOpenDataform()
     }
 }
 
@@ -218,11 +196,10 @@ function setInputFilter(textbox, inputFilter) {
 
 function initForm(e){
 
-  initDataform()
+  buildTryOutDiv()
+
   document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginner", "tryOutForm")}, true)
   document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOut", "beginnerForm")}, true)
-
-  buildTryOutDiv()
 
   setInputFilter(document.getElementById("id_basepairLengthToBeSequenced"), function(value) {
     return /^\d*$/.test(value);
@@ -235,6 +212,8 @@ function initForm(e){
   setInputFilter(document.getElementById("id_coverage"), function(value) {
     return /^\d*$/.test(value);
   });
+
+  initDataform()
 
 }
 
