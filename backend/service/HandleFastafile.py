@@ -4,7 +4,7 @@ from Bio import SeqIO
 
 logger = logging.getLogger(__name__)
 
-def readInFastaAndReturnOnlyFragments(inputFasta, restrictionEnzymePairList):
+def readInFastaAndReturnOnlyFragmentLength(inputFasta, restrictionEnzymePairList):
 
     try:
         digestedDNAFragmentsByRestrictionEnzymes = {}
