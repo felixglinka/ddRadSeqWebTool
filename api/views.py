@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes
-from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS
+from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE
 from .forms import BasicInputDDRadDataForm
 
 logger = logging.getLogger(__name__)
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": "", 'mode': 'none'}
+    context = {"graph": "", 'mode': 'none', 'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
     restrictionEnzymes = requestRestrictionEnzymes()
 
     if request.method == "POST":

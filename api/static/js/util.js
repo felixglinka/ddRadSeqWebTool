@@ -1,6 +1,3 @@
-const adaptorContaminationSlope = 0.4508;
-const overlapSlope =  0.7055;
-
 function createIcon(id){
     questionIcon = document.createElement('div');
     questionIcon.id = id;
@@ -59,7 +56,7 @@ function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneVal
                              parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
 
-    numberOfAdaptorContamination = Math.round(selectedFragmentLength*adaptorContaminationSlope)
+    numberOfAdaptorContamination = Math.round(selectedFragmentLength*parseFloat(adaptorContaminationSlope))
 
     if( sliderOneValue <= parseInt(sequenceLength)/10) {
         return contaminationValue + numberOfAdaptorContamination;
@@ -74,7 +71,7 @@ function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequence
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
 
-    numberOfOverlaps = Math.round(selectedFragmentLength*overlapSlope)
+    numberOfOverlaps = Math.round(selectedFragmentLength*parseFloat(overlapSlope))
 
     if(sliderOneValue >= parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;

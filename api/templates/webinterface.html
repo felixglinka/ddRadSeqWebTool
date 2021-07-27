@@ -9,6 +9,8 @@
     <script type="text/javascript">
 
         const mode ="{{ mode }}"
+        const adaptorContaminationSlope ="{{ adaptorContaminationSlope }}"
+        const overlapSlope ="{{ overlapSlope }}"
 
         {% if dataFrames %}
             const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
@@ -24,6 +26,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{% static 'js/util.js' %}"></script>
     <script src="{% static 'js/dataFrame.js' %}"></script>
+    <script src="{% static 'js/beginnerForm.js' %}"></script>
+    <script src="{% static 'js/tryOutForm.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/popovers.js' %}"></script>
 </head>
@@ -64,13 +68,75 @@
             </div>
 
             <div id="beginnerForm" style="display: none;">
-                <hr/>
-                <h1>Under Construction</h1>
+
+                    <div id="methodChoice" class="text-center bottom15">
+                        <hr/>
+                        <h5 class="card-title">Ok, what you wanna do?</h5>
+                        <button id="populationStructureButton" type="button" class="btn btn-outline-primary right10">Perform Population Structure Analysis</button>
+                        <button id="genomeScanButton" type="button" class="btn btn-outline-primary right10">Gonna Genome Scan</button>
+                        <button id="linkageMappingButton" type="button" class="btn btn-outline-primary right10">Lemme Linkage Map!</button>
+                    </div>
+
+                    <div id="populationStructureSection" style="display: none;">
+                        <div class="row form-group">
+                            <div class="col-6 d-flex justify-content-end">
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.popStructNumberOfSnps.label }}: </b> </label>
+                                <div id='popStructNumberOfSnps' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                <div class="col-xs-10">
+                                    {{ form.popStructNumberOfSnps }}
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.popStructPopSnpDensity.label }}: </b> </label>
+                                <div id='popStructPopSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                    <div class="col-xs-10">
+                                        {{ form.popStructPopSnpDensity }}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="genomeScanSection" style="display: none;">
+                        <div class="row form-group">
+                            <div class="col-6 d-flex justify-content-end">
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanPopSnpDensity.label }}: </b> </label>
+                                <div id='genomeScanPopSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                <div class="col-xs-10">
+                                    {{ form.genomeScanPopSnpDensity }}
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanRadSnpDensity.label }}: </b> </label>
+                                <div id='genomeScanRadSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                    <div class="col-xs-10">
+                                        {{ form.genomeScanRadSnpDensity }}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="linkageMappingSection" style="display: none;">
+                        <div class="row form-group">
+                            <div class="col-6 d-flex justify-content-end">
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.linkageMappingNumberOfSnps.label }}: </b> </label>
+                                <div id='linkageMappingNumberOfSnps' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                <div class="col-xs-10">
+                                    {{ form.linkageMappingNumberOfSnps }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 <hr/>
             </div>
 
             <div id="tryOutForm" style="display: none;">
-                <hr/>
+
+                <div id="tryOutTitle" class="text-center bottom15">
+                    <hr/>
+                    <h5 class="card-title">Here you go, choose your Enzymes.</h5>
+                </div>
+
                 {% for field in form %}
                     {% if 'Restriction Enzyme ' in  field.label %}
                         <label>{{ field.label }}</label> {{ field }}

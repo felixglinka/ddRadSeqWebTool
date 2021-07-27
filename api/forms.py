@@ -11,6 +11,12 @@ class BasicInputDDRadDataForm(forms.Form):
 
         self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': '','class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
+        self.fields['popStructNumberOfSnps'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['popStructPopSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['genomeScanPopSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['genomeScanRadSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['linkageMappingNumberOfSnps'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+
         restrictionEnzymesChoices = (('', '------'),) + tuple((index, enzyme.name) for index, enzyme in enumerate(self.restrictionEnzymes))
         for number in range(1, MAX_NUMBER_SELECTFIELDS):
             self.fields['restrictionEnzyme' + str(number)].choices = restrictionEnzymesChoices
@@ -24,6 +30,11 @@ class BasicInputDDRadDataForm(forms.Form):
     fastaFile = forms.FileField()
     formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+    popStructNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced", required=False)
+    popStructPopSnpDensity = forms.CharField(label="SNP density of popuation", required=False)
+    genomeScanPopSnpDensity = forms.CharField(label="SNP density of popuation", required=False)
+    genomeScanRadSnpDensity = forms.CharField(label="SNP density to be expected", required=False)
+    linkageMappingNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced ", required=False)
 
     for number in range(1, MAX_NUMBER_SELECTFIELDS):
         locals()[f"restrictionEnzyme{number}"] = forms.ChoiceField(choices=[], label="Restriction Enzyme "+str(int(number/2) if number % 2 == 0 else int(-(-(number/2) // 1)))+str('.')+str(2 if number % 2 == 0 else 1), required=False, widget=forms.Select(attrs={'class':'form-select'}))
