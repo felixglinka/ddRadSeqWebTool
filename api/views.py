@@ -4,7 +4,8 @@ import logging
 from django.contrib import messages
 from django.shortcuts import render
 
-from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes
+from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
+    handlePopulationStructureRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
     ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE
 from .forms import BasicInputDDRadDataForm
@@ -36,6 +37,12 @@ def webinterfaceViews(request):
 
                 if(inputForm.cleaned_data['formMode'] == 'tryOut'):
                     context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
+                if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
+                    context = beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context)
+                # if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
+                #     context =
+                # if(inputForm.cleaned_data['formMode'] == 'beginner-linkageMapping'):
+                #     context =
 
             except Exception as e:
                 logger.error(e)
@@ -68,6 +75,16 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
     context["coverage"] = inputForm.cleaned_data['coverage'] if inputForm.cleaned_data["coverage"] != "" else None
+
+    return context
+
+def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
+
+    populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
+                                           int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None,
+                                           int(inputForm.cleaned_data["coverage"]) if inputForm.cleaned_data["coverage"] != "" else None,
+                                           int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
+                                           inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
     return context
 

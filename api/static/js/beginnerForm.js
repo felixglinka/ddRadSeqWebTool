@@ -8,7 +8,7 @@ function toggleMethodForm(method, otherMethod, otherOtherMethod) {
 
   if (methodSpace.style.display === "none") {
     methodSpace.style.display = "block";
-    forModeInput.value = 'beginner-'.concat(mode)
+    forModeInput.value = 'beginner-'.concat(method)
     otherMethodSpace.style.display = "none";
     otherOtherMethodSpace.style.display = "none";
   } else {

@@ -3,14 +3,14 @@ import numpy as np
 from backend.service.DigestedDna import DigestedDna
 from backend.service.DigestedDnaComparison import DigestedDnaComparison
 from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
-from backend.service.HandleFastafile import readInFastaAndReturnOnlyFragmentLength
+from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutEnzymesDependingOnRareCutterLimit
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS
 
 def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
 
     binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-    doubleDigestedSequencesFromFasta = readInFastaAndReturnOnlyFragmentLength(inputFasta, restrictionEnzymePairList)
+    doubleDigestedSequencesFromFasta = countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList)
     doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
     digestedDnaComparison = DigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
@@ -24,6 +24,12 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
             'graph': digestedDnaComparison.createLineChart(),
             'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection],
         }
+
+def handlePopulationStructureRequest(inputFasta, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
+
+    tryOutEnzymesDependingOnRareCutterLimit(inputFasta, 0)
+
+    return {}
 
 def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
 

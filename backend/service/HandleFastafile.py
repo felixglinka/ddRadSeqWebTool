@@ -2,9 +2,12 @@ import logging
 
 from Bio import SeqIO
 
+from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
+from backend.settings import COMMONLYUSEDRARECUTTERS
+
 logger = logging.getLogger(__name__)
 
-def readInFastaAndReturnOnlyFragmentLength(inputFasta, restrictionEnzymePairList):
+def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
 
     try:
         digestedDNAFragmentsByRestrictionEnzymes = {}
@@ -15,7 +18,8 @@ def readInFastaAndReturnOnlyFragmentLength(inputFasta, restrictionEnzymePairList
         for fastaPart in fastaSequences:
 
             for restrictionEnzymePair in restrictionEnzymePairList:
-                digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].append(doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1]))
+                doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1])
+                digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].append(doubleDigestedFastaPart['fragmentLengths'])
 
         for restrictionEnzymePair in digestedDNAFragmentsByRestrictionEnzymes.keys():
             digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair] = [fragment for fragments in digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair] for fragment in fragments]
@@ -26,10 +30,34 @@ def readInFastaAndReturnOnlyFragmentLength(inputFasta, restrictionEnzymePairList
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
 
+def tryOutEnzymesDependingOnRareCutterLimit(inputFasta, rareCutterLimit):
+
+    try:
+        digestedDNAFragmentsByRestrictionEnzymes = {}
+        fastaSequences = SeqIO.parse(inputFasta, 'fasta')
+
+        for fastaPart in fastaSequences:
+
+            totalRareCutterDigestions = {}
+            totalRareCutterCutsCount = 0
+
+            for rareCutter in COMMONLYUSEDRARECUTTERS:
+                rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
+                totalRareCutterDigestions[rareCutter] = rareCutterDigestion
+                totalRareCutterCutsCount += len(rareCutterDigestion) - 1
+
+        return digestedDNAFragmentsByRestrictionEnzymes
+
+    except Exception as e:
+        logger.error(e)
+        raise Exception("No proper fasta file has been uploaded")
+
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
 
     digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
-    return list(map(len, digestedFastaSeq["fragmentsFlankedByTwoSites"]))
+    return {'fragmentLengths': list(map(len, digestedFastaSeq['fragmentsFlankedByTwoSites'])),
+            'countCutsByFirstRestrictionEnzyme': digestedFastaSeq['countCutsByFirstRestrictionEnzyme'],
+            'countCutsBySecondRestrictionEnzyme': digestedFastaSeq['countCutsBySecondRestrictionEnzyme']}
 
 def digestSequence(dnaSequence, restrictionEnzyme):
 
@@ -41,6 +69,7 @@ def digestSequence(dnaSequence, restrictionEnzyme):
 def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme):
 
     doubleDigestedDnaFragments = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
+    cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
     fragmentsFlankedByTwoSites = list(filter(
         lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
@@ -48,7 +77,7 @@ def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRes
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
             firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments))
 
-    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites}
+    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
 
 def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
@@ -66,5 +95,7 @@ def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestriction
     secondDigestion = doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme)
 
     return {
+        "countCutsByFirstRestrictionEnzyme": len(firstDigestion) - 1,
+        "countCutsBySecondRestrictionEnzyme": secondDigestion["cutBySecondRestrictionEnzyme"],
         "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
     }

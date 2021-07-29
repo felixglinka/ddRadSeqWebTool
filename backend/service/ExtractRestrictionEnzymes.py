@@ -26,3 +26,13 @@ def createRestrictionEnzymeObjectFromDictionary(dictionaryOfRestrictionEnzyme):
     cutSite3end = cutSites[1] if cutSites[1] != "" else ""
 
     return RestrictionEnzyme(dictionaryOfRestrictionEnzyme["Enzyme"], cutSite5end, cutSite3end)
+
+def getRestrictionEnzymeObjectByName(name):
+
+    with open(os.path.join(STATIC_ROOT, 'restrictionEnzymes/newEnglandEnzymeList.csv'), encoding='utf-8-sig') as csvFile:
+        csvDictReader = csv.DictReader(csvFile, delimiter=";")
+        newEnglandEnzymeList = list(csvDictReader)
+
+    queryRestrictionEnzyme = next(enzyme for enzyme in newEnglandEnzymeList if enzyme["Enzyme"] == name)
+
+    return createRestrictionEnzymeObjectFromDictionary(queryRestrictionEnzyme)
