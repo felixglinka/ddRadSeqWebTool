@@ -33,24 +33,30 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
 def tryOutEnzymesDependingOnRareCutterLimit(inputFasta, rareCutterLimit):
 
     try:
-        digestedDNAFragmentsByRestrictionEnzymes = {}
+        totalRareCutterDigestions = createRareCutterCutsDigestion()
         fastaSequences = SeqIO.parse(inputFasta, 'fasta')
 
         for fastaPart in fastaSequences:
 
-            totalRareCutterDigestions = {}
-            totalRareCutterCutsCount = 0
-
             for rareCutter in COMMONLYUSEDRARECUTTERS:
                 rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
-                totalRareCutterDigestions[rareCutter] = rareCutterDigestion
-                totalRareCutterCutsCount += len(rareCutterDigestion) - 1
+                totalRareCutterDigestions[rareCutter]['fragments'] = rareCutterDigestion
+                totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] += len(rareCutterDigestion) - 1
 
-        return digestedDNAFragmentsByRestrictionEnzymes
+        return totalRareCutterDigestions
 
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
+
+def createRareCutterCutsDigestion():
+
+    totalRareCutterDigestions = {}
+
+    for rareCutter in COMMONLYUSEDRARECUTTERS:
+        totalRareCutterDigestions[rareCutter] = {'fragments': [], 'countCutsByFirstRestrictionEnzyme': 0, 'countCutsBySecondRestrictionEnzyme': 0}
+
+    return totalRareCutterDigestions
 
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
 
