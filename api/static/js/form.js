@@ -64,9 +64,8 @@ function initButtons() {
    document.getElementById("beginnerButton").addEventListener('click', function() {toggleDataform("beginner", "tryOutForm")}, true)
    document.getElementById("tryoutButton").addEventListener('click', function() {toggleDataform("tryOut", "beginnerForm")}, true)
 
-   document.getElementById("populationStructureButton").addEventListener('click', function() {toggleMethodForm("populationStructure", "linkageMappingSection", "genomeScanSection")}, true)
-   document.getElementById("genomeScanButton").addEventListener('click', function() {toggleMethodForm("genomeScan", "populationStructureSection", "linkageMappingSection")}, true)
-   document.getElementById("linkageMappingButton").addEventListener('click', function() {toggleMethodForm("linkageMapping", "genomeScanSection", "populationStructureSection")}, true)
+   document.getElementById("populationStructureButton").addEventListener('click', function() {toggleMethodForm("populationStructure", "genomeScanSection")}, true)
+   document.getElementById("genomeScanButton").addEventListener('click', function() {toggleMethodForm("genomeScan", "populationStructureSection")}, true)
 }
 
 function initForm(e) {

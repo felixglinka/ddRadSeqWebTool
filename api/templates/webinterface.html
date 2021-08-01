@@ -74,7 +74,6 @@
                         <h5 class="card-title">Ok, what you wanna do?</h5>
                         <button id="populationStructureButton" type="button" class="btn btn-outline-primary right10">Perform Population Structure Analysis!</button>
                         <button id="genomeScanButton" type="button" class="btn btn-outline-primary right10">Gonna Genome Scan!</button>
-                        <button id="linkageMappingButton" type="button" class="btn btn-outline-primary right10">Lemme Linkage Map!</button>
                     </div>
 
                     <div id="populationStructureSection" style="display: none;">
@@ -111,18 +110,6 @@
                                     <div class="col-xs-10">
                                         {{ form.genomeScanRadSnpDensity }}
                                     </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="linkageMappingSection" style="display: none;">
-                        <div class="row form-group">
-                            <div class="col-6 d-flex justify-content-end">
-                                <label class="bottom15 right4 col-form-label"> <b>{{ form.linkageMappingNumberOfSnps.label }}: </b> </label>
-                                <div id='linkageMappingNumberOfSnps' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                                <div class="col-xs-10">
-                                    {{ form.linkageMappingNumberOfSnps }}
-                                </div>
                             </div>
                         </div>
                     </div>
