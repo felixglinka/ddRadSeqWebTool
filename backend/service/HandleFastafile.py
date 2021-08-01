@@ -40,8 +40,6 @@ def tryOutEnzymesDependingOnRareCutterLimit(inputFasta, rareCutterLimit):
                 totalRareCutterDigestions[rareCutter]['fragments'].extend(rareCutterDigestion)
                 totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] += len(rareCutterDigestion)
 
-        totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] - 1
-
         return totalRareCutterDigestions
 
     except Exception as e:
@@ -53,7 +51,7 @@ def createRareCutterCutsDigestion():
     totalRareCutterDigestions = {}
 
     for rareCutter in COMMONLYUSEDRARECUTTERS:
-        totalRareCutterDigestions[rareCutter] = {'fragments': [], 'countCutsByFirstRestrictionEnzyme': 0, 'countCutsBySecondRestrictionEnzyme': 0}
+        totalRareCutterDigestions[rareCutter] = {'fragments': [], 'countCutsByFirstRestrictionEnzyme': -1, 'countCutsBySecondRestrictionEnzyme': 0}
 
     return totalRareCutterDigestions
 
