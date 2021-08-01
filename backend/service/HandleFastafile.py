@@ -19,10 +19,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
 
             for restrictionEnzymePair in restrictionEnzymePairList:
                 doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1])
-                digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].append(doubleDigestedFastaPart['fragmentLengths'])
-
-        for restrictionEnzymePair in digestedDNAFragmentsByRestrictionEnzymes.keys():
-            digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair] = [fragment for fragments in digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair] for fragment in fragments]
+                digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(doubleDigestedFastaPart['fragmentLengths'])
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
@@ -40,8 +37,10 @@ def tryOutEnzymesDependingOnRareCutterLimit(inputFasta, rareCutterLimit):
 
             for rareCutter in COMMONLYUSEDRARECUTTERS:
                 rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
-                totalRareCutterDigestions[rareCutter]['fragments'] = rareCutterDigestion
-                totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] += len(rareCutterDigestion) - 1
+                totalRareCutterDigestions[rareCutter]['fragments'].extend(rareCutterDigestion)
+                totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] += len(rareCutterDigestion)
+
+        totalRareCutterDigestions[rareCutter]['countCutsByFirstRestrictionEnzyme'] - 1
 
         return totalRareCutterDigestions
 
@@ -91,9 +90,9 @@ def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
     for dnaFragment in digestedDnaFragment:
         digestedDnaFragmentBySecondRestrictionEnzyme = digestSequence(dnaFragment, secondRestrictionEnzyme)
-        allDigestedDnaFragments.append(digestedDnaFragmentBySecondRestrictionEnzyme)
+        allDigestedDnaFragments.extend(digestedDnaFragmentBySecondRestrictionEnzyme)
 
-    return [dnaFragment for DnaFragments in allDigestedDnaFragments for dnaFragment in DnaFragments]
+    return allDigestedDnaFragments
 
 def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestrictionEnzyme):
 
