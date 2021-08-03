@@ -75,16 +75,24 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
     context["coverage"] = inputForm.cleaned_data['coverage'] if inputForm.cleaned_data["coverage"] != "" else None
+    context['mode'] += 'populationStructure'
 
     return context
 
 def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 
     populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
-                                           int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None,
-                                           int(inputForm.cleaned_data["coverage"]) if inputForm.cleaned_data["coverage"] != "" else None,
+                                           int(inputForm.cleaned_data["popStructNumberOfSnps"]),
+                                           int(inputForm.cleaned_data["popStructExpectPolyMorph"]),
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
+
+    context["graph"] = populationStructureResult['graph']
+    context["dataFrames"] = populationStructureResult['dataFrames']
+    context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
+    context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
+    context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
+    context["coverage"] = inputForm.cleaned_data['coverage']
 
     return context
 

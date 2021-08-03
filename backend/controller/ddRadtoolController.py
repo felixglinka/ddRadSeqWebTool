@@ -1,10 +1,12 @@
 import numpy as np
 
-from backend.service.DigestedDna import DigestedDna
-from backend.service.DigestedDnaComparison import DigestedDnaComparison
-from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
-from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutEnzymesDependingOnRareCutterLimit
-from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS
+from backend.service.DoubleDigestedDna import DoubleDigestedDna
+from backend.service.DoubleDigestedDnaComparison import DoubleDigestedDnaComparison
+from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList, \
+    getRestrictionEnzymeObjectByName
+from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutRareCutterAndFilterSmallest
+from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDFREQUENTCUTTERS
+
 
 def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
 
@@ -12,7 +14,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
 
     doubleDigestedSequencesFromFasta = countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList)
     doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
-    digestedDnaComparison = DigestedDnaComparison(doubleDigestedDnaCollection)
+    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
 
     if sequencingYield == None and coverage == None:
@@ -25,20 +27,41 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
             'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection],
         }
 
-def handlePopulationStructureRequest(inputFasta, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
+def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd):
 
-    tryOutEnzymesDependingOnRareCutterLimit(inputFasta, 0)
+    binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-    return {}
+    rareCutterCuts = tryOutRareCutterAndFilterSmallest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd)
+    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts)
+    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
+    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+
+    return {
+        'graph': digestedDnaComparison.createLineChart(),
+        'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
+                       digestedDnaComparison.DigestedDnaCollection],
+    }
+
 
 def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
 
     listOfDigestedDna = []
 
     for enzymeName in doubleDigestedSequencesFromFasta.keys():
-        listOfDigestedDna.append(DigestedDna(enzymeName, doubleDigestedSequencesFromFasta[enzymeName]))
+        listOfDigestedDna.append(DoubleDigestedDna(enzymeName, doubleDigestedSequencesFromFasta[enzymeName]))
 
     return listOfDigestedDna
+
+
+def combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts):
+
+    listOfDoubleDigestedDna = []
+
+    for rareCutterCut in rareCutterCuts.values():
+        for frequentCutter in COMMONLYUSEDFREQUENTCUTTERS:
+            listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+
+    return listOfDoubleDigestedDna
 
 def requestRestrictionEnzymes():
 

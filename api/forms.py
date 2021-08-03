@@ -12,8 +12,8 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': '','class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
 
         self.fields['popStructNumberOfSnps'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
-        self.fields['popStructPopSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
-        self.fields['genomeScanPopSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['popStructExpectPolyMorph'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['genomeScanExpectPolyMorph'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['genomeScanRadSnpDensity'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['linkageMappingNumberOfSnps'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
@@ -31,8 +31,8 @@ class BasicInputDDRadDataForm(forms.Form):
     formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     popStructNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced", required=False)
-    popStructPopSnpDensity = forms.CharField(label="SNP density of popuation", required=False)
-    genomeScanPopSnpDensity = forms.CharField(label="SNP density of popuation", required=False)
+    popStructExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
+    genomeScanExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
     genomeScanRadSnpDensity = forms.CharField(label="SNP density to be expected", required=False)
     linkageMappingNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced ", required=False)
 

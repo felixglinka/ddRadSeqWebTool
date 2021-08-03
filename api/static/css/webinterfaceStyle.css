@@ -107,6 +107,10 @@ caption {
 
 /* Grouping functions */
 
+.text-mandatory {
+    color: #dc3545;
+}
+
 
 /* Data frama and table */
 

@@ -4,6 +4,9 @@ function toggleDataform(mode, otherMode) {
   let otherFormSpace1 = document.getElementById(otherMode);
   let forModeInput = document.getElementById('id_formMode');
 
+  let optionalSmalls = document.querySelectorAll('.optional');
+  let mandatorySmalls = document.querySelectorAll('.text-mandatory');
+
   if (formSpace.style.display === "none") {
     formSpace.style.display = "block";
     forModeInput.value = mode
@@ -12,6 +15,24 @@ function toggleDataform(mode, otherMode) {
     formSpace.style.display = "none";
     forModeInput.value = 'none'
   }
+
+  if (mode === 'tryOut') {
+    optionalSmalls.forEach(function(optional){
+        optional.style.display = 'block'
+    })
+    mandatorySmalls.forEach(function(mandatory){
+        mandatory.style.display = 'none'
+    })
+  }
+
+  if (mode.startsWith('beginner')) {
+    optionalSmalls.forEach(function(optional){
+        optional.style.display = 'none'
+    })
+    mandatorySmalls.forEach(function(mandatory){
+        mandatory.style.display = 'block'
+    })
+  }
 }
 
 function initDataform() {
@@ -19,11 +40,29 @@ function initDataform() {
     let lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
     initExtendIconsTryOutForm(lastElementIndexWithSelection)
 
+   let optionalSmalls = document.querySelectorAll('.optional');
+   let mandatorySmalls = document.querySelectorAll('.text-mandatory');
+
     if(mode.startsWith('beginner')) {
         document.getElementById('beginnerForm').style.display = "block"
+
+        mandatorySmalls.forEach(function(mandatory){
+        mandatory.style.display = 'block'
+
+        if(mode.endsWith('populationStructure')) {
+            document.getElementById('populationStructureSection').style.display = "block"
+        }
+        if(mode.endsWith('genomeScan')) {
+            document.getElementById('genomeScanSection').style.display = "block"
+        }
+    })
     }
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
+
+        optionalSmalls.forEach(function(optional){
+        optional.style.display = 'block'
+    })
     }
 }
 

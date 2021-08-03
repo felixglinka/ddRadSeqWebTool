@@ -7,7 +7,7 @@ import pandas as pd
 from backend.settings import MAX_GRAPH_VIEW, MAX_GRAPH_RANGE, BINNING_STEPS, MAX_BINNING_LIMIT
 
 
-class DigestedDnaComparison:
+class DoubleDigestedDnaComparison:
 
   def __init__(self, DigestedDnaCollection):
     self.DigestedDnaCollection = DigestedDnaCollection
