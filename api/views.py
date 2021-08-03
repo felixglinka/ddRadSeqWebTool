@@ -92,7 +92,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
-    context["numberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
+    context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
     context["expectPolyMorph"] = inputForm.cleaned_data['popStructExpectPolyMorph']
     context['mode'] += 'populationStructure'
 

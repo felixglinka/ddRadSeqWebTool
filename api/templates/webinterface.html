@@ -12,6 +12,10 @@
         const adaptorContaminationSlope ="{{ adaptorContaminationSlope }}"
         const overlapSlope ="{{ overlapSlope }}"
 
+        {% if expectedNumberOfSnps %}
+            const expectedNumberOfSnps = "{{ expectedNumberOfSnps }}"
+        {% endif %}
+
         {% if dataFrames %}
             const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
             const pairedEndChoice = "{{ pairedEndChoice }}"
@@ -199,6 +203,19 @@
         </form>
         <hr/>
     </div>
+
+    {% if expectedNumberOfSnps %}
+    <div class="row form-group">
+        <div id="suggestionCard" class="col-12 d-flex justify-content-center">
+            <div class="card text-center" style="width: 50%;">
+              <div class="card-body">
+                    <h5 class="card-title">Here is a title</h5>
+                    <p class="card-text">Here comes a text for explanation. xoxo</p>
+              </div>
+            </div>
+        </div>
+    </div>
+  {% endif %}
 
     {% if graph %}
     <div id="graph">
