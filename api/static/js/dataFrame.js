@@ -67,13 +67,13 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    rowElement.cells[5].lastChild.innerText = (experimentalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[6].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
-   if(experimentalDataFrameValues.sumAllBasesOfEveryBin < expectedNumberOfSnps) {
+   if(theoreticalDataFrameValues.sumAllBasesOfEveryBin < expectedNumberOfSnps) {
         for (let i = 0; i < 8; i++) {
-            rowElement.cells[i].classList.add("text-muted")
+            rowElement.classList.add("excludingSecondCutter")
         }
    } else {
         for (let i = 0; i < 8; i++) {
-            rowElement.cells[i].classList.remove("text-muted")
+              rowElement.classList.remove("excludingSecondCutter")
         }
    }
 

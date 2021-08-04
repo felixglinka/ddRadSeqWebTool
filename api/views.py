@@ -80,14 +80,15 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 
 def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 
+    checkAllBeginnerFieldEntries(inputForm)
     populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
                                            int(inputForm.cleaned_data["popStructExpectPolyMorph"]),
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
-    context["graph"] = populationStructureResult['graph']
-    context["dataFrames"] = populationStructureResult['dataFrames']
+    if "graph" in populationStructureResult: context["graph"] = populationStructureResult['graph']
+    if "dataFrames" in populationStructureResult: context["dataFrames"] = populationStructureResult['dataFrames']
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
@@ -97,6 +98,11 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context['mode'] += 'populationStructure'
 
     return context
+
+def checkAllBeginnerFieldEntries(inputForm):
+    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" or inputForm.cleaned_data[
+        "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
+        raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
 def checkCorrectSequenceCalculationFields(inputForm):
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[

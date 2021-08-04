@@ -19,7 +19,12 @@ class DoubleDigestedDnaComparison:
       doubleDigestedDna.createBasicDataframeForGraph(binningSizes)
       if sequenceLength != None: doubleDigestedDna.calculateBaseSequencingCosts(binningSizes, sequenceLength, pairedEnd)
 
-    self.digestedDnaCollectionDataframe = pd.concat([digestedDna.fragmentCalculationDataframe for digestedDna in self.DigestedDnaCollection], axis=1) if len(self.DigestedDnaCollection) > 1 else self.DigestedDnaCollection[0].fragmentCalculationDataframe
+    if len(self.DigestedDnaCollection) > 1:
+      self.digestedDnaCollectionDataframe = pd.concat([digestedDna.fragmentCalculationDataframe for digestedDna in self.DigestedDnaCollection], axis=1)
+
+    if len(self.DigestedDnaCollection) == 1:
+     self.DigestedDnaCollection[0].fragmentCalculationDataframe
+
 
   def createLineChart(self):
 

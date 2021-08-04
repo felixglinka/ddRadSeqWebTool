@@ -22,7 +22,7 @@ class SingleDigestedDna:
 
         bpInGenomeToBeSequenced = self.countCutsByFirstRestrictionEnzyme * pairedEndModifier * sequenceLength
 
-        return bpInGenomeToBeSequenced/genomeSize * expectPolyMorph
+        return bpInGenomeToBeSequenced * (expectPolyMorph/1000)
 
     def digestDnaSecondTime(self, secondRestrictionEnzyme):
 

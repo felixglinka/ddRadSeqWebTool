@@ -36,11 +36,14 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
 
-    return {
-        'graph': digestedDnaComparison.createLineChart(),
-        'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
-                       digestedDnaComparison.DigestedDnaCollection],
-    }
+    if(len(digestedDnaComparison.DigestedDnaCollection) > 1):
+        return {
+            'graph': digestedDnaComparison.createLineChart(),
+            'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
+                           digestedDnaComparison.DigestedDnaCollection],
+        }
+    else:
+        return {}
 
 
 def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
