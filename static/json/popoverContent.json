@@ -1,0 +1,6 @@
+{
+  "basepairLengthToBeSequencedHelp": {
+    "title": "Read Length to be Sequenced",
+    "content": "Here you need to type in the read length of your desired sequencing product in bp."
+  }
+}

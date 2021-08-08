@@ -11,6 +11,20 @@ function initPopovers() {
         })
     })
 
+    fillPopovers()
+
+}
+
+function fillPopovers() {
+
+    let popoverList = document.getElementsByClassName("questionIcon")
+    for (let popover of popoverList) {
+
+        if(popoverContents[popover.id] !== undefined ) {
+            popover.setAttribute("data-bs-original-title", popoverContents[popover.id].title);
+            popover.setAttribute("data-bs-content", popoverContents[popover.id].content);
+        }
+    }
 }
 
 window.addEventListener('load', initPopovers)
