@@ -5,7 +5,7 @@ from backend.service.DoubleDigestedDnaComparison import DoubleDigestedDnaCompari
 from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList, \
     getRestrictionEnzymeObjectByName
 from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutRareCutterAndFilterSmallest
-from backend.service.ReadInPopoverText import readInPopoverTexts
+from backend.service.ReadInJsonFiles import readInPopoverTexts, readInBeginnerInformationTexts
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDFREQUENTCUTTERS
 
 
@@ -74,3 +74,7 @@ def requestRestrictionEnzymes():
 def requestPopoverTexts():
 
     return readInPopoverTexts()
+
+def requestBeginnerInformationTexts():
+
+    return readInBeginnerInformationTexts()
