@@ -1,6 +1,42 @@
 {
   "basepairLengthToBeSequencedHelp": {
     "title": "Read Length to be Sequenced",
+    "content": "Here you need to type in the read length of your desired sequencing products in [bp]."
+  },
+    "sequencingYieldHelp": {
+    "title": "Sequencing Yield of Illumina machine",
+    "content": "Please provide the amount of sequence data per lane in [Mbp]."
+  },
+  "popStructNumberOfSnps": {
+    "title": "Number of SNPs to be sequenced",
+    "content": "Which amount of SNPs are you at least aiming to receive?"
+  },
+  "popStructPopSnpDensity": {
+    "title": "Expected SNP-Polymorphism of population",
+    "content": "Each population has an individual rate of of SNP mutations. In this field the (estimated) rate of SNP-Mutation is requested in [mut/kbp]."
+  },
+  "genomeScanPopSnpDensity": {
+    "title": "Read Length to be Sequenced",
     "content": "Here you need to type in the read length of your desired sequencing product in [bp]."
+  },
+  "genomeScanRadSnpDensity": {
+    "title": "Expected SNP-Polymorphism of population",
+    "content": "Each population has an individual rate of of SNP mutations. In this field the (estimated) rate of SNP-Mutation is requested in [mut/kbp]."
+  },
+  "basepairsSequencedHelp": {
+    "title": "No. basepairs sequenced in the lane",
+    "content": "In this column the total amount of base pairs produced by all sample multiplexed in the lane in [bp]."
+  },
+  "adapterContaminationHelp": {
+    "title": "Adapter Contamination",
+    "content": "Number of fragments below the given length read length of your desired sequencing products are considered as Adapter Contamination."
+  },
+  "overlapHelp": {
+    "title": "Overlaps",
+    "content": "If paired end sequencing is chosen then fragments have the chance to result in an overlap, which is also considered as contamination. Overlaps occur within fragments with the desired read lengths and and twice their size."
+  },
+  "tryOutRestrictionHelp": {
+    "title": "Restriction Enzyme",
+    "content": "Here you can choose between various Restriction Enzymes. Just pick two different Restriction Enzymes in each row to perform the analysis on the given fasta-file."
   }
 }

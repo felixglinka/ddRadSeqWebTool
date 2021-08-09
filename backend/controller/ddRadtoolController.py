@@ -36,12 +36,12 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
     doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts)
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+    digestedDnaComparison.filterSecondCutByExpectedSNP(numberOfSnps)
 
     if(len(digestedDnaComparison.DigestedDnaCollection) > 1):
         return {
             'graph': digestedDnaComparison.createLineChart(),
-            'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
-                           digestedDnaComparison.DigestedDnaCollection],
+            'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
         }
     else:
         return {}

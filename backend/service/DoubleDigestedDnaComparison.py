@@ -1,10 +1,12 @@
-import io, urllib, base64
+import base64
+import io
+import urllib
+
 import matplotlib.pyplot as plt
-from matplotlib import cm
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, MAX_GRAPH_RANGE, BINNING_STEPS, MAX_BINNING_LIMIT
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS
 
 
 class DoubleDigestedDnaComparison:
@@ -25,6 +27,20 @@ class DoubleDigestedDnaComparison:
     if len(self.DigestedDnaCollection) == 1:
      self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
+
+  def filterSecondCutByExpectedSNP(self, numberOfSnps):
+
+
+    allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
+    filteredDigestedDnaCollectionDataframe = []
+
+    for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
+      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() < numberOfSnps:
+        self.DigestedDnaCollection.pop(index)
+      else:
+        filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
+
+    self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1)
 
   def createLineChart(self):
 

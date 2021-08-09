@@ -30,7 +30,7 @@ class BasicInputDDRadDataForm(forms.Form):
     fastaFile = forms.FileField()
     formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
 
-    popStructNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced", required=False)
+    popStructNumberOfSnps = forms.CharField(label="Number of SNPs to be sequenced", required=False)
     popStructExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
     genomeScanExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
     genomeScanRadSnpDensity = forms.CharField(label="SNP density to be expected", required=False)

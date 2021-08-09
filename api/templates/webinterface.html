@@ -109,18 +109,28 @@
                     <div id="genomeScanSection" style="display: none;">
                         <div class="row form-group">
                             <div class="col-6 d-flex justify-content-end">
-                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanExpectPolyMorph.label }}: </b> </label>
-                                <div id='genomeScanPopSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanRadSnpDensity.label }}: </b> </label>
+                                <div id='genomeScanRadSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
                                 <div class="col-xs-10">
-                                    {{ form.genomeScanExpectPolyMorph }}
+                                    <div class="input-group">
+                                        {{ form.genomeScanRadSnpDensity }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" for="{{ form.sequencingYield.id_for_label }}">per kb</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex">
-                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanRadSnpDensity.label }}: </b> </label>
-                                <div id='genomeScanRadSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                                    <div class="col-xs-10">
-                                        {{ form.genomeScanRadSnpDensity }}
+                                <label class="bottom15 right4 col-form-label"> <b>{{ form.genomeScanExpectPolyMorph.label }}: </b> </label>
+                                <div id='genomeScanPopSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                                <div class="col-xs-10">
+                                    <div class="input-group">
+                                        {{ form.genomeScanExpectPolyMorph }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" for="{{ form.sequencingYield.id_for_label }}">per kb</span>
+                                        </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
