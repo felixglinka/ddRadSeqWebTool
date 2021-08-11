@@ -28,19 +28,25 @@ class DoubleDigestedDnaComparison:
      self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
 
-  def filterSecondCutByExpectedSNP(self, numberOfSnps):
+  def filterSecondCutByExpectedSNP(self, beginnerModeFilterNumber):
 
+    if(self.digestedDnaCollectionDataframe is  None):
+      return pd.DataFrame()
 
     allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
     filteredDigestedDnaCollectionDataframe = []
+    indicesToDelete = []
 
     for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
-      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() < numberOfSnps:
-        self.DigestedDnaCollection.pop(index)
+      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() < beginnerModeFilterNumber:
+        indicesToDelete.append(index)
       else:
         filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
 
-    self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1)
+    for index in sorted(indicesToDelete, reverse=True):
+      del self.DigestedDnaCollection[index]
+
+    self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1) if len(filteredDigestedDnaCollectionDataframe) > 0 else pd.DataFrame()
 
   def createLineChart(self):
 

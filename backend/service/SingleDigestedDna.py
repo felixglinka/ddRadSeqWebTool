@@ -1,7 +1,7 @@
 from backend.service.DigestSequence import doubleDigestSequence
 from backend.service.DoubleDigestedDna import DoubleDigestedDna
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
-from backend.settings import PAIRED_END_ENDING
+from backend.settings import PAIRED_END_ENDING, DENSITY_MODIFIER
 
 
 class SingleDigestedDna:
@@ -13,7 +13,7 @@ class SingleDigestedDna:
         self.countCutsBySecondRestrictionEnzyme = 0
 
 
-    def calculateBpInGenomeToBeSequenced(self, sequenceLength, pairedEnd, genomeSize, expectPolyMorph):
+    def calculateBpInGenomeToBeSequenced(self, sequenceLength, pairedEnd, expectPolyMorph):
 
         pairedEndModifier = 2
 
@@ -22,7 +22,7 @@ class SingleDigestedDna:
 
         bpInGenomeToBeSequenced = self.countCutsByFirstRestrictionEnzyme * pairedEndModifier * sequenceLength
 
-        return bpInGenomeToBeSequenced * (expectPolyMorph/1000)
+        return bpInGenomeToBeSequenced * (expectPolyMorph/DENSITY_MODIFIER)
 
     def digestDnaSecondTime(self, secondRestrictionEnzyme):
 

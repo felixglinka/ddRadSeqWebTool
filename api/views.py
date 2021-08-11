@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
-    handlePopulationStructureRequest, requestPopoverTexts, requestBeginnerInformationTexts
+    handlePopulationStructureRequest, requestPopoverTexts, requestBeginnerInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
     ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE
 from .forms import BasicInputDDRadDataForm
@@ -40,10 +40,8 @@ def webinterfaceViews(request):
                     context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
                 if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
                     context = beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context)
-                # if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
-                #     context =
-                # if(inputForm.cleaned_data['formMode'] == 'beginner-linkageMapping'):
-                #     context =
+                if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
+                    context = beginnerGenomeScanRequest(inputForm, stringStreamFasta, context)
 
             except Exception as e:
                 logger.error(e)
@@ -97,6 +95,28 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
     context["expectPolyMorph"] = inputForm.cleaned_data['popStructExpectPolyMorph']
     context['mode'] += 'populationStructure'
+
+    return context
+
+
+def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
+
+    checkAllBeginnerFieldEntries(inputForm)
+    genomeScanResult = handleGenomeScanRequest(stringStreamFasta,
+                                           int(inputForm.cleaned_data["genomeScanRadSnpDensity"]),
+                                           int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]),
+                                           int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
+                                           inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
+
+    if "graph" in genomeScanResult: context["graph"] = genomeScanResult['graph']
+    if "dataFrames" in genomeScanResult: context["dataFrames"] = genomeScanResult['dataFrames']
+    context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
+    context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
+    context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
+    context["coverage"] = inputForm.cleaned_data['coverage']
+    context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
+    context["expectPolyMorph"] = inputForm.cleaned_data['genomeScanExpectPolyMorph']
+    context['mode'] += 'genomeScan'
 
     return context
 

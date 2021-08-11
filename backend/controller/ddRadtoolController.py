@@ -32,8 +32,8 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
 
     binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-    rareCutterCuts = tryOutRareCutterAndFilterSmallest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd)
-    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts)
+    rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
+    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
     digestedDnaComparison.filterSecondCutByExpectedSNP(numberOfSnps)
@@ -42,6 +42,27 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
         return {
             'graph': digestedDnaComparison.createLineChart(),
             'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
+        }
+    else:
+        return {}
+
+def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph, sequenceLength, pairedEnd):
+
+    binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
+                             MAX_BINNING_LIMIT + BINNING_STEPS)
+
+    rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
+    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
+    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+    digestedDnaComparison.filterSecondCutByExpectedSNP(rareCutterCutsAndGenomeMutationAmount[1])
+
+    if (len(digestedDnaComparison.DigestedDnaCollection) > 1):
+        return {
+            'graph': digestedDnaComparison.createLineChart(),
+            'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
+                           digestedDnaComparison.DigestedDnaCollection],
+            'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
         }
     else:
         return {}

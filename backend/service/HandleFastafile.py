@@ -2,7 +2,7 @@ import logging
 
 from Bio import SeqIO
 
-from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence
+from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelection
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
 from backend.service.SingleDigestedDna import SingleDigestedDna
 from backend.settings import COMMONLYUSEDRARECUTTERS
@@ -29,7 +29,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
 
-def tryOutRareCutterAndFilterSmallest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd):
+def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
     try:
         totalRareCutterDigestions = {}
@@ -49,9 +49,9 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, numberOfSnps, expectPolyMorph,
                 totalRareCutterDigestions[rareCutter].fragments.extend(rareCutterDigestion)
                 totalRareCutterDigestions[rareCutter].countCutsByFirstRestrictionEnzyme += len(rareCutterDigestion)
 
-        totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in totalRareCutterDigestions.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, genomeSize, expectPolyMorph) > numberOfSnps}
+        totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelection(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
-        return totalRareCutterDigestions
+        return totalRareCutterDigestionsAndGenomeMutationAmount
 
 
     except Exception as e:
