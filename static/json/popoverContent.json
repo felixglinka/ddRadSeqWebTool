@@ -13,7 +13,7 @@
   },
   "popStructPopSnpDensity": {
     "title": "Expected SNP-Polymorphism of population",
-    "content": "Each population has an individual rate of of SNP mutations. In this field the (estimated) rate of SNP-Mutation is requested in [mut/kbp]."
+    "content": "Each population has an individual rate of of SNP mutations. In this field the (estimated) rate of SNP-Mutation is requested in [mutation/kbp]."
   },
   "genomeScanPopSnpDensity": {
     "title": "Expected SNP-Polymorphism of population",

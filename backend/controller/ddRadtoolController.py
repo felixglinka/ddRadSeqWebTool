@@ -84,7 +84,9 @@ def combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts):
 
     for rareCutterCut in rareCutterCuts.values():
         for frequentCutter in COMMONLYUSEDFREQUENTCUTTERS:
-            if rareCutterCut.name != frequentCutter: listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+
+            if rareCutterCut.name != frequentCutter and frequentCutter + '+' + rareCutterCut.name not in [doubleDigestedDna.restrictionEnzymeCombination for doubleDigestedDna in listOfDoubleDigestedDna]:
+                listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
 
     return listOfDoubleDigestedDna
 
