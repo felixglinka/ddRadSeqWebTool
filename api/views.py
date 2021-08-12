@@ -1,5 +1,4 @@
-import io
-import logging
+import io,logging, os
 
 from django.contrib import messages
 from django.shortcuts import render
@@ -35,6 +34,7 @@ def webinterfaceViews(request):
                     raise Exception('No proper fasta file has been uploaded')
 
                 context["mode"] = inputForm.cleaned_data['formMode']
+                context["fileName"] =  os.path.splitext(request.FILES['fastaFile'].name)[0]
 
                 if(inputForm.cleaned_data['formMode'] == 'tryOut'):
                     context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
