@@ -67,16 +67,17 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    rowElement.cells[5].lastChild.innerText = (experimentalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[6].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
-   if(theoreticalDataFrameValues.sumAllBasesOfEveryBin < expectedNumberOfSnps) {
-        for (let i = 0; i < 8; i++) {
-            rowElement.classList.add("excludingSecondCutter")
-        }
-   } else {
-        for (let i = 0; i < 8; i++) {
-              rowElement.classList.remove("excludingSecondCutter")
-        }
+   if (typeof expectedNumberOfSnps !== "undefined") {
+       if(theoreticalDataFrameValues.sumAllBasesOfEveryBin < expectedNumberOfSnps) {
+            for (let i = 0; i < 8; i++) {
+                rowElement.classList.add("excludingSecondCutter")
+            }
+       } else {
+            for (let i = 0; i < 8; i++) {
+                  rowElement.classList.remove("excludingSecondCutter")
+            }
+       }
    }
-
 }
 
 function generateDataFrameTableHead(table) {

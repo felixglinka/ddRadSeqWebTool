@@ -2,7 +2,6 @@ import pandas as pd
 
 from backend.settings import PAIRED_END_ENDING
 
-
 class DoubleDigestedDna:
 
   def __init__(self, restrictionEnzymeCombination, dnaFragments):

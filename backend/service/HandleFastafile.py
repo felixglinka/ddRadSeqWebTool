@@ -1,5 +1,4 @@
 import logging
-
 from Bio import SeqIO
 
 from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelection

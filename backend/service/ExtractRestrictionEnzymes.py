@@ -1,6 +1,5 @@
 import csv, os
 
-from django.templatetags.static import static
 from backend.models.RestrictionEnzyme import RestrictionEnzyme
 from backend.settings import STATIC_ROOT
 

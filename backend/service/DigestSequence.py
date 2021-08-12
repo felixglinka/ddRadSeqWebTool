@@ -1,6 +1,5 @@
 from backend.settings import DENSITY_MODIFIER
 
-
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
 
     digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)

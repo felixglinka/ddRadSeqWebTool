@@ -1,6 +1,4 @@
-import base64
-import io
-import urllib
+import base64, io, urllib
 
 import matplotlib.pyplot as plt
 import numpy as np
