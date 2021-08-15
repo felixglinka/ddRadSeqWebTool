@@ -125,6 +125,10 @@ def checkAllBeginnerFieldEntries(inputForm):
         "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
         raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
+    if (int(inputForm.cleaned_data["popStructExpectPolyMorph"]) > 1000 or int(inputForm.cleaned_data["genomeScanRadSnpDensity"]) > 1000 or
+        int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]) > 1000):
+        raise Exception("Fields with mutations per kilobase cannot exceed a value of 1000.")
+
 def checkCorrectSequenceCalculationFields(inputForm):
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
         "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
