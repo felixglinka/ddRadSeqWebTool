@@ -68,7 +68,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    rowElement.cells[6].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
    if (typeof expectedNumberOfSnps !== "undefined") {
-       if(theoreticalDataFrameValues.sumAllBasesOfEveryBin < expectedNumberOfSnps) {
+       if(theoreticalDataFrameValues.sumAllBasesOfEveryBin * parseFloat(expectPolyMorph) < expectedNumberOfSnps) {
             for (let i = 0; i < 8; i++) {
                 rowElement.classList.add("excludingSecondCutter")
             }

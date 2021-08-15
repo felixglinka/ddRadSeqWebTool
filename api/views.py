@@ -6,7 +6,7 @@ from django.shortcuts import render
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestBeginnerInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, DENSITY_MODIFIER
 from .forms import BasicInputDDRadDataForm
 
 logger = logging.getLogger(__name__)
@@ -93,7 +93,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
     context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
-    context["expectPolyMorph"] = inputForm.cleaned_data['popStructExpectPolyMorph']
+    context["expectPolyMorph"] = int(inputForm.cleaned_data['popStructExpectPolyMorph'])/DENSITY_MODIFIER
     context['mode'] += 'populationStructure'
 
     return context
@@ -115,7 +115,7 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
-    context["expectPolyMorph"] = inputForm.cleaned_data['genomeScanExpectPolyMorph']
+    context["expectPolyMorph"] = int(inputForm.cleaned_data['genomeScanExpectPolyMorph'])/DENSITY_MODIFIER
     context['mode'] += 'genomeScan'
 
     return context
@@ -125,9 +125,9 @@ def checkAllBeginnerFieldEntries(inputForm):
         "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
         raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
-    if (int(inputForm.cleaned_data["popStructExpectPolyMorph"]) > 1000 or int(inputForm.cleaned_data["genomeScanRadSnpDensity"]) > 1000 or
-        int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]) > 1000):
-        raise Exception("Fields with mutations per kilobase cannot exceed a value of 1000.")
+    # if (int(inputForm.cleaned_data["popStructExpectPolyMorph"]) > 1000 or int(inputForm.cleaned_data["genomeScanRadSnpDensity"]) > 1000 or
+    #     int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]) > 1000):
+    #     raise Exception("Fields with mutations per kilobase cannot exceed a value of 1000.")
 
 def checkCorrectSequenceCalculationFields(inputForm):
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
@@ -159,7 +159,7 @@ def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
         if inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] == '' and inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] != '' \
             or inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] == '' and inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] != "":
 
-            raise Exception("Please ensure the every Restriction Enzyme has a partner.")
+            raise Exception("Please ensure that every Restriction Enzyme has a partner.")
 
         if(inputFormClearedData['restrictionEnzyme' + str(firstRestrictionEnzyme)] != "" and
            inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)] != ""):
@@ -167,6 +167,6 @@ def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
                                                  restrictionEnzymes[int(inputFormClearedData['restrictionEnzyme' + str(secondRestrictionEnzyme)])]))
 
     if not chosenRestrictionEnzymePairs:
-        raise Exception("Please select at least one pair, if you use this option")
+        raise Exception("Please select at least one pair, if you would like to use this option")
 
     return chosenRestrictionEnzymePairs

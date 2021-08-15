@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, DENSITY_MODIFIER
 
 
 class DoubleDigestedDnaComparison:
@@ -26,7 +26,7 @@ class DoubleDigestedDnaComparison:
      self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
 
-  def filterSecondCutByExpectedSNP(self, beginnerModeFilterNumber):
+  def filterSecondCutByExpectedSNP(self, beginnerModeFilterNumber, expectPolyMorph):
 
     if(self.digestedDnaCollectionDataframe is  None):
       return pd.DataFrame()
@@ -36,7 +36,7 @@ class DoubleDigestedDnaComparison:
     indicesToDelete = []
 
     for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
-      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() < beginnerModeFilterNumber:
+      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() * (expectPolyMorph/DENSITY_MODIFIER) < beginnerModeFilterNumber:
         indicesToDelete.append(index)
       else:
         filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)

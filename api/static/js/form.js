@@ -86,7 +86,7 @@ function setInputFilter(textbox, inputFilter) {
 function setInputFilterOfCharFields() {
 
   setInputFilter(document.getElementById("id_basepairLengthToBeSequenced"), function(value) {
-    return /^\d*$/.test(value);
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
   });
 
   setInputFilter(document.getElementById("id_sequencingYield"), function(value) {
@@ -102,15 +102,15 @@ function setInputFilterOfCharFields() {
   });
 
   setInputFilter(document.getElementById("id_popStructExpectPolyMorph"), function(value) {
-    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 999);
   });
 
   setInputFilter(document.getElementById("id_genomeScanRadSnpDensity"), function(value) {
-    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 999);
   });
 
   setInputFilter(document.getElementById("id_genomeScanExpectPolyMorph"), function(value) {
-    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 999);
   });
 
 }
