@@ -1,7 +1,7 @@
 import logging
 from Bio import SeqIO
 
-from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelection
+from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelectionFiltering
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
 from backend.service.SingleDigestedDna import SingleDigestedDna
 from backend.settings import COMMONLYUSEDRARECUTTERS
@@ -48,7 +48,7 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
                 totalRareCutterDigestions[rareCutter].fragments.extend(rareCutterDigestion)
                 totalRareCutterDigestions[rareCutter].countCutsByFirstRestrictionEnzyme += len(rareCutterDigestion)
 
-        totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelection(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
+        totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
         return totalRareCutterDigestionsAndGenomeMutationAmount
 

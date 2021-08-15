@@ -48,7 +48,7 @@ def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestriction
         "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
     }
 
-def beginnerModeSelection(rareCutterCuts, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps=None, genomeScanRadSnpDensity=None):
+def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
     totalRareCutterDigestions={}
     genomeMutationAmount=0
