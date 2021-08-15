@@ -97,6 +97,22 @@ function setInputFilterOfCharFields() {
     return /^\d*$/.test(value);
   });
 
+  setInputFilter(document.getElementById("id_popStructNumberOfSnps"), function(value) {
+    return /^\d*$/.test(value);
+  });
+
+  setInputFilter(document.getElementById("id_popStructExpectPolyMorph"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+  });
+
+  setInputFilter(document.getElementById("id_genomeScanRadSnpDensity"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+  });
+
+  setInputFilter(document.getElementById("id_genomeScanExpectPolyMorph"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1000);
+  });
+
 }
 
 function initButtons() {
