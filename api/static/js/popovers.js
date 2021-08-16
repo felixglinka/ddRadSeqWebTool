@@ -10,9 +10,8 @@ function initPopovers() {
         placement: 'right'
         })
     })
-
     fillPopovers()
-
+    fillBeginnerExplanation()
 }
 
 function fillPopovers() {
@@ -25,6 +24,18 @@ function fillPopovers() {
             popover.setAttribute("data-bs-content", popoverContents[popover.id].content);
         }
     }
+}
+
+function fillBeginnerExplanation() {
+
+    if(typeof expectedNumberOfSnps !== 'undefined') {
+        let beginnerExplanationTitle = document.getElementById("beginnerExplanationTitle")
+        let beginnerExplanationContent = document.getElementById("beginnerExplanationContent")
+
+        beginnerExplanationTitle.innerHTML = beginnerInformation.title
+        beginnerExplanationContent.innerHTML = beginnerInformation.content
+    }
+
 }
 
 window.addEventListener('load', initPopovers)
