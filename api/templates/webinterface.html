@@ -38,19 +38,20 @@
     <script src="{% static 'js/tryOutForm.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
     <script src="{% static 'js/popovers.js' %}"></script>
+    <script src="{% static 'js/loadingScreen.js' %}"></script>
 </head>
 <body>
+
     {% if messages %}
         {% for message in messages %}
           <div class="alert alert-danger">{{ message|safe }}</div>
         {% endfor %}
-  {% endif %}
+   {% endif %}
 
     <h1>Insert cool name</h1>
 
-
-    <div class="container-sm">
-        <form  action='.' method="POST" mode="" enctype="multipart/form-data" >
+    <div id="formWrapper" class="container-sm">
+        <form  action='.' method="POST" mode="" onsubmit="showLoading()" enctype="multipart/form-data" >
             {% csrf_token %}
             <div class="row form-group">
                 <div id="customFile" class="col-12 d-flex justify-content-center">
@@ -145,11 +146,11 @@
 
                 <div id="tryOutTitle" class="text-center bottom15">
                     <hr/>
-                    <h5>Here you go, choose your Enzymes.</h5>
+                    <h5>Here you go, choose your enzyme.</h5>
                 </div>
 
                 {% for field in form %}
-                    {% if 'Restriction Enzyme ' in  field.label %}
+                    {% if 'Restriction enzyme ' in  field.label %}
                         <label>{{ field.label }}</label> {{ field }}
                     {% endif %}
                 {% endfor %}
@@ -220,7 +221,7 @@
     </div>
 
     {% if expectedNumberOfSnps %}
-    <div class="row form-group">
+    <div id="beginnerExplanation" class="row form-group">
         <div id="suggestionCard" class="col-12 d-flex justify-content-center">
             <div class="card text-center" style="width: 50%;">
               <div class="card-body">
@@ -242,7 +243,6 @@
     <div id="dataFrame" class="tablePositioning"></div>
     <div style="padding-top: 30px;"></div>
   {% endif %}
-
 
 </body>
 </html>
