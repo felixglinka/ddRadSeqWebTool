@@ -37,8 +37,8 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
     doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph)
-    digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
+    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph, pairedEnd)
+    digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph, pairedEnd)
 
     if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
         return {
@@ -69,8 +69,9 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
             'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
         }
     else:
-        return {}
-
+        return {
+            'expectedNumberOfSnps': 1
+        }
 
 def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
 

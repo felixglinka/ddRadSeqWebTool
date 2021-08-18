@@ -110,7 +110,7 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
 
     if "graph" in genomeScanResult: context["graph"] = genomeScanResult['graph']
     if "dataFrames" in genomeScanResult: context["dataFrames"] = genomeScanResult['dataFrames']
-    if "graph" in genomeScanResult: context["expectedNumberOfSnps"] = genomeScanResult['expectedNumberOfSnps']
+    if "expectedNumberOfSnps" in genomeScanResult: context["expectedNumberOfSnps"] = genomeScanResult['expectedNumberOfSnps']
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
