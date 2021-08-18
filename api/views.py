@@ -6,7 +6,7 @@ from django.shortcuts import render
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestBeginnerInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, DENSITY_MODIFIER
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER
 from .forms import BasicInputDDRadDataForm
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     checkAllBeginnerFieldEntries(inputForm)
     populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
-                                           int(inputForm.cleaned_data["popStructExpectPolyMorph"]),
+                                           int(inputForm.cleaned_data["popStructExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
@@ -93,7 +93,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
     context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
-    context["expectPolyMorph"] = int(inputForm.cleaned_data['popStructExpectPolyMorph'])/DENSITY_MODIFIER
+    context["expectPolyMorph"] = int(inputForm.cleaned_data['popStructExpectPolyMorph'])/POLYMORPHISM_MODIFIER
     context['mode'] += 'populationStructure'
 
     return context
@@ -103,8 +103,8 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
 
     checkAllBeginnerFieldEntries(inputForm)
     genomeScanResult = handleGenomeScanRequest(stringStreamFasta,
-                                           int(inputForm.cleaned_data["genomeScanRadSnpDensity"]),
-                                           int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]),
+                                           int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
+                                           int(inputForm.cleaned_data["genomeScanExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
@@ -115,7 +115,7 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
-    context["expectPolyMorph"] = int(inputForm.cleaned_data['genomeScanExpectPolyMorph'])/DENSITY_MODIFIER
+    context["expectPolyMorph"] = int(inputForm.cleaned_data['genomeScanExpectPolyMorph']) / POLYMORPHISM_MODIFIER
     context['mode'] += 'genomeScan'
 
     return context

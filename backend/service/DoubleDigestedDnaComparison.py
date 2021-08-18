@@ -1,10 +1,12 @@
-import base64, io, urllib
+import base64
+import io
+import urllib
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, DENSITY_MODIFIER, MAX_RECOMMENDATION_NUMBER
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, MAX_RECOMMENDATION_NUMBER
 
 
 class DoubleDigestedDnaComparison:
@@ -37,7 +39,7 @@ class DoubleDigestedDnaComparison:
 
     for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
       sumMostCommonlySelectedFragmentSize = enzymeCuttingValue.iloc[30:70,:]['numberSequencedBasesOfBin'].sum()
-      if sumMostCommonlySelectedFragmentSize * (expectPolyMorph/DENSITY_MODIFIER) < beginnerModeFilterNumber:
+      if sumMostCommonlySelectedFragmentSize * expectPolyMorph < beginnerModeFilterNumber:
         indicesToDelete.append(index)
       else:
         filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
@@ -53,7 +55,7 @@ class DoubleDigestedDnaComparison:
       return pd.DataFrame()
 
     allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
-    sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(enzymeCut.iloc[:,0].sum() * (expectPolyMorph/DENSITY_MODIFIER) - beginnerModeFilterNumber))
+    sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(enzymeCut.iloc[:,0].sum() * expectPolyMorph - beginnerModeFilterNumber))
 
     if(len(sortedEnzymeCuttingValues) > MAX_RECOMMENDATION_NUMBER):
       filteredSortedEnzymeCuttingValues = sortedEnzymeCuttingValues[:MAX_RECOMMENDATION_NUMBER]

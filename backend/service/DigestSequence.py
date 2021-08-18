@@ -1,5 +1,3 @@
-from backend.settings import DENSITY_MODIFIER
-
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
 
     digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
@@ -57,7 +55,7 @@ def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, ge
         totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > numberOfSnps}
 
     if genomeScanRadSnpDensity != None:
-        genomeMutationAmount = (genomeScanRadSnpDensity / DENSITY_MODIFIER) * genomeSize
+        genomeMutationAmount = genomeScanRadSnpDensity * genomeSize
         totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
 
     return (totalRareCutterDigestions, genomeMutationAmount)
