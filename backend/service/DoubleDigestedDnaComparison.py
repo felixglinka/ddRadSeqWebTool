@@ -78,7 +78,7 @@ class DoubleDigestedDnaComparison:
   def sortDigestedDnaCollectionBySelectedRecommendation(self, filteredSortedEnzymeCuttingValues):
 
     sortedNamesOfSelectedRecommendations = [enzymeCut.columns[0] for enzymeCut in filteredSortedEnzymeCuttingValues]
-    self.DigestedDnaCollection = [element for _, element in sorted(zip(sortedNamesOfSelectedRecommendations, self.DigestedDnaCollection))]
+    self.DigestedDnaCollection = [digestedDna for sortedRecommendation in sortedNamesOfSelectedRecommendations for digestedDna in self.DigestedDnaCollection if digestedDna.restrictionEnzymeCombination == sortedRecommendation]
 
   def createLineChart(self):
 
