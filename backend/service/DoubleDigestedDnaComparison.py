@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, DENSITY_MODIFIER
+from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, DENSITY_MODIFIER, MAX_RECOMMENDATION_NUMBER
 
 
 class DoubleDigestedDnaComparison:
@@ -26,7 +26,7 @@ class DoubleDigestedDnaComparison:
      self.DigestedDnaCollection[0].fragmentCalculationDataframe
 
 
-  def filterSecondCutByExpectedSNP(self, beginnerModeFilterNumber, expectPolyMorph):
+  def filterSecondCutLessThanExpectedSNP(self, beginnerModeFilterNumber, expectPolyMorph):
 
     if(self.digestedDnaCollectionDataframe is  None):
       return pd.DataFrame()
@@ -36,7 +36,8 @@ class DoubleDigestedDnaComparison:
     indicesToDelete = []
 
     for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
-      if enzymeCuttingValue['numberSequencedBasesOfBin'].sum() * (expectPolyMorph/DENSITY_MODIFIER) < beginnerModeFilterNumber:
+      sumMostCommonlySelectedFragmentSize = enzymeCuttingValue.iloc[30:70,:]['numberSequencedBasesOfBin'].sum()
+      if sumMostCommonlySelectedFragmentSize * (expectPolyMorph/DENSITY_MODIFIER) < beginnerModeFilterNumber:
         indicesToDelete.append(index)
       else:
         filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
@@ -45,6 +46,39 @@ class DoubleDigestedDnaComparison:
       del self.DigestedDnaCollection[index]
 
     self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1) if len(filteredDigestedDnaCollectionDataframe) > 0 else pd.DataFrame()
+
+  def filterSecondCutForTooManySNPs(self, beginnerModeFilterNumber, expectPolyMorph):
+
+    if(self.digestedDnaCollectionDataframe is  None):
+      return pd.DataFrame()
+
+    allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
+    sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(enzymeCut.iloc[:,0].sum() * (expectPolyMorph/DENSITY_MODIFIER) - beginnerModeFilterNumber))
+
+    if(len(sortedEnzymeCuttingValues) > MAX_RECOMMENDATION_NUMBER):
+      filteredSortedEnzymeCuttingValues = sortedEnzymeCuttingValues[:MAX_RECOMMENDATION_NUMBER]
+      indicesToDelete = []
+
+      for outSortedEnzymeCut in sortedEnzymeCuttingValues[MAX_RECOMMENDATION_NUMBER:]:
+        outSortedEnzymeCutName = outSortedEnzymeCut.columns[0]
+
+        for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
+          if outSortedEnzymeCutName == enzymeCuttingValue.columns[0]:
+            indicesToDelete.append(index)
+
+      for index in sorted(indicesToDelete, reverse=True):
+        del self.DigestedDnaCollection[index]
+
+      self.sortDigestedDnaCollectionBySelectedRecommendation(filteredSortedEnzymeCuttingValues)
+      self.digestedDnaCollectionDataframe = pd.concat(filteredSortedEnzymeCuttingValues, axis=1) if len(filteredSortedEnzymeCuttingValues) > 0 else pd.DataFrame()
+
+    else:
+      self.digestedDnaCollectionDataframe = pd.concat(sortedEnzymeCuttingValues, axis=1) if len(sortedEnzymeCuttingValues) > 0 else pd.DataFrame()
+
+  def sortDigestedDnaCollectionBySelectedRecommendation(self, filteredSortedEnzymeCuttingValues):
+
+    sortedNamesOfSelectedRecommendations = [enzymeCut.columns[0] for enzymeCut in filteredSortedEnzymeCuttingValues]
+    self.DigestedDnaCollection = [element for _, element in sorted(zip(sortedNamesOfSelectedRecommendations, self.DigestedDnaCollection))]
 
   def createLineChart(self):
 

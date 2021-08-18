@@ -37,9 +37,10 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
     doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutByExpectedSNP(numberOfSnps, expectPolyMorph)
+    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph)
+    digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
 
-    if(len(digestedDnaComparison.DigestedDnaCollection) > 1):
+    if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
         return {
             'graph': digestedDnaComparison.createLineChart(),
             'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
@@ -53,12 +54,14 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
                              MAX_BINNING_LIMIT + BINNING_STEPS)
 
     rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
+    genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
     doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutByExpectedSNP(rareCutterCutsAndGenomeMutationAmount[1], expectPolyMorph)
+    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph)
+    digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
 
-    if (len(digestedDnaComparison.DigestedDnaCollection) > 1):
+    if (len(digestedDnaComparison.DigestedDnaCollection) >= 1):
         return {
             'graph': digestedDnaComparison.createLineChart(),
             'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
