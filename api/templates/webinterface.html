@@ -10,7 +10,6 @@
 
         const mode ="{{ mode }}"
         const popoverContents = {{ popoverContents|safe }};
-        const beginnerInformation = {{ beginnerInformation|safe }};
         const adaptorContaminationSlope ="{{ adaptorContaminationSlope }}"
         const overlapSlope ="{{ overlapSlope }}"
 
@@ -220,20 +219,8 @@
         <hr/>
     </div>
 
-    {% if expectedNumberOfSnps %}
-    <div id="beginnerExplanation" class="row form-group">
-        <div id="suggestionCard" class="col-12 d-flex justify-content-center">
-            <div class="card text-center" style="width: 50%;">
-              <div class="card-body">
-                    <h5 class="card-title" id="beginnerExplanationTitle"></h5>
-                    <p class="card-text" id="beginnerExplanationContent"></p>
-              </div>
-            </div>
-        </div>
-    </div>
-  {% endif %}
-
     {% if graph %}
+    <a href="{% url 'explanation'%}?mode=tag" target="_blank" rel="noopener noreferrer">Link</a>
     <div id="graph">
         <img class="center" src="{{ graph }}" width="900" height="{{ graphHeight }}">
     </div>

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
-    handlePopulationStructureRequest, requestPopoverTexts, requestBeginnerInformationTexts, handleGenomeScanRequest
+    handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
     ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER
 from .forms import BasicInputDDRadDataForm
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": "", 'mode': 'none', 'popoverContents': requestPopoverTexts(), 'beginnerInformation': requestBeginnerInformationTexts(),
+    context = {"graph": "", 'mode': 'none', 'popoverContents': requestPopoverTexts(),
                'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
     restrictionEnzymes = requestRestrictionEnzymes()
 
@@ -170,3 +170,9 @@ def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
         raise Exception("Please select at least one pair, if you would like to use this option")
 
     return chosenRestrictionEnzymePairs
+
+def explanationsViews(request):
+
+    context = {'mode': 'none', 'popStructureInformation': requestInformationTexts()}
+
+    return render(request, "explanations.html", context)

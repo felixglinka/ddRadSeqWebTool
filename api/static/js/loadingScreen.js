@@ -8,10 +8,6 @@ function showLoading() {
 
     form.parentNode.insertBefore(loader, form.nextSibling);
 
-    if (typeof expectedNumberOfSnps !== 'undefined') {
-        document.getElementById('beginnerExplanation').style.display="none";
-    }
-
     if (typeof graph !== 'undefined') {
         document.getElementById('graph').style.display="none";
     }

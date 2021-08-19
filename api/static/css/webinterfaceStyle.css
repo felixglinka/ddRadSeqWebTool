@@ -4,11 +4,7 @@ body {
 
 /* headers */
 
-h1 {
-  text-align: center;
-}
-
-h5 {
+h1, h4, h5 {
   text-align: center;
 }
 
@@ -280,4 +276,13 @@ input[type='range']::-ms-thumb{
 input[type='range']:active::-webkit-slider-thumb{
     background-color: #ffffff;
     border: 3px solid #3264fe;
+}
+
+/* Explain Section */
+
+.explainButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
 }

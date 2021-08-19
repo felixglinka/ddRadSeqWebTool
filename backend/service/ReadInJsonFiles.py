@@ -12,10 +12,10 @@ def readInPopoverTexts():
 
     return popoverJson
 
-def readInBeginnerInformationTexts():
+def readInInformationTexts():
 
-    with open(os.path.join(STATIC_ROOT, 'json/beginnerInformation.json'), encoding='utf-8-sig') as beginnerInformation:
-        readBeginnerInformation = beginnerInformation.read()
-        beginnerInformationJson = json.loads(readBeginnerInformation)
+    with open(os.path.join(STATIC_ROOT, 'json/beginnerInformation.json'), encoding='utf-8-sig') as informationText:
+        readInformation = informationText.read()
+        informationJson = json.loads(readInformation)
 
-    return beginnerInformationJson
+    return informationJson
