@@ -42,4 +42,4 @@ class BasicInputDDRadDataForm(forms.Form):
     basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
     sequencingYield = forms.CharField(label="Sequencing Yield [reads]", required=False)
-    coverage = forms.CharField(label="Coverage", required=False)
+    coverage = forms.CharField(label="Depth", required=False)

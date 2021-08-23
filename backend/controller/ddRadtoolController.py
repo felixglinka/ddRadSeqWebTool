@@ -58,8 +58,8 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
     doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
     digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
     digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph)
-    digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
+    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
+    digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
 
     if (len(digestedDnaComparison.DigestedDnaCollection) >= 1):
         return {

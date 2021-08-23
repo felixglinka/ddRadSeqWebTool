@@ -11,6 +11,7 @@ function initPopovers() {
         })
     })
     fillPopovers()
+    initLink()
 }
 
 function fillPopovers() {
@@ -22,6 +23,13 @@ function fillPopovers() {
             popover.setAttribute("data-bs-original-title", popoverContents[popover.id].title);
             popover.setAttribute("data-bs-content", popoverContents[popover.id].content);
         }
+    }
+}
+
+function initLink() {
+
+    if(document.body.contains(document.getElementById('explanationRef'))){
+        document.getElementById('explanationRef').setAttribute("href", window.location.href + 'explanation' + '?mode=' + mode);
     }
 }
 

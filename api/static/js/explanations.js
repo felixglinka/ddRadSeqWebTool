@@ -1,7 +1,5 @@
 function initExplanations() {
-
-    console.log(getUrlParameter('mode'))
-
+    initByURLParameter()
     initExplanationsButtons()
     fillBeginnerExplanation()
 }
@@ -15,6 +13,28 @@ function fillBeginnerExplanation() {
         popStructureExplanationTitle.innerHTML = popStructureInformation.title
         popStructureExplanationContent.innerHTML = popStructureInformation.content
     }
+}
+
+function initByURLParameter(){
+
+    let urlParameter = getUrlParameter('mode')
+
+    let popStructureExplanation = document.getElementById("popStructureExplanation")
+    let genomeScanExplanation = document.getElementById("genomeScanExplanation")
+    let tryOutExplanation = document.getElementById("tryOutExplanation")
+
+    if(urlParameter === 'beginner-populationStructure'){
+        popStructureExplanation.style.display = 'block'
+    }
+
+    if(urlParameter === 'beginner-genomeScan'){
+        genomeScanExplanation.style.display = 'block'
+    }
+
+    if(urlParameter === 'tryOut'){
+        tryOutExplanation.style.display = 'block'
+    }
+
 }
 
 function initExplanationsButtons() {
@@ -61,7 +81,6 @@ function getUrlParameter(sParam) {
 
     for (i = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split('=');
-
         if (sParameterName[0] === sParam) {
             return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }

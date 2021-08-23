@@ -4,7 +4,7 @@ body {
 
 /* headers */
 
-h1, h4, h5 {
+h1, h4, h5, .link {
   text-align: center;
 }
 
@@ -285,4 +285,22 @@ input[type='range']:active::-webkit-slider-thumb{
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1rem;
+}
+
+.All {
+  display: block;
+  margin: auto;
+  width: 75%;
+  text-align: center;
+}
+.Fraction {
+    display: table-cell;
+    text-align: center;
+}
+.Denominator{
+    border-top: 1px solid #000;
+    display: block;
+}
+.Fraction, .Numerator, .Denominator {
+    padding: 0px 5px;
 }

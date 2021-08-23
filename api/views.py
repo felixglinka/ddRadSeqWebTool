@@ -94,7 +94,6 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["coverage"] = inputForm.cleaned_data['coverage']
     context["expectedNumberOfSnps"] = inputForm.cleaned_data['popStructNumberOfSnps']
     context["expectPolyMorph"] = int(inputForm.cleaned_data['popStructExpectPolyMorph'])/POLYMORPHISM_MODIFIER
-    context['mode'] += 'populationStructure'
 
     return context
 
@@ -116,7 +115,6 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER
     context["coverage"] = inputForm.cleaned_data['coverage']
     context["expectPolyMorph"] = int(inputForm.cleaned_data['genomeScanExpectPolyMorph']) / POLYMORPHISM_MODIFIER
-    context['mode'] += 'genomeScan'
 
     return context
 

@@ -212,7 +212,7 @@
 
             <div class="row form-group">
                 <div class="col-12 d-flex justify-content-center">
-                    <input class="btn btn-primary" type="submit" value="Submit">
+                    <input id="submitButton" class="btn btn-primary" type="submit" value="Submit">
                 </div>
             </div>
         </form>
@@ -220,7 +220,7 @@
     </div>
 
     {% if graph %}
-    <a href="{% url 'explanation'%}?mode=tag" target="_blank" rel="noopener noreferrer">Link</a>
+    <span id="explanationLink" class="center link"> For a detailed explanation about the results, please click <a id="explanationRef" href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer">here</a></span>
     <div id="graph">
         <img class="center" src="{{ graph }}" width="900" height="{{ graphHeight }}">
     </div>

@@ -21,16 +21,16 @@ class DoubleDigestedDnaComparison:
       doubleDigestedDna.createBasicDataframeForGraph(binningSizes)
       if sequenceLength != None: doubleDigestedDna.calculateBaseSequencingCosts(binningSizes, sequenceLength, pairedEnd)
 
-    if len(self.DigestedDnaCollection) > 1:
+    if len(self.DigestedDnaCollection) >= 1:
       self.digestedDnaCollectionDataframe = pd.concat([digestedDna.fragmentCalculationDataframe for digestedDna in self.DigestedDnaCollection], axis=1)
 
-    if len(self.DigestedDnaCollection) == 1:
-     self.DigestedDnaCollection[0].fragmentCalculationDataframe
+    if len(self.DigestedDnaCollection) == 0:
+     self.digestedDnaCollectionDataframe = pd.DataFrame()
 
 
   def filterSecondCutLessThanExpectedSNP(self, beginnerModeFilterNumber, expectPolyMorph, pairedEnd):
 
-    if(self.digestedDnaCollectionDataframe is  None):
+    if(self.digestedDnaCollectionDataframe.empty):
       return
 
     if (pairedEnd == PAIRED_END_ENDING):
@@ -55,7 +55,7 @@ class DoubleDigestedDnaComparison:
 
   def filterSecondCutForTooManySNPs(self, beginnerModeFilterNumber, expectPolyMorph, pairedEnd):
 
-    if(self.digestedDnaCollectionDataframe is  None):
+    if (self.digestedDnaCollectionDataframe.empty):
       return
 
     if (pairedEnd == PAIRED_END_ENDING):
