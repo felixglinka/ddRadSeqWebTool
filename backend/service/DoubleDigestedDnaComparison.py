@@ -63,7 +63,7 @@ class DoubleDigestedDnaComparison:
     else:
       allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(3, len(self.digestedDnaCollectionDataframe.columns), 3), axis=1)
 
-    sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(enzymeCut.iloc[:,0].sum() * expectPolyMorph - beginnerModeFilterNumber))
+    sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(beginnerModeFilterNumber - enzymeCut.iloc[:,0].sum() * expectPolyMorph))
 
     if(len(sortedEnzymeCuttingValues) > MAX_RECOMMENDATION_NUMBER):
       filteredSortedEnzymeCuttingValues = sortedEnzymeCuttingValues[:MAX_RECOMMENDATION_NUMBER]

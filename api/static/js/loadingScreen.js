@@ -11,6 +11,10 @@ function showLoading() {
 
     form.parentNode.insertBefore(loader, form.nextSibling);
 
+    if (typeof noRecommendation !== 'undefined') {
+        document.getElementById('noRecommendation').style.display="none";
+    }
+
     if (typeof graph !== 'undefined') {
         document.getElementById('explanationLink').style.display="none";
         document.getElementById('graph').style.display="none";

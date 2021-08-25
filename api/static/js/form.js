@@ -3,17 +3,37 @@ function toggleDataform(mode, otherMode) {
   let formSpace = document.getElementById(mode.concat('Form'));
   let otherFormSpace1 = document.getElementById(otherMode);
   let forModeInput = document.getElementById('id_formMode');
+  let sequenceCalculation = document.getElementById('sequenceCalculation');
 
   let optionalSmalls = document.querySelectorAll('.optional');
   let mandatorySmalls = document.querySelectorAll('.text-mandatory');
-
   if (formSpace.style.display === "none") {
     formSpace.style.display = "block";
     forModeInput.value = mode
     otherFormSpace1.style.display = "none";
+
+    if (mode === 'tryOut') {
+       sequenceCalculation.style.display = "block";
+       submitButton.disabled  = false;
+     }
+
+    if (mode === 'beginner') {
+        let populationStructureSection = document.getElementById('populationStructureSection');
+        let genomeScanSection = document.getElementById('genomeScanSection');
+
+        if(populationStructureSection.style.display === "block" || genomeScanSection.style.display === "block") {
+            sequenceCalculation.style.display = "block";
+            submitButton.disabled  = false;
+        } else {
+            sequenceCalculation.style.display = "none";
+            submitButton.disabled  = true;
+        }
+    }
   } else {
     formSpace.style.display = "none";
     forModeInput.value = 'none'
+    sequenceCalculation.style.display = "none";
+    submitButton.disabled  = true;
   }
 
   if (mode === 'tryOut') {
@@ -37,26 +57,34 @@ function toggleDataform(mode, otherMode) {
 
 function initDataform() {
 
-    let lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
-    initExtendIconsTryOutForm(lastElementIndexWithSelection)
+    console.log(mode)
+
+   let lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
+   initExtendIconsTryOutForm(lastElementIndexWithSelection)
 
    let optionalSmalls = document.querySelectorAll('.optional');
    let mandatorySmalls = document.querySelectorAll('.text-mandatory');
 
+   if(mode != 'none') {
+        document.getElementById('submitButton').disabled  = false;
+        document.getElementById('sequenceCalculation').style.display = "block";
+    }
+
     if(mode.startsWith('beginner')) {
-        document.getElementById('beginnerForm').style.display = "block"
+        document.getElementById('beginnerForm').style.display = "block";
 
         mandatorySmalls.forEach(function(mandatory){
-        mandatory.style.display = 'block'
+        mandatory.style.display = 'block';
 
         if(mode.endsWith('populationStructure')) {
-            document.getElementById('populationStructureSection').style.display = "block"
+            document.getElementById('populationStructureSection').style.display = "block";
         }
         if(mode.endsWith('genomeScan')) {
-            document.getElementById('genomeScanSection').style.display = "block"
+            document.getElementById('genomeScanSection').style.display = "block";
         }
     })
     }
+
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
 

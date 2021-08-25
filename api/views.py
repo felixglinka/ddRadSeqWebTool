@@ -86,7 +86,10 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
-    if "graph" in populationStructureResult: context["graph"] = populationStructureResult['graph']
+    if "graph" in populationStructureResult:
+        context["graph"] = populationStructureResult['graph']
+    else:
+        context["noRecommendation"] = 'n'
     if "dataFrames" in populationStructureResult: context["dataFrames"] = populationStructureResult['dataFrames']
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice']
@@ -107,7 +110,10 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
-    if "graph" in genomeScanResult: context["graph"] = genomeScanResult['graph']
+    if "graph" in genomeScanResult:
+        context["graph"] = genomeScanResult['graph']
+    else:
+        context["noRecommendation"] = 'n'
     if "dataFrames" in genomeScanResult: context["dataFrames"] = genomeScanResult['dataFrames']
     if "expectedNumberOfSnps" in genomeScanResult: context["expectedNumberOfSnps"] = genomeScanResult['expectedNumberOfSnps']
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
