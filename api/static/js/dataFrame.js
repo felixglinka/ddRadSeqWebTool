@@ -172,6 +172,11 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
                 predicationTD.innerText = 'Prediction'
             }
 
+            //add sizes for certain cells
+            if(title === '' || title === 'No. fragments' || title === 'No. basepairs in insilico digested sample' || title === 'No. SNPs in digestion' || title === 'No. samples multiplexable') {
+                connectedTD.style = 'width: 1%;'
+            }
+
             connectedTD.appendChild(theoreticalTD);
             connectedTD.appendChild(predicationTD);
             rowElement.appendChild(connectedTD);

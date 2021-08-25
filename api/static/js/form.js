@@ -57,8 +57,6 @@ function toggleDataform(mode, otherMode) {
 
 function initDataform() {
 
-    console.log(mode)
-
    let lastElementIndexWithSelection = extendTryOutFormUntilLastSelection()
    initExtendIconsTryOutForm(lastElementIndexWithSelection)
 
