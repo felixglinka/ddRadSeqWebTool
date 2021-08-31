@@ -236,6 +236,7 @@
   {% endif %}
 
     {% if graph %}
+    <h5 id="resultTitle">Results</h5>
     <span id="explanationLink" class="center link"> For a detailed explanation about the results, please click <a id="explanationRef" href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer">here</a></span>
     <div id="graph">
         <img class="center" src="{{ graph }}" width="900" height="{{ graphHeight }}">

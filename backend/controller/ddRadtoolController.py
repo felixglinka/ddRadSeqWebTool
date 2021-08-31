@@ -89,21 +89,27 @@ def combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts):
 
     for rareCutterCut in rareCutterCuts.values():
 
+        storedRestrictionEnzymes = [doubleDigestedDna.restrictionEnzymeCombination for doubleDigestedDna in listOfDoubleDigestedDna]
+
         if rareCutterCut.name == 'EcoRI':
             for frequentCutter in COMMONLYUSEDECORIFREQUENTCUTTERS:
-                listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
+                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
 
         if rareCutterCut.name == 'PstI':
             for frequentCutter in COMMONLYUSEDPSTIFREQUENTCUTTERS:
-                listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
+                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
 
         if rareCutterCut.name == 'SbfI':
             for frequentCutter in COMMONLYUSEDSBFIFREQUENTCUTTERS:
-                listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
+                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
 
         if rareCutterCut.name == 'SphI':
             for frequentCutter in COMMONLYUSEDSPHIFREQUENTCUTTERS:
-                listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
+                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
 
     return listOfDoubleDigestedDna
 

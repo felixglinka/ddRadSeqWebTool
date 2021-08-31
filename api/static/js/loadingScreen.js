@@ -16,6 +16,7 @@ function showLoading() {
     }
 
     if (typeof graph !== 'undefined') {
+        document.getElementById('resultTitle').style.display="none";
         document.getElementById('explanationLink').style.display="none";
         document.getElementById('graph').style.display="none";
     }

@@ -173,8 +173,12 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
             }
 
             //add sizes for certain cells
-            if(title === '' || title === 'No. fragments' || title === 'No. basepairs in insilico digested sample' || title === 'No. SNPs in digestion' || title === 'No. samples multiplexable') {
+            if(title === '' || title === 'No. fragments' || title === 'No. SNPs in digestion' || title === 'No. samples multiplexable') {
                 connectedTD.style = 'width: 1%;'
+            }
+
+            if(title === 'No. basepairs in insilico digested sample') {
+                connectedTD.style = 'width: 8%;'
             }
 
             connectedTD.appendChild(theoreticalTD);
