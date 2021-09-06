@@ -67,13 +67,13 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
         rowElement.cells[4].lastChild.innerText = experimentalNumberOfSNPs.toLocaleString(undefined, { minimumFractionDigits: 0 });
       }
 
-   rowElement.cells[2].firstChild.innerText = currentSelectedFragmentSize;
+   rowElement.cells[2].firstChild.innerText = currentSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].firstChild.innerText = theoreticalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[4+expectedNumberOfSnpsModifier].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples;
+   rowElement.cells[4+expectedNumberOfSnpsModifier].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[5+expectedNumberOfSnpsModifier].firstChild.innerText = (theoreticalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[6+expectedNumberOfSnpsModifier].firstChild.innerText = String(adaptorContaminationValues.adaptorContamination).concat(' [').concat(adaptorContaminationValues.adaptorContaminationPercentage).concat('%]');
 
-   rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize;
+   rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].lastChild.innerText = experimentalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[4+expectedNumberOfSnpsModifier].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples;
    rowElement.cells[5+expectedNumberOfSnpsModifier].lastChild.innerText = (experimentalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
@@ -177,8 +177,8 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
                 connectedTD.style = 'width: 1%;'
             }
 
-            if(title === 'No. basepairs in insilico digested sample') {
-                connectedTD.style = 'width: 8%;'
+            if(title === 'No. basepairs in insilico digested sample' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
+                connectedTD.style = 'width: 11%;'
             }
 
             connectedTD.appendChild(theoreticalTD);

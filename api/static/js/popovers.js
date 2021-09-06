@@ -28,8 +28,8 @@ function fillPopovers() {
 
 function initLink() {
 
-    if(document.body.contains(document.getElementById('explanationRef'))){
-        document.getElementById('explanationRef').setAttribute("href", window.location.href + 'explanation' + '?mode=' + mode);
+    if(document.body.contains(document.getElementById('explanationModRef'))){
+        document.getElementById('explanationModRef').setAttribute("href", window.location.href + 'explanation' + '#tableMetrics');
     }
 }
 

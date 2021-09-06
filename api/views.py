@@ -177,6 +177,6 @@ def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
 
 def explanationsViews(request):
 
-    context = {'mode': 'none', 'popStructureInformation': requestInformationTexts()}
+    context = {'mode': 'none', 'explantionTexts': requestInformationTexts()}
 
     return render(request, "explanations.html", context)

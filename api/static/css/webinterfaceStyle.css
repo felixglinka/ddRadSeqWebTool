@@ -290,11 +290,10 @@ input[type='range']:active::-webkit-slider-thumb{
 .All {
   display: block;
   margin: auto;
-  width: 75%;
+  width: 60%;
   text-align: center;
 }
 .Fraction {
-    display: table-cell;
     text-align: center;
 }
 .Denominator{
