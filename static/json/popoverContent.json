@@ -13,11 +13,11 @@
   },
   "popStructPopSnpDensity": {
     "title": "Expected nucleotide polymorphism in study samples",
-    "content": "The expected number of nucleotide polymorphism vary hugely depending on the study organism and the scale of the study. For example, in pedrigree or linkage map analyses nucleotide polymorphism would be very low as samples are from a single family compared to phylogeographic studies that involve samples from multiple populations."
+    "content": "Number of SNPs within 1 kilo bases. For more information click <a id='explanationModRef' href='/explanation#popStructureAnalysisTitle' target='_blank' rel='noopener noreferrer'>here</a>."
   },
   "genomeScanPopSnpDensity": {
     "title": "Expected average number of SNPs in a 100Kb window of genomic sequence",
-    "content": "The expected number of single nucleotide polymorphisms (SNPs) vary greatly depending on the study organism, the population sampled, and the number of samples. For example, in pedigree or linkage map analyses the number of SNPs  would be smaller, as samples are from a single family, compared to phylogeographic studies that involve samples from multiple populations across the entire species range. A sample from a single location/population would have an intermediate number of SNPs, which would depend on the genetic diversity of that population (e.g. whether it has recently undergone a population bottleneck)."
+    "content": "Number of SNPs within 1 kilo bases. For more information click <a id='explanationModRef' href='/explanation#genomeScanTitle' target='_blank' rel='noopener noreferrer'>here</a>."
   },
   "genomeScanRadSnpDensity": {
     "title": "Average number of SNPs in a 100Kb window that is required for the study",

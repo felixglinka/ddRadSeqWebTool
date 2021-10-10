@@ -19,6 +19,7 @@ function showLoading() {
         document.getElementById('resultTitle').style.display="none";
         document.getElementById('explanationModLink').style.display="none";
         document.getElementById('graph').style.display="none";
+        document.getElementById('printButton').style.display="none";
     }
 
     if (typeof dataFrameData !== 'undefined') {
