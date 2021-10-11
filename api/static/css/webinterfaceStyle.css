@@ -38,6 +38,20 @@ caption {
   100% { transform: rotate(360deg); }
 }
 
+@media print {
+    body * {
+       visibility: hidden;
+    }
+    #results, #results * {
+       visibility: visible;
+    }
+    #results {
+       position: absolute;
+       left: 0;
+       top: 0;
+    }
+}
+
 /* form spacing */
 
 .top15 {

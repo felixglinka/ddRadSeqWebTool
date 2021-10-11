@@ -97,12 +97,13 @@ function calculateSamplesToBeMultiplexed(totalFragmentLength, sequencingYield, c
 }
 
 function printDiv() {
-    let divContents = document.getElementById("results").innerHTML;
-    let a = window.open('', '', 'height=500, width=500');
-    a.document.write('<html>');
-    a.document.write('<body>');
-    a.document.write(divContents);
-    a.document.write('</body></html>');
-    a.document.close();
-    a.print();
+      window.print();
+//    let divContents = document.getElementById("results").innerHTML;
+//    let a = window.open('', '', 'height=500, width=500');
+//    a.document.write('<html>');
+//    a.document.write('<body >');
+//    a.document.write(divContents);
+//    a.document.write('</body></html>');
+//    a.print();
+//    a.document.close();
 }

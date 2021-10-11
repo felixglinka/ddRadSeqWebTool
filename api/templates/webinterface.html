@@ -246,14 +246,15 @@
 
    {% if dataFrames %}
     <div id="dataFrame" class="tablePositioning"></div>
-    <div style="padding-top: 30px;"></div>
   {% endif %}
     </div>
 
     {% if graph %}
-    <input id="printButton" class="btn btn-secondary" type="button" value="Print"
-                    onclick="printDiv()">
-
+    <div class="text-center">
+        <input id="printButton" class="btn btn-secondary" type="button" value="Print Results"
+                        onclick="printDiv()">
+        <div style="padding-top: 30px"></div>
+    </div>
     {% endif %}
 
 </body>
