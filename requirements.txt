@@ -1,0 +1,26 @@
+asgiref @ file:///tmp/build/80754af9/asgiref_1617740417847/work
+biopython @ file:///C:/ci/biopython_1613155550696/work
+certifi==2021.5.30
+cycler==0.10.0
+Django @ file:///tmp/build/80754af9/django_1622711766781/work
+django-chunked-upload==2.0.0
+django-crispy-forms==1.12.0
+django-remote-forms==0.0.1
+kiwisolver @ file:///C:/ci/kiwisolver_1612282555033/work
+matplotlib @ file:///C:/ci/matplotlib-suite_1613408055530/work
+mkl-fft==1.3.0
+mkl-random @ file:///C:/ci/mkl_random_1618854182866/work
+mkl-service==2.3.0
+numpy @ file:///C:/ci/numpy_and_numpy_base_1620831398996/work
+olefile==0.46
+pandas @ file:///C:/ci/pandas_1618365625310/work
+Pillow @ file:///C:/ci/pillow_1617386320391/work
+psycopg2 @ file:///C:/ci/psycopg2_1612298766762/work
+pyparsing @ file:///home/linux1/recipes/ci/pyparsing_1610983426697/work
+python-dateutil @ file:///home/ktietz/src/ci/python-dateutil_1611928101742/work
+pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+sip==4.19.13
+six @ file:///C:/ci/six_1605205404068/work
+sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
+tornado @ file:///C:/ci/tornado_1606924294691/work
+wincertstore==0.2
