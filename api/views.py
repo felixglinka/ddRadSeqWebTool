@@ -28,8 +28,9 @@ def webinterfaceViews(request):
             try:
                 checkCorrectSequenceCalculationFields(inputForm)
                 try:
-                    readInputFasta = request.FILES['fastaFile'].read().decode('utf-8')
-                    stringStreamFasta = io.StringIO(readInputFasta)
+                    readInputFasta = request.FILES['fastaFile'].read()
+                    byteStreamFasta = io.BytesIO(readInputFasta)
+                    stringStreamFasta = io.TextIOWrapper(byteStreamFasta, encoding='utf-8')
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
