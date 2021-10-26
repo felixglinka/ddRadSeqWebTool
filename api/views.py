@@ -1,4 +1,5 @@
-import io,logging, os
+import logging
+import os
 
 from django.contrib import messages
 from django.shortcuts import render
@@ -28,9 +29,12 @@ def webinterfaceViews(request):
             try:
                 checkCorrectSequenceCalculationFields(inputForm)
                 try:
-                    readInputFasta = request.FILES['fastaFile'].read()
-                    byteStreamFasta = io.BytesIO(readInputFasta)
-                    stringStreamFasta = io.TextIOWrapper(byteStreamFasta, encoding='utf-8')
+                    stringStreamFasta = request.FILES['fastaFile']
+                    # byteStreamFasta = io.BytesIO(readInputFasta)
+                    # stringStreamFasta = io.TextIOWrapper(byteStreamFasta, encoding='utf-8')
+
+                    # stringStreamFasta = handle_uploaded_file(readInputFasta)
+
                 except UnicodeDecodeError:
                     raise Exception('No proper fasta file has been uploaded')
 
@@ -100,7 +104,6 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
     context["expectPolyMorph"] = int(inputForm.cleaned_data['popStructExpectPolyMorph'])/POLYMORPHISM_MODIFIER
 
     return context
-
 
 def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
 

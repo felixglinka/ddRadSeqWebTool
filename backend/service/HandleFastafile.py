@@ -1,4 +1,7 @@
 import logging
+import os
+from tempfile import NamedTemporaryFile
+
 from Bio import SeqIO
 
 from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelectionFiltering
@@ -14,13 +17,28 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
         digestedDNAFragmentsByRestrictionEnzymes = {}
         for restrictionEnzymePair in restrictionEnzymePairList:
             digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name] = []
-        fastaSequences = SeqIO.parse(inputFasta, 'fasta')
 
-        for fastaPart in fastaSequences:
+        tmpFile = NamedTemporaryFile('w', delete=False)
 
-            for restrictionEnzymePair in restrictionEnzymePairList:
-                doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0], restrictionEnzymePair[1])
-                digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(doubleDigestedFastaPart['fragmentLengths'])
+        try:
+            with tmpFile:
+                for chunk in inputFasta.chunks():
+                    tmpFile.write(chunk.decode("utf-8"))
+
+            open(tmpFile.name, 'r')
+            fastaSequences = SeqIO.parse(tmpFile.name, 'fasta')
+
+            for fastaPart in fastaSequences:
+
+                for restrictionEnzymePair in restrictionEnzymePairList:
+                    doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0],
+                                                                    restrictionEnzymePair[1])
+                    digestedDNAFragmentsByRestrictionEnzymes[
+                        restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
+                        doubleDigestedFastaPart['fragmentLengths'])
+
+        finally:
+            os.unlink(tmpFile.name)
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
