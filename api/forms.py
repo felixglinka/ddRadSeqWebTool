@@ -40,6 +40,6 @@ class BasicInputDDRadDataForm(forms.Form):
         locals()[f"restrictionEnzyme{number}"] = forms.ChoiceField(choices=[], label="Restriction enzyme "+str(int(number/2) if number % 2 == 0 else int(-(-(number/2) // 1)))+str('.')+str(2 if number % 2 == 0 else 1), required=False, widget=forms.Select(attrs={'class':'form-select'}))
 
     basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
-    pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
+    pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), required=False)
     sequencingYield = forms.CharField(label="Sequencing Yield [reads]", required=False)
     coverage = forms.CharField(label="Depth", required=False)

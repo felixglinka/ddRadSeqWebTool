@@ -2,6 +2,7 @@ import io
 import logging
 import os
 
+from chunked_upload.views import ChunkedUploadCompleteView, ChunkedUploadView
 from django.contrib import messages
 from django.shortcuts import render
 
@@ -10,6 +11,7 @@ from backend.controller.ddRadtoolController import handleDDRadSeqRequest, reques
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
     ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER
 from .forms import BasicInputDDRadDataForm
+from .models import fastaFileUpload
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,8 @@ def webinterfaceViews(request):
             try:
                 checkCorrectSequenceCalculationFields(inputForm)
                 try:
+                    test = fastaFileUpload
+                    # test = FastaFileUploadCompleteView()
                     readInputFasta = request.FILES['fastaFile']
                     stringStreamFasta = io.TextIOWrapper(readInputFasta, encoding='utf-8')
 
@@ -182,3 +186,31 @@ def explanationsViews(request):
     context = {'mode': 'none', 'explantionTexts': requestInformationTexts()}
 
     return render(request, "explanations.html", context)
+
+class FastaFileUploadView(ChunkedUploadView):
+
+    model = fastaFileUpload
+    field_name = 'fastaFile'
+
+    def check_permissions(self, request):
+        # Allow non authenticated users to make uploads
+        pass
+
+class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
+
+    model = fastaFileUpload
+
+    def check_permissions(self, request):
+        # Allow non authenticated users to make uploads
+        pass
+
+    def on_completion(self, uploaded_file, request):
+        # Do something with the uploaded file. E.g.:
+        # * Store the uploaded file on another model:
+        # SomeModel.objects.create(user=request.user, file=uploaded_file)
+        # * Pass it as an argument to a function:
+        # function_that_process_file(uploaded_file)
+        pass
+
+    def get_response_data(self, chunked_upload, request):
+        return [chunked_upload.filename, chunked_upload.offset]
