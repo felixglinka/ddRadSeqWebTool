@@ -213,4 +213,5 @@ class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
         pass
 
     def get_response_data(self, chunked_upload, request):
-        return [chunked_upload.filename, chunked_upload.offset]
+        return {'filePath': chunked_upload.file.name}
+
