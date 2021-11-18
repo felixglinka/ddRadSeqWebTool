@@ -18,22 +18,30 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
         for restrictionEnzymePair in restrictionEnzymePairList:
             digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name] = []
 
-        fastaSequences = SeqIO.parse(inputFasta, 'fasta')
+        with open(inputFasta, 'r') as fasta:
+            fastaSequences = SeqIO.parse(fasta, 'fasta')
 
-        for fastaPart in fastaSequences:
+            for fastaPart in fastaSequences:
 
-            for restrictionEnzymePair in restrictionEnzymePairList:
-                doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0],
-                                                                restrictionEnzymePair[1])
-                digestedDNAFragmentsByRestrictionEnzymes[
-                    restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
-                    doubleDigestedFastaPart['fragmentLengths'])
+                for restrictionEnzymePair in restrictionEnzymePairList:
+                    doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0],
+                                                                    restrictionEnzymePair[1])
+                    digestedDNAFragmentsByRestrictionEnzymes[
+                        restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
+                        doubleDigestedFastaPart['fragmentLengths'])
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
+
+    finally:
+        if os.path.exists(inputFasta):
+            os.remove(inputFasta)
+        else:
+            logger.error("The file does not exist")
+
 
 def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
@@ -58,7 +66,6 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
         totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
         return totalRareCutterDigestionsAndGenomeMutationAmount
-
 
     except Exception as e:
         logger.error(e)
