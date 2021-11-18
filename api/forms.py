@@ -9,8 +9,6 @@ class BasicInputDDRadDataForm(forms.Form):
         self.restrictionEnzymes = kwargs.pop('restrictionEnzymes')
         super(BasicInputDDRadDataForm, self).__init__(*args, **kwargs)
 
-        self.fields['fastaFile'].widget = forms.ClearableFileInput(attrs={'title': '','class': 'form-control', 'id': 'fastaFileUpload', 'EnableViewState': "true"})
-
         self.fields['popStructNumberOfSnps'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['popStructExpectPolyMorph'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['genomeScanExpectPolyMorph'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
@@ -27,7 +25,8 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
-    fastaFile = forms.FileField()
+    formFile = forms.CharField(widget=forms.HiddenInput(), required=False)
+    formFileName = forms.CharField(widget=forms.HiddenInput(), required=False)
     formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     popStructNumberOfSnps = forms.CharField(label="Number of SNPs to be sequenced", required=False)

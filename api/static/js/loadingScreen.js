@@ -29,6 +29,22 @@ function calculate_md5(file, chunk_size) {
         read_next_chunk();
    }
 
+function prepareFormInput(data){
+
+    let inputValues = data;
+    $.each($('#ddGraderForm').serializeArray(), function(i, field) {
+        inputValues[field.name] = field.value;
+    });
+
+    for (let inputField in inputValues) {
+        if (inputValues[inputField] === null || inputValues[inputField] === undefined || inputValues[inputField] === "") {
+          delete inputValues[inputField];
+        }
+     }
+
+  return inputValues
+}
+
 function fillFastaUploader() {
 
     csrf = $("input[name='csrfmiddlewaretoken']")[0].value;
@@ -56,6 +72,7 @@ function fillFastaUploader() {
         }
       },
       done: function (e, data) { // Called when the file has completely uploaded
+        let formInput;
         $.ajax({
           type: "POST",
           url: window.location.href + 'api/chunked_upload_complete/',
@@ -66,12 +83,14 @@ function fillFastaUploader() {
           },
           dataType: "json",
           success: function(data) {
-            window.location.href = window.location.href + '?file=' + data.filePath;
-          }
+                inputForm = document.getElementById('ddGraderForm')
+                document.getElementById('id_formFile').value = data['file']
+                document.getElementById('id_formFileName').value = data['filename']
+                inputForm.submit()
+             }
         });
       },
     });
-
 }
 
 function showLoading() {

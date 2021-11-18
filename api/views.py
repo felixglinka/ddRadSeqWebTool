@@ -1,10 +1,9 @@
-import io
 import logging
 import os
 
 from chunked_upload.views import ChunkedUploadCompleteView, ChunkedUploadView
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
@@ -25,30 +24,24 @@ def webinterfaceViews(request):
 
     if request.method == "POST":
 
-        inputForm = BasicInputDDRadDataForm(request.POST, request.FILES, restrictionEnzymes=restrictionEnzymes)
+        inputForm = BasicInputDDRadDataForm(request.POST, restrictionEnzymes=restrictionEnzymes)
+        checkIfThereIsAnInputFastaFile(inputForm)
 
         if inputForm.is_valid():
 
             try:
                 checkCorrectSequenceCalculationFields(inputForm)
-                try:
-                    test = fastaFileUpload
-                    # test = FastaFileUploadCompleteView()
-                    readInputFasta = request.FILES['fastaFile']
-                    stringStreamFasta = io.TextIOWrapper(readInputFasta, encoding='utf-8')
 
-                except UnicodeDecodeError:
-                    raise Exception('No proper fasta file has been uploaded')
-
+                uploadedFastaFile = inputForm.cleaned_data['formFile']
                 context["mode"] = inputForm.cleaned_data['formMode']
-                context["fileName"] =  os.path.splitext(request.FILES['fastaFile'].name)[0]
+                context["fileName"] = os.path.splitext(inputForm.cleaned_data['formFileName'])[0]
 
                 if(inputForm.cleaned_data['formMode'] == 'tryOut'):
-                    context = tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context)
+                    context = tryOutRequest(inputForm, restrictionEnzymes, uploadedFastaFile, context)
                 if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
-                    context = beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context)
+                    context = beginnerPopulationStructureRequest(inputForm, uploadedFastaFile, context)
                 if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
-                    context = beginnerGenomeScanRequest(inputForm, stringStreamFasta, context)
+                    context = beginnerGenomeScanRequest(inputForm, uploadedFastaFile, context)
 
             except Exception as e:
                 logger.error(e)
@@ -139,7 +132,14 @@ def checkAllBeginnerFieldEntries(inputForm):
     #     int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]) > 1000):
     #     raise Exception("Fields with mutations per kilobase cannot exceed a value of 1000.")
 
+def checkIfThereIsAnInputFastaFile(inputForm):
+
+    if ('formFile' not in inputForm.data or inputForm.data["formFile"] == None):
+        raise Exception("Input Fasta File is needed")
+
+
 def checkCorrectSequenceCalculationFields(inputForm):
+
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
         "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
             inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
@@ -213,5 +213,4 @@ class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
         pass
 
     def get_response_data(self, chunked_upload, request):
-        return {'filePath': chunked_upload.file.name}
-
+        return {'file': chunked_upload.file.name, 'filename': chunked_upload.filename}
