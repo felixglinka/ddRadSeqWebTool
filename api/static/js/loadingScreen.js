@@ -55,8 +55,15 @@ function fillFastaUploader() {
         dataType: "json",
         maxChunkSize: 100000, // Chunks of 100 kB
         formData: form_data,
+        replaceFileInput:false,
         type: 'POST',
         add: function (e, data) {
+            $('#fastaFileUpload').on('change',function(){
+                //get the file name
+                let fileName = $(this).val();
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
             form_data.splice(1);
             calculate_md5(data.files[0], 100000);
             $("#submitButton").off('click').on("click", function () {
