@@ -134,4 +134,13 @@ function showLoading() {
 
 }
 
+function getResultsOnPage(){
+     if (typeof graph !== 'undefined') {
+         $('html, body').animate({
+          scrollTop: $("#explanationModLink").offset().top
+        }, 0.5);
+     }
+}
+
 window.addEventListener('load', fillFastaUploader)
+window.addEventListener('load', getResultsOnPage)
