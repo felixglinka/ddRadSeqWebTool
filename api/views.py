@@ -194,7 +194,10 @@ class FastaFileUploadView(ChunkedUploadView):
 
     def check_permissions(self, request):
         # Allow non authenticated users to make uploads
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(e)
 
 class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
 
