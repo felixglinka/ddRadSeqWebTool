@@ -202,7 +202,10 @@ class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
 
     def check_permissions(self, request):
         # Allow non authenticated users to make uploads
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(e)
 
     def on_completion(self, uploaded_file, request):
         # Do something with the uploaded file. E.g.:
