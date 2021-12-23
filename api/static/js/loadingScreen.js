@@ -53,7 +53,7 @@ function fillFastaUploader() {
     $('#fastaFileUpload').fileupload({
         url: window.location.href + 'api/chunked_upload/',
         dataType: "json",
-        maxChunkSize: 100000, // Chunks of 100 kB
+        maxChunkSize: 2000000, // Chunks of 100 kB
         formData: form_data,
         replaceFileInput:false,
         type: 'POST',
