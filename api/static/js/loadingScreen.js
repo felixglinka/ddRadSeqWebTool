@@ -53,7 +53,7 @@ function fillFastaUploader() {
     $('#fastaFileUpload').fileupload({
         url: window.location.href + 'api/chunked_upload/',
         dataType: "json",
-        maxChunkSize: 100000, // Chunks of 100 kB
+        maxChunkSize: 2000000, // Chunks of 100 kB
         formData: form_data,
         replaceFileInput:false,
         type: 'POST',
@@ -65,7 +65,7 @@ function fillFastaUploader() {
                 $(this).next('.custom-file-label').html(fileName);
             })
             form_data.splice(1);
-            calculate_md5(data.files[0], 100000);
+            calculate_md5(data.files[0], 2000000);
             $("#submitButton").off('click').on("click", function () {
                 showLoading()
                 data.submit();
