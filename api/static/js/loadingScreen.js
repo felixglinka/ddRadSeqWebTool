@@ -65,7 +65,7 @@ function fillFastaUploader() {
                 $(this).next('.custom-file-label').html(fileName);
             })
             form_data.splice(1);
-            calculate_md5(data.files[0], 100000);
+            calculate_md5(data.files[0], 2000000);
             $("#submitButton").off('click').on("click", function () {
                 showLoading()
                 data.submit();
