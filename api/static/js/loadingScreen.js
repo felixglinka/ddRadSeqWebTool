@@ -71,33 +71,46 @@ function fillFastaUploader() {
                 data.submit();
             });
         },
-      chunkdone: function (e, data) { // Called after uploading each chunk
-        if (form_data.length < 2) {
+        chunkdone: function (e, data) { // Called after uploading each chunk
+          if (form_data.length < 2) {
           form_data.push(
-            {"name": "upload_id", "value": data.result.upload_id}
-          );
-        }
-      },
-      done: function (e, data) { // Called when the file has completely uploaded
-        let formInput;
-        $.ajax({
-          type: "POST",
-          url: window.location.href + 'api/chunked_upload_complete/',
-          data: {
-            csrfmiddlewaretoken: csrf,
-            upload_id: data.result.upload_id,
-            md5: md5
-          },
-          dataType: "json",
-          success: function(data) {
-                inputForm = document.getElementById('ddGraderForm')
-                document.getElementById('id_formFile').value = data['file']
-                document.getElementById('id_formFileName').value = data['filename']
-                inputForm.submit()
-             }
-        });
-      },
+            {"name": "upload_id", "value": data.result.upload_id});
+          }
+        },
+        error: function (error) {
+            showError();
+        },
+        done: function (e, data) { // Called when the file has completely uploaded
+            let formInput;
+            $.ajax({
+              type: "POST",
+              url: window.location.href + 'api/chunked_upload_complete/',
+              data: {
+                csrfmiddlewaretoken: csrf,
+                upload_id: data.result.upload_id,
+                md5: md5
+              },
+              dataType: "json",
+              success: function(data) {
+                    inputForm = document.getElementById('ddGraderForm')
+                    document.getElementById('id_formFile').value = data['file']
+                    document.getElementById('id_formFileName').value = data['filename']
+                    inputForm.submit()
+                 },
+              error: function (error) {
+                showError();
+                }
+            });
+        },
     });
+}
+
+function showError(){
+    let forModeInput = document.getElementById('id_formMode');
+    forModeInput.value = 'uploadError'
+
+    let inputForm = document.getElementById('ddGraderForm')
+    inputForm.submit()
 }
 
 function showLoading() {
@@ -131,7 +144,6 @@ function showLoading() {
     $('html, body').animate({
       scrollTop: $("#loader").offset().top
     }, 0.5);
-
 }
 
 function getResultsOnPage(){

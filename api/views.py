@@ -24,31 +24,36 @@ def webinterfaceViews(request):
 
     if request.method == "POST":
 
-        inputForm = BasicInputDDRadDataForm(request.POST, restrictionEnzymes=restrictionEnzymes)
-        checkIfThereIsAnInputFastaFile(inputForm)
+        try:
+            inputForm = BasicInputDDRadDataForm(request.POST, restrictionEnzymes=restrictionEnzymes)
+            checkIfThereIsAnInputFastaFile(inputForm)
 
-        if inputForm.is_valid():
+            if inputForm.is_valid():
 
-            try:
-                checkCorrectSequenceCalculationFields(inputForm)
+                try:
+                    checkCorrectSequenceCalculationFields(inputForm)
 
-                uploadedFastaFile = inputForm.cleaned_data['formFile']
-                context["mode"] = inputForm.cleaned_data['formMode']
-                context["fileName"] = os.path.splitext(inputForm.cleaned_data['formFileName'])[0]
+                    uploadedFastaFile = inputForm.cleaned_data['formFile']
+                    context["mode"] = inputForm.cleaned_data['formMode']
+                    context["fileName"] = os.path.splitext(inputForm.cleaned_data['formFileName'])[0]
 
-                if(inputForm.cleaned_data['formMode'] == 'tryOut'):
-                    context = tryOutRequest(inputForm, restrictionEnzymes, uploadedFastaFile, context)
-                if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
-                    context = beginnerPopulationStructureRequest(inputForm, uploadedFastaFile, context)
-                if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
-                    context = beginnerGenomeScanRequest(inputForm, uploadedFastaFile, context)
+                    if(inputForm.cleaned_data['formMode'] == 'tryOut'):
+                        context = tryOutRequest(inputForm, restrictionEnzymes, uploadedFastaFile, context)
+                    if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
+                        context = beginnerPopulationStructureRequest(inputForm, uploadedFastaFile, context)
+                    if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
+                        context = beginnerGenomeScanRequest(inputForm, uploadedFastaFile, context)
 
-            except Exception as e:
-                logger.error(e)
-                messages.error(request, e)
+                except Exception as e:
+                    logger.error(e)
+                    messages.error(request, e)
 
-        else:
-            logger.error(inputForm.errors)
+            else:
+                logger.error(inputForm.errors)
+
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, e)
 
     else:
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
@@ -128,15 +133,13 @@ def checkAllBeginnerFieldEntries(inputForm):
         "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
         raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
-    # if (int(inputForm.cleaned_data["popStructExpectPolyMorph"]) > 1000 or int(inputForm.cleaned_data["genomeScanRadSnpDensity"]) > 1000 or
-    #     int(inputForm.cleaned_data["genomeScanExpectPolyMorph"]) > 1000):
-    #     raise Exception("Fields with mutations per kilobase cannot exceed a value of 1000.")
-
 def checkIfThereIsAnInputFastaFile(inputForm):
+
+    if (inputForm.data['formMode'] == 'uploadError'):
+        raise Exception("Something went wrong while uploading. Please try again.")
 
     if ('formFile' not in inputForm.data or inputForm.data["formFile"] == None):
         raise Exception("Input Fasta File is needed")
-
 
 def checkCorrectSequenceCalculationFields(inputForm):
 
@@ -194,10 +197,7 @@ class FastaFileUploadView(ChunkedUploadView):
 
     def check_permissions(self, request):
         # Allow non authenticated users to make uploads
-        try:
-            pass
-        except Exception as e:
-            logger.error(e)
+        pass
 
 class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
 
@@ -205,10 +205,7 @@ class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
 
     def check_permissions(self, request):
         # Allow non authenticated users to make uploads
-        try:
-            pass
-        except Exception as e:
-            logger.error(e)
+        pass
 
     def on_completion(self, uploaded_file, request):
         # Do something with the uploaded file. E.g.:
@@ -217,6 +214,7 @@ class FastaFileUploadCompleteView(ChunkedUploadCompleteView):
         # * Pass it as an argument to a function:
         # function_that_process_file(uploaded_file)
         pass
+
 
     def get_response_data(self, chunked_upload, request):
         return {'file': chunked_upload.file.name, 'filename': chunked_upload.filename}
