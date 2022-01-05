@@ -128,10 +128,28 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "api/static"),
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CHUNKED_UPLOAD_PATH_BASE = 'chunked_uploads'
+CHUNKED_UPLOAD_PATH = CHUNKED_UPLOAD_PATH_BASE + '/%Y/%m/%d'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1
