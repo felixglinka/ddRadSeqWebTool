@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a_jqm*7+$wqd2$2zscx&5m6%imgu4doc_(0%7=#x)bbj&etlfb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ddgrader.haifa.ac.il', '132.75.251.57']
+ALLOWED_HOSTS = ['www.ddgrader.haifa.ac.il', 'ddgrader.haifa.ac.il', '132.75.251.57']
 
 
 # Application definition
