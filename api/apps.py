@@ -1,6 +1,13 @@
+import logging
+
 from django.apps import AppConfig
 
+logger = logging.getLogger(__name__)
 
-class DdradseqwebapplicationConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
+class CleanUpService(AppConfig):
     name = 'api'
+
+    def ready(self):
+        logger.info('ho')
+        from backend.service import Update
+        Update.start()

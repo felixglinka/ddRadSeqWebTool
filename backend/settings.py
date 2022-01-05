@@ -148,7 +148,9 @@ LOGGING = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CHUNKED_UPLOAD_PATH = 'home/felix/ddRadSeqWebTool/chunked_uploads/%Y/%m/%d'
+
+CHUNKED_UPLOAD_PATH_BASE = 'home/felix/ddRadSeqWebTool/chunked_uploads'
+CHUNKED_UPLOAD_PATH = CHUNKED_UPLOAD_PATH_BASE + '/%Y/%m/%d'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1
