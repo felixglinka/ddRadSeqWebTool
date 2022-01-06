@@ -85,6 +85,11 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 
     checkAllBeginnerFieldEntries(inputForm)
+
+    if (inputForm.cleaned_data["popStructNumberOfSnps"] == "" or inputForm.cleaned_data[
+        "popStructExpectPolyMorph"] == "" ):
+        raise Exception("Please insert all fields for the population structure analysis.")
+
     populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
                                            int(inputForm.cleaned_data["popStructExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
@@ -108,6 +113,11 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
 
     checkAllBeginnerFieldEntries(inputForm)
+
+    if (inputForm.cleaned_data["genomeScanRadSnpDensity"] == "" or inputForm.cleaned_data[
+        "genomeScanExpectPolyMorph"] == "" ):
+        raise Exception("Please insert all fields for the genome scan.")
+
     genomeScanResult = handleGenomeScanRequest(stringStreamFasta,
                                            int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
                                            int(inputForm.cleaned_data["genomeScanExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
