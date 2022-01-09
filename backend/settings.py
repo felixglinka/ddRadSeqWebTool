@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a_jqm*7+$wqd2$2zscx&5m6%imgu4doc_(0%7=#x)bbj&etlfb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ddgrader.com','ddgrader.haifa.ac.il', '132.75.251.57']
+ALLOWED_HOSTS = ['ddgrader.haifa.ac.il', '132.75.251.57']
 
 
 # Application definition
@@ -149,8 +149,8 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CHUNKED_UPLOAD_PATH_BASE = 'home/felix/ddRadSeqWebTool/chunked_uploads'
-CHUNKED_UPLOAD_PATH = CHUNKED_UPLOAD_PATH_BASE + '/%Y/%m/%d'
+CHUNKED_UPLOAD_PATH_BASE = 'home/felix/ddRadSeqWebTool/chunked_uploads/'
+CHUNKED_UPLOAD_PATH = CHUNKED_UPLOAD_PATH_BASE + '%Y/%m/%d'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1
