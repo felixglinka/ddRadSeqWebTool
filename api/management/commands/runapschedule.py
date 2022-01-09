@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 from backend.settings import CHUNKED_UPLOAD_PATH_BASE
 
-# @register_job(scheduler, "cron", hour=12, minute=24)
 def cleanUp():
     currentTime = datetime.now()
     currentYear = currentTime.strftime('%Y')
