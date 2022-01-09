@@ -32,7 +32,7 @@ def cleanUp():
     for dir in os.listdir(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)):
         if dir != currentMonth:
             try:
-                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear))), stat.S_IWUSR)
+                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir), stat.S_IWUSR)
                 shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir))
             except Exception as e:
                 logger.error(e)
@@ -40,7 +40,7 @@ def cleanUp():
     for dir in os.listdir(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)):
         if dir != currentDay:
             try:
-                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)), stat.S_IWUSR)
+                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir), stat.S_IWUSR)
                 shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir))
             except Exception as e:
                 logger.error(e)
