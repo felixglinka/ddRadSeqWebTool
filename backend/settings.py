@@ -164,6 +164,19 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+# This scheduler config will:
+# - Store jobs in the project database
+# - Execute jobs in threads inside the application process
+SCHEDULER_CONFIG = {
+    "apscheduler.jobstores.default": {
+        "class": "django_apscheduler.jobstores:DjangoJobStore"
+    },
+    'apscheduler.executors.processpool': {
+        "type": "threadpool"
+    },
+}
+SCHEDULER_AUTOSTART = True
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CHUNKED_UPLOAD_PATH = './chunked_uploads/%Y/%m/%d'
 CHUNKED_BASE_DIR = 'chunked_uploads/'
