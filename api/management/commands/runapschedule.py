@@ -1,5 +1,6 @@
 import logging
 import os, shutil
+import stat
 from datetime import datetime
 from sched import scheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -22,14 +23,17 @@ def cleanUp():
 
     for dir in os.listdir(CHUNKED_UPLOAD_PATH_BASE):
         if dir != currentYear:
+            os.chmod(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir), stat.S_IWUSR)
             shutil.rmtree(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir))
 
     for dir in os.listdir(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)):
         if dir != currentMonth:
+            os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear))), stat.S_IWUSR)
             shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir))
 
     for dir in os.listdir(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)):
         if dir != currentDay:
+            os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)), stat.S_IWUSR)
             shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir))
 
 
@@ -57,7 +61,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             cleanUp,
-            trigger=CronTrigger(hour=13, minute=3),  # Every 10 seconds
+            trigger=CronTrigger(hour=13, minute=10),  # Every 10 seconds
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
