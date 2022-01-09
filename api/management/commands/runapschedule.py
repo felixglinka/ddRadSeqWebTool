@@ -21,7 +21,7 @@ def cleanUp():
     for dir in os.listdir(CHUNKED_UPLOAD_PATH_BASE):
         if dir != currentYear:
             try:
-                os.chmod(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir), 755)
+                os.chmod(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir), 775)
                 shutil.rmtree(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir))
             except Exception as e:
                 logger.error(e)
@@ -29,7 +29,7 @@ def cleanUp():
     for dir in os.listdir(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)):
         if dir != currentMonth:
             try:
-                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir), 755)
+                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir), 775)
                 shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir))
             except Exception as e:
                 logger.error(e)
@@ -37,7 +37,7 @@ def cleanUp():
     for dir in os.listdir(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)):
         if dir != currentDay:
             try:
-                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir), 755)
+                os.chmod(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir), 775)
                 shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir))
             except Exception as e:
                 logger.error(e)
@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             cleanUp,
-            trigger=CronTrigger(hour=13, minute=36),  # Every 10 seconds
+            trigger=CronTrigger(hour=13, minute=46),  # Every 10 seconds
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
