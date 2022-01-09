@@ -12,6 +12,7 @@ def cleanUp():
     currentDay = currentTime.strftime('%d')
 
     for dir in os.listdir(CHUNKED_UPLOAD_PATH_BASE):
+        print(dir)
         if dir != currentYear:
             shutil.rmtree(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir))
 
