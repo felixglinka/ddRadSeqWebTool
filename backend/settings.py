@@ -165,7 +165,7 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CHUNKED_UPLOAD_PATH = 'home/felix/ddRadSeqWebTool/chunked_uploads/%Y/%m/%d'
+CHUNKED_UPLOAD_PATH = './chunked_uploads/%Y/%m/%d'
 CHUNKED_BASE_DIR = 'chunked_uploads/'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
