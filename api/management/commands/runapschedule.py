@@ -10,7 +10,7 @@ from django_apscheduler import util
 
 logger = logging.getLogger(__name__)
 
-from backend.settings import CHUNKED_UPLOAD_PATH_BASE
+from backend.settings import CHUNKED_UPLOAD_BASE_DIR
 
 def cleanUp():
     currentTime = datetime.now()
@@ -18,24 +18,24 @@ def cleanUp():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    for dir in os.listdir(CHUNKED_UPLOAD_PATH_BASE):
+    for dir in os.listdir(CHUNKED_UPLOAD_BASE_DIR):
         if dir != currentYear:
             try:
-                shutil.rmtree(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir))
+                shutil.rmtree(os.path.join(CHUNKED_UPLOAD_BASE_DIR, dir))
             except Exception as e:
                 logger.error(e)
 
-    for dir in os.listdir(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)):
+    for dir in os.listdir(os.path.join(CHUNKED_UPLOAD_BASE_DIR, currentYear)):
         if dir != currentMonth:
             try:
-                shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear)), dir))
+                shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_BASE_DIR, currentYear)), dir))
             except Exception as e:
                 logger.error(e)
 
-    for dir in os.listdir(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth)):
+    for dir in os.listdir(os.path.join(os.path.join(CHUNKED_UPLOAD_BASE_DIR, currentYear), currentMonth)):
         if dir != currentDay:
             try:
-                shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_PATH_BASE, currentYear), currentMonth), dir))
+                shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_UPLOAD_BASE_DIR, currentYear), currentMonth), dir))
             except Exception as e:
                 logger.error(e)
 
