@@ -20,9 +20,6 @@ def cleanUp():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    for dir in os.listdir('..'):
-        print(dir)
-
     for dir in os.listdir(CHUNKED_UPLOAD_PATH_BASE):
         if dir != currentYear:
             shutil.rmtree(os.path.join(CHUNKED_UPLOAD_PATH_BASE, dir))
@@ -60,7 +57,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             cleanUp,
-            trigger=CronTrigger(hour=12, minute=50),  # Every 10 seconds
+            trigger=CronTrigger(hour=13, minute=3),  # Every 10 seconds
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
