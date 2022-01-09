@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             cleanUp,
-            trigger=CronTrigger(hour=13, minute=58),  # Every 10 seconds
+            trigger=CronTrigger(hour=14, minute=23),  # Every 10 seconds
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
