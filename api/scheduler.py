@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import sys
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -20,7 +21,10 @@ def cleanUp():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    logger.error('hi')
+    sys.stdout.write('line 1 to stdout  ')
+
+    for dir in os.listdir('test'):
+        sys.stdout.write('line 2 to stdout  ')
 
     for dir in os.listdir(CHUNKED_BASE_DIR):
         if dir != currentYear:
