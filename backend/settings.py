@@ -192,7 +192,7 @@ SCHEDULER_AUTOSTART = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CHUNKED_UPLOAD_PATH = './chunked_uploads/%Y/%m/%d'
-CHUNKED_BASE_DIR = 'chunked_uploads/'
+CHUNKED_BASE_DIR = './chunked_uploads'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1

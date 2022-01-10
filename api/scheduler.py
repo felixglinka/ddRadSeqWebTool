@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 def cleanUp():
 
-    print('i miss you')
-
     currentTime = datetime.now()
     currentYear = currentTime.strftime('%Y')
     currentMonth = currentTime.strftime('%m')
