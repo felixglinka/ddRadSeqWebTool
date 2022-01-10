@@ -176,7 +176,7 @@ SCHEDULER_AUTOSTART = True
 SCHEDULER_TIMEZONE = "UTC"  # <========== add here
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CHUNKED_UPLOAD_PATH = './chunked_uploads/%Y/%m/%d'
+CHUNKED_UPLOAD_PATH = 'home/felix/ddRadSeqWebTool/chunked_uploads/%Y/%m/%d'
 CHUNKED_BASE_DIR = 'home/felix/ddRadSeqWebTool/chunked_uploads/'
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
