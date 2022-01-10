@@ -54,6 +54,6 @@ def start():
     # - Add a scheduled job to the job store on application initialization
     # - The job will execute a model class method at midnight each day
     # - replace_existing in combination with the unique ID prevents duplicate copies of the job
-    scheduler.add_job(cleanUp, trigger=CronTrigger(second='*/10'), id="cleanUp", replace_existing=True)
+    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=14, minute=55), id="cleanUp", replace_existing=True)
 
     scheduler.start()
