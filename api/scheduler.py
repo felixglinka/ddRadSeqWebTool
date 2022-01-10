@@ -20,14 +20,6 @@ def cleanUp():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    os.write('line 1 to stdout  ')
-
-    for dir in os.listdir('test'):
-        try:
-            shutil.rmtree(os.path.join('test', dir))
-        except Exception as e:
-            logger.error(e)
-
     for dir in os.listdir(CHUNKED_BASE_DIR):
         if dir != currentYear:
             try:
@@ -60,6 +52,6 @@ def start():
     # - Add a scheduled job to the job store on application initialization
     # - The job will execute a model class method at midnight each day
     # - replace_existing in combination with the unique ID prevents duplicate copies of the job
-    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=49), id="my_class_method",replace_existing=True)
+    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=57), id="my_class_method",replace_existing=True)
 
     scheduler.start()
