@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 
 def cleanUp():
 
+    print('i miss you')
+
     currentTime = datetime.now()
     currentYear = currentTime.strftime('%Y')
     currentMonth = currentTime.strftime('%m')
@@ -55,6 +57,6 @@ def start():
     # - Add a scheduled job to the job store on application initialization
     # - The job will execute a model class method at midnight each day
     # - replace_existing in combination with the unique ID prevents duplicate copies of the job
-    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=11, minute=26), id="my_class_method",replace_existing=True)
+    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=11, minute=29), id="my_class_method",replace_existing=True)
 
     scheduler.start()
