@@ -4,10 +4,7 @@ import shutil
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.executors.pool import ProcessPoolExecutor, ThreadPoolExecutor
 from apscheduler.triggers.cron import CronTrigger
-from django_apscheduler.jobstores import register_events, register_job
-
 from django.conf import settings
 
 # Create scheduler to run in a thread inside the application process
@@ -18,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 def cleanUp():
 
-    logger.info('i miss you')
-
     currentTime = datetime.now()
     currentYear = currentTime.strftime('%Y')
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
+
+    logger.log('hi')
 
     for dir in os.listdir(CHUNKED_BASE_DIR):
         if dir != currentYear:
@@ -57,6 +54,6 @@ def start():
     # - Add a scheduled job to the job store on application initialization
     # - The job will execute a model class method at midnight each day
     # - replace_existing in combination with the unique ID prevents duplicate copies of the job
-    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=9), id="my_class_method",replace_existing=True)
+    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=14), id="my_class_method",replace_existing=True)
 
     scheduler.start()
