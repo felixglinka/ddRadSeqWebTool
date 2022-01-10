@@ -1,7 +1,6 @@
 import logging
 import os
 import shutil
-import sys
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -11,7 +10,7 @@ from django.conf import settings
 # Create scheduler to run in a thread inside the application process
 from backend.settings import CHUNKED_BASE_DIR
 
-scheduler = BackgroundScheduler(timezone='UTC')
+scheduler = BackgroundScheduler(settings.SCHEDULER_CONFIG)
 logger = logging.getLogger(__name__)
 
 def cleanUp():
@@ -21,10 +20,10 @@ def cleanUp():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    sys.stdout.write('line 1 to stdout  ')
+    os.write('line 1 to stdout  ')
 
     for dir in os.listdir('test'):
-        sys.stdout.write('line 2 to stdout  ')
+        os.write('line 2 to stdout  ')
 
     for dir in os.listdir(CHUNKED_BASE_DIR):
         if dir != currentYear:
@@ -58,6 +57,6 @@ def start():
     # - Add a scheduled job to the job store on application initialization
     # - The job will execute a model class method at midnight each day
     # - replace_existing in combination with the unique ID prevents duplicate copies of the job
-    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=21), id="my_class_method",replace_existing=True)
+    scheduler.add_job(cleanUp, trigger=CronTrigger(hour=12, minute=45), id="my_class_method",replace_existing=True)
 
     scheduler.start()
