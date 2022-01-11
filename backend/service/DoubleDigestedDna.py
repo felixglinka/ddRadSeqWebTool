@@ -1,6 +1,9 @@
+import logging
 import pandas as pd
 
 from backend.settings import PAIRED_END_ENDING
+
+logger = logging.getLogger(__name__)
 
 class DoubleDigestedDna:
 
@@ -11,13 +14,16 @@ class DoubleDigestedDna:
 
   def createBasicDataframeForGraph(self, binningSizes):
 
-    if(len(self.fragments) == 0):
-      self.fragmentCalculationDataframe = pd.DataFrame(index=binningSizes, columns=[self.restrictionEnzymeCombination])
+    try:
+      if(len(self.fragments) == 0):
+        self.fragmentCalculationDataframe = pd.DataFrame(index=binningSizes, columns=[self.restrictionEnzymeCombination])
 
-    basicDataframeForGraph = pd.DataFrame({self.restrictionEnzymeCombination: self.fragments})
-    basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[self.restrictionEnzymeCombination], binningSizes)).count()
+      basicDataframeForGraph = pd.DataFrame({self.restrictionEnzymeCombination: self.fragments})
+      basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[self.restrictionEnzymeCombination], binningSizes)).count()
 
-    self.fragmentCalculationDataframe = basicDataframeForGraph
+      self.fragmentCalculationDataframe = basicDataframeForGraph
+    except Exception as e:
+      logger.error(e)
 
   def calculateBaseSequencingCosts(self, binningSizes, sequenceLength, pairedEnd):
 
