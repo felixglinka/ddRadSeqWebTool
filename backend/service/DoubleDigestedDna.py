@@ -19,7 +19,6 @@ class DoubleDigestedDna:
         self.fragmentCalculationDataframe = pd.DataFrame(index=binningSizes, columns=[self.restrictionEnzymeCombination])
 
       basicDataframeForGraph = pd.DataFrame({self.restrictionEnzymeCombination: self.fragments})
-      basicDataframeForGraph = basicDataframeForGraph.loc[:, (basicDataframeForGraph != 0).all(axis=0)]
       basicDataframeForGraph = basicDataframeForGraph.groupby(pd.cut(basicDataframeForGraph[self.restrictionEnzymeCombination], binningSizes)).count()
 
       self.fragmentCalculationDataframe = basicDataframeForGraph
