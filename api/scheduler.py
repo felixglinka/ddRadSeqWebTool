@@ -35,7 +35,7 @@ def cleanUp():
                 logger.error(e)
 
     for dir in os.listdir(os.path.join(os.path.join(CHUNKED_BASE_DIR, currentYear), currentMonth)):
-        if int(dir) < int(currentDay):
+        if dir != currentDay:
             try:
                 shutil.rmtree(os.path.join(os.path.join(os.path.join(CHUNKED_BASE_DIR, currentYear), currentMonth), dir))
             except Exception as e:
