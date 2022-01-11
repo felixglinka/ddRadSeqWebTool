@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 
 from backend.service.DoubleDigestedDna import DoubleDigestedDna
@@ -9,69 +10,86 @@ from backend.service.ReadInJsonFiles import readInPopoverTexts, readInInformatio
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDECORIFREQUENTCUTTERS, \
     COMMONLYUSEDPSTIFREQUENTCUTTERS, COMMONLYUSEDSBFIFREQUENTCUTTERS, COMMONLYUSEDSPHIFREQUENTCUTTERS
 
+logger = logging.getLogger(__name__)
+
 
 def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
 
-    binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+    try:
 
-    doubleDigestedSequencesFromFasta = countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList)
-    doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
-    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-    if sequencingYield == None and coverage == None:
-        return {
-            'graph': digestedDnaComparison.createLineChart()
-        }
-    else:
-        return {
-            'graph': digestedDnaComparison.createLineChart(),
-            'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection],
-        }
+        doubleDigestedSequencesFromFasta = countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList)
+        doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
+        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
+        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+
+        if sequencingYield == None and coverage == None:
+            return {
+                'graph': digestedDnaComparison.createLineChart()
+            }
+        else:
+            return {
+                'graph': digestedDnaComparison.createLineChart(),
+                'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection],
+            }
+
+    except Exception as e:
+        logger.error(e)
 
 def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd):
 
-    binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+    try:
 
-    rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
-    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
-    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph, pairedEnd)
-    digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph, pairedEnd)
+        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-    if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
-        return {
-            'graph': digestedDnaComparison.createLineChart(),
-            'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
-        }
-    else:
-        return {}
+        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
+        doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
+        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+        digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph, pairedEnd)
+        digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph, pairedEnd)
+
+        if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
+            return {
+                'graph': digestedDnaComparison.createLineChart(),
+                'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
+            }
+        else:
+            return {}
+
+    except Exception as e:
+        logger.error(e)
 
 def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph, sequenceLength, pairedEnd):
 
-    binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
-                             MAX_BINNING_LIMIT + BINNING_STEPS)
+    try:
 
-    rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
-    genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
-    doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
-    digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-    digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-    digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
-    digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
+        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
+                                 MAX_BINNING_LIMIT + BINNING_STEPS)
 
-    if (len(digestedDnaComparison.DigestedDnaCollection) >= 1):
-        return {
-            'graph': digestedDnaComparison.createLineChart(),
-            'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
-                           digestedDnaComparison.DigestedDnaCollection],
-            'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
-        }
-    else:
-        return {
-            'expectedNumberOfSnps': 1
-        }
+        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
+        genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
+        doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
+        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+        digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
+        digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
+
+        if (len(digestedDnaComparison.DigestedDnaCollection) >= 1):
+            return {
+                'graph': digestedDnaComparison.createLineChart(),
+                'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
+                               digestedDnaComparison.DigestedDnaCollection],
+                'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
+            }
+        else:
+            return {
+                'expectedNumberOfSnps': 1
+            }
+
+    except Exception as e:
+        logger.error(e)
 
 def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
 
