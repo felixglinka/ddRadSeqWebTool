@@ -29,16 +29,16 @@ class BasicInputDDRadDataForm(forms.Form):
     formFileName = forms.CharField(widget=forms.HiddenInput(), required=False)
     formMode = forms.CharField(widget=forms.HiddenInput(), required=False)
 
-    popStructNumberOfSnps = forms.CharField(label="Number of SNPs to be sequenced", required=False)
-    popStructExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
-    genomeScanExpectPolyMorph = forms.CharField(label="Expected Polymorphism", required=False)
+    popStructNumberOfSnps = forms.CharField(label="Number of SNPs to be genotyped", required=False)
+    popStructExpectPolyMorph = forms.CharField(label="Expected polymorphism", required=False)
+    genomeScanExpectPolyMorph = forms.CharField(label="Expected polymorphism", required=False)
     genomeScanRadSnpDensity = forms.CharField(label="SNP density to be expected", required=False)
     linkageMappingNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced ", required=False)
 
     for number in range(1, MAX_NUMBER_SELECTFIELDS):
         locals()[f"restrictionEnzyme{number}"] = forms.ChoiceField(choices=[], label="Restriction enzyme "+str(int(number/2) if number % 2 == 0 else int(-(-(number/2) // 1)))+str('.')+str(2 if number % 2 == 0 else 1), required=False, widget=forms.Select(attrs={'class':'form-select'}))
 
-    basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
+    basepairLengthToBeSequenced = forms.CharField(label="Read length to be genotyped", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), required=False)
-    sequencingYield = forms.CharField(label="Sequencing Yield [reads]", required=False)
+    sequencingYield = forms.CharField(label="Sequencing yield [reads]", required=False)
     coverage = forms.CharField(label="Depth", required=False)
