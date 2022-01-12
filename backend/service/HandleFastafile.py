@@ -7,7 +7,7 @@ from Bio import SeqIO
 from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelectionFiltering
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
 from backend.service.SingleDigestedDna import SingleDigestedDna
-from backend.settings import COMMONLYUSEDRARECUTTERS
+from backend.settings import COMMONLYUSEDRARECUTTERS, MAX_BINNING_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,8 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
                                                                     restrictionEnzymePair[1])
                     digestedDNAFragmentsByRestrictionEnzymes[
                         restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
-                        doubleDigestedFastaPart['fragmentLengths'])
+                        list(filter(lambda limit: limit <= MAX_BINNING_LIMIT, doubleDigestedFastaPart['fragmentLengths']))
+                    )
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
