@@ -1,3 +1,6 @@
+from backend.settings import MAX_BINNING_LIMIT
+
+
 def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
 
     digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
@@ -18,10 +21,10 @@ def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRes
     cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
     fragmentsFlankedByTwoSites = list(filter(
-        lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
+        lambda fragment: fragment <= MAX_BINNING_LIMIT and (fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
             secondRestrictionEnzyme.cutSite5end)
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
-            firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments))
+            firstRestrictionEnzyme.cutSite5end)), doubleDigestedDnaFragments))
 
     return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
 
