@@ -28,8 +28,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
                                                                     restrictionEnzymePair[1])
                     digestedDNAFragmentsByRestrictionEnzymes[
                         restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
-                        list(filter(lambda limit: limit <= MAX_BINNING_LIMIT, doubleDigestedFastaPart['fragmentLengths']))
-                    )
+                        doubleDigestedFastaPart['fragmentLengths'])
 
         return digestedDNAFragmentsByRestrictionEnzymes
 
