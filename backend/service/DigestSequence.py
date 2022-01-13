@@ -1,12 +1,4 @@
-from backend.settings import MAX_BINNING_LIMIT
-
-
-def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
-
-    digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
-    return {'fragmentLengths': list(map(len, digestedFastaSeq['fragmentsFlankedByTwoSites'])),
-            'countCutsByFirstRestrictionEnzyme': digestedFastaSeq['countCutsByFirstRestrictionEnzyme'],
-            'countCutsBySecondRestrictionEnzyme': digestedFastaSeq['countCutsBySecondRestrictionEnzyme']}
+from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS
 
 def digestSequence(dnaSequence, restrictionEnzyme):
 
@@ -15,18 +7,20 @@ def digestSequence(dnaSequence, restrictionEnzyme):
 
     return str(dnaSequence).replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
 
-def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme):
+def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison):
 
     doubleDigestedDnaFragments = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
-    cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
-    fragmentsFlankedByTwoSites = list(filter(
-        lambda fragment: len(fragment) <= MAX_BINNING_LIMIT and (fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
+    lengthsFragmentsFlankedByTwoSites = list(filter(lambda fragLen: fragLen <= MAX_BINNING_LIMIT+BINNING_STEPS, (map(lambda frag: len(frag), filter(
+        lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
             secondRestrictionEnzyme.cutSite5end)
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
-            firstRestrictionEnzyme.cutSite5end)), doubleDigestedDnaFragments))
+            firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments)))))
 
-    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
+    restrictionEnzymeCombination = firstRestrictionEnzyme.name + '+' + secondRestrictionEnzyme.name
+
+    doubleDigestedDnaComparison.countGivenFragments(restrictionEnzymeCombination, lengthsFragmentsFlankedByTwoSites)
+
 
 def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
@@ -38,16 +32,11 @@ def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
     return allDigestedDnaFragments
 
-def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestrictionEnzyme):
+def digestFastaSequence(fastaPart, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison):
 
-    firstDigestion = digestSequence(fastaSequence, firstRestrictionEnzyme)
-    secondDigestion = doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme)
+    firstDigestion = digestSequence(fastaPart, firstRestrictionEnzyme)
+    doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison)
 
-    return {
-        "countCutsByFirstRestrictionEnzyme": len(firstDigestion) - 1,
-        "countCutsBySecondRestrictionEnzyme": secondDigestion["cutBySecondRestrictionEnzyme"],
-        "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
-    }
 
 def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps=None, genomeScanRadSnpDensity=None):
 

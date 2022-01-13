@@ -4,19 +4,16 @@ from tempfile import NamedTemporaryFile
 
 from Bio import SeqIO
 
-from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelectionFiltering
+from backend.service.DigestSequence import digestFastaSequence, digestSequence, beginnerModeSelectionFiltering
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
 from backend.service.SingleDigestedDna import SingleDigestedDna
-from backend.settings import COMMONLYUSEDRARECUTTERS, MAX_BINNING_LIMIT
+from backend.settings import COMMONLYUSEDRARECUTTERS
 
 logger = logging.getLogger(__name__)
 
-def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
+def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison):
 
     try:
-        digestedDNAFragmentsByRestrictionEnzymes = {}
-        for restrictionEnzymePair in restrictionEnzymePairList:
-            digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name] = []
 
         with open(inputFasta, 'r') as fasta:
             fastaSequences = SeqIO.parse(fasta, 'fasta')
@@ -24,13 +21,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
             for fastaPart in fastaSequences:
 
                 for restrictionEnzymePair in restrictionEnzymePairList:
-                    doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0],
-                                                                    restrictionEnzymePair[1])
-                    digestedDNAFragmentsByRestrictionEnzymes[
-                        restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
-                        doubleDigestedFastaPart['fragmentLengths'])
-
-        return digestedDNAFragmentsByRestrictionEnzymes
+                    digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0], restrictionEnzymePair[1], doubleDigestedDnaComparison)
 
     except Exception as e:
         logger.error(e)
