@@ -70,7 +70,6 @@ class DoubleDigestedDnaComparison:
     if (self.pairedEnd == PAIRED_END_ENDING):
       self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' overlaps'] = self.sumColumnUntilLimit(restrictionEnzymeCombination, self.sequenceLength, self.sequenceLength * 2 if self.sequenceLength < 505 else 1000)
 
-    test = 'stop'
 
   def sumColumnUntilLimit(self, restrictionEnzymeCombination, minSequenceLimit, maxSequenceLimit):
 
@@ -145,6 +144,8 @@ class DoubleDigestedDnaComparison:
     self.DigestedDnaCollection = [digestedDna for sortedRecommendation in sortedNamesOfSelectedRecommendations for digestedDna in self.DigestedDnaCollection if digestedDna.restrictionEnzymeCombination == sortedRecommendation]
 
   def prepareDataframeData(self):
+
+    # self.digestedDnaCollectionDataframe.index =
 
     if (self.pairedEnd == PAIRED_END_ENDING):
       allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
