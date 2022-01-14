@@ -145,7 +145,8 @@ class DoubleDigestedDnaComparison:
 
   def prepareDataframeData(self):
 
-    # self.digestedDnaCollectionDataframe.index =
+    binning = pd.concat([pd.Series([0]), pd.Series(self.digestedDnaCollectionDataframe.index * 10)]).astype(int)
+    self.digestedDnaCollectionDataframe.index = pd.cut(pd.Series(self.digestedDnaCollectionDataframe.index * 10), binning)
 
     if (self.pairedEnd == PAIRED_END_ENDING):
       allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe, np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
