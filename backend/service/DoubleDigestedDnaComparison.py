@@ -94,7 +94,7 @@ class DoubleDigestedDnaComparison:
     indicesToDelete = []
 
     for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
-      sumMostCommonlySelectedFragmentSize = enzymeCuttingValue.iloc[30:70,:]['numberSequencedBasesOfBin'].sum()
+      sumMostCommonlySelectedFragmentSize = enzymeCuttingValue.iloc[30:70,:][enzymeCuttingValue.columns[1]].sum()
       if sumMostCommonlySelectedFragmentSize * expectPolyMorph < beginnerModeFilterNumber:
         indicesToDelete.append(index)
       else:

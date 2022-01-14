@@ -53,10 +53,9 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
                 rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
                 totalRareCutterDigestions[rareCutter] += len(rareCutterDigestion)
 
-        test = 'stop'
         totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
-        #
-        # return totalRareCutterDigestionsAndGenomeMutationAmount
+
+        return totalRareCutterDigestionsAndGenomeMutationAmount
 
     except Exception as e:
         logger.error(e)

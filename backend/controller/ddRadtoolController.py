@@ -41,32 +41,52 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
     except Exception as e:
         logger.error(e)
 
-def handlePopulationStructureRequest():
-    return 0
 
 def handleGenomeScanRequest():
     return 0
 
-def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd):
+def createRestrictionEnzymePairList(restrictionEnzymePairs):
+
+    restrictionEnzymePairList = []
+
+    for restrictionEnzymePair in restrictionEnzymePairs:
+
+        restrictionEnzymes = restrictionEnzymePair.split('+')
+        rareCutter = restrictionEnzymes[0]
+        frequentCutter = restrictionEnzymes[1]
+
+        restrictionEnzymePairList.append((getRestrictionEnzymeObjectByName(rareCutter), getRestrictionEnzymeObjectByName(frequentCutter)))
+
+    return restrictionEnzymePairList
+
+
+def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd, sequencingYield=None, coverage=None):
 
     try:
 
-        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+        binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
         rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
-        # doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
-        # digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-        # digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-        # digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph, pairedEnd)
-        # digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph, pairedEnd)
-        #
-        # if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
-        #     return {
-        #         'graph': digestedDnaComparison.createLineChart(),
-        #         'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
-        #     }
-        # else:
-        #     return {}
+        genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
+        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairList = createRestrictionEnzymePairList(restrictionEnzymePairs)
+
+        doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
+        doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
+
+        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        if doubleDigestedDnaComparison.sequencingCalculation:
+            for restrictionEnzymePair in restrictionEnzymePairs:
+                doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
+
+        doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
+        doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
+
+        return {
+                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
+                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
+            }
+
 
     except Exception as e:
         logger.error(e)
@@ -103,36 +123,29 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
 #
 #
 #
-# def combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts):
-#
-#     listOfDoubleDigestedDna = []
-#
-#     for rareCutterCut in rareCutterCuts.values():
-#
-#         storedRestrictionEnzymes = [doubleDigestedDna.restrictionEnzymeCombination for doubleDigestedDna in listOfDoubleDigestedDna]
-#
-#         if rareCutterCut.name == 'EcoRI':
-#             for frequentCutter in COMMONLYUSEDECORIFREQUENTCUTTERS:
-#                 if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-#                     listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
-#
-#         if rareCutterCut.name == 'PstI':
-#             for frequentCutter in COMMONLYUSEDPSTIFREQUENTCUTTERS:
-#                 if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-#                     listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
-#
-#         if rareCutterCut.name == 'SbfI':
-#             for frequentCutter in COMMONLYUSEDSBFIFREQUENTCUTTERS:
-#                 if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-#                     listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
-#
-#         if rareCutterCut.name == 'SphI':
-#             for frequentCutter in COMMONLYUSEDSPHIFREQUENTCUTTERS:
-#                 if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-#                     listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
-#
-#     return listOfDoubleDigestedDna
-#
+def combineFrequentCuttersCutsWithRareCutterCut(rareCutters):
+
+    enzymePairsToDoubleDigest = []
+
+    for rareCutter in rareCutters:
+
+        if rareCutter == 'EcoRI':
+            for frequentCutter in COMMONLYUSEDECORIFREQUENTCUTTERS:
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
+
+        if rareCutter == 'PstI':
+            for frequentCutter in COMMONLYUSEDPSTIFREQUENTCUTTERS:
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
+
+        if rareCutter == 'SbfI':
+            for frequentCutter in COMMONLYUSEDSBFIFREQUENTCUTTERS:
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
+
+        if rareCutter == 'SphI':
+            for frequentCutter in COMMONLYUSEDSPHIFREQUENTCUTTERS:
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
+
+    return enzymePairsToDoubleDigest
 
 def collectRestrictionEnzymePairs(restrictionEnzymePairList):
 

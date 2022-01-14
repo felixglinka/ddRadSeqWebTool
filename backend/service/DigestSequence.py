@@ -1,4 +1,5 @@
-from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS
+from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, PAIRED_END_ENDING
+
 
 def digestSequence(dnaSequence, restrictionEnzyme):
 
@@ -44,10 +45,21 @@ def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, ge
     genomeMutationAmount=0
 
     if numberOfSnps != None:
-        totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > numberOfSnps}
+        totalRareCutterDigestions = [rareCutter for rareCutter, amountEnzymeCuts in rareCutterCuts.items() if calculateBpInGenomeToBeSequenced(amountEnzymeCuts, sequenceLength, pairedEnd, expectPolyMorph) > numberOfSnps]
 
     if genomeScanRadSnpDensity != None:
         genomeMutationAmount = genomeScanRadSnpDensity * genomeSize
         totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
 
     return (totalRareCutterDigestions, genomeMutationAmount)
+
+def calculateBpInGenomeToBeSequenced(countCutsByFirstRestrictionEnzyme, sequenceLength, pairedEnd, expectPolyMorph):
+
+    pairedEndModifier = 2
+
+    if pairedEnd == PAIRED_END_ENDING:
+        pairedEndModifier = 4
+
+    bpInGenomeToBeSequenced = countCutsByFirstRestrictionEnzyme * pairedEndModifier * sequenceLength
+
+    return bpInGenomeToBeSequenced * expectPolyMorph
