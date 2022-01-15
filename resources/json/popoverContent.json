@@ -38,5 +38,13 @@
   "tryOutRestrictionHelp": {
     "title": "Restriction Enzyme",
     "content": "Select a pair of restriction enzymes using the drop-down menu to in-silico digest the given fasta file. To compare multiple pairs of enzymes, click on '+' button to add more rows."
+  },
+  "coverageHelp": {
+    "title": "TO BE ANNOUNCED",
+    "content": "TO BE ANNOUNCED"
+  },
+  "pairedEndHelp": {
+    "title": "TO BE ANNOUNCED",
+    "content": "TO BE ANNOUNCED"
   }
 }
