@@ -9,7 +9,7 @@
   },
   "popStructNumberOfSnps": {
     "title": "Total number of SNPs across the whole genome required for the intended analysis",
-    "content": "The number of SNPs required for analysis may vary depending on the questions being addressed. For example, one thousand SNPs may be sufficient for a typical population structure analysis (e.g. the STRUCTURE algorithm used in Privman et al. 2018 <a id='privmanModRef' href='https://doi.org/10.1111/mec.14767' target='_blank' rel='noopener noreferrer'>doi: https://doi.org/10.1111/mec.14767</a>). Demographic inference using more complex models such as the estimation of migration between population may require more (e.g. the multispecies-coalescent-with-introgression model used in Flouri et al. 2020 <a id='flouriModRef' href=' https://doi.org/10.1093/molbev/msz296' target='_blank' rel='noopener noreferrer'>doi:10.1093/molbev/msz296</a>)."
+    "content": "The number of SNPs required for analysis may vary depending on the questions being addressed. For example, one thousand SNPs may be sufficient for a typical population structure analysis (e.g. the STRUCTURE algorithm used in Privman et al. 2018 <a id='privmanModRef' href='https://doi.org/10.1111/mec.14767' target='_blank' rel='noopener noreferrer'>doi: https://doi.org/10.1111/mec.14767</a>). Demographic inference using more complex models such as the estimation of migration between population may require more (e.g. the multispecies-coalescent-with-introgression model used in Flouri et al. 2020 <a id='flouriModRef' href='https://doi.org/10.1093/molbev/msz296' target='_blank' rel='noopener noreferrer'>doi:10.1093/molbev/msz296</a>)."
   },
   "popStructPopSnpDensity": {
     "title": "Expected SNP density in study population",
