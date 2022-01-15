@@ -24,6 +24,10 @@ class DoubleDigestedDnaComparison:
 
   def createEmptyDataFrame(self, restrictionEnzymeCombinations, binningSize):
 
+    if len(restrictionEnzymeCombinations) == 0:
+      self.digestedDnaCollectionDataframe = pd.DataFrame()
+      return
+
     singleRestrictionEnzymeDataFrames=[]
 
     for restrictionEnzymeCombination in restrictionEnzymeCombinations:

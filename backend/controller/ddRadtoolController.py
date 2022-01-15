@@ -82,10 +82,13 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
         doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
 
-        return {
-                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
-                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
-            }
+        if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
+            return {}
+        else:
+            return {
+                    'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
+                    'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
+                }
 
 
     except Exception as e:
