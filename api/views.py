@@ -124,7 +124,9 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
                                            int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
                                            int(inputForm.cleaned_data["genomeScanExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
-                                           inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
+                                           inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None,
+                                           int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None,
+                                           int(inputForm.cleaned_data["coverage"]) if inputForm.cleaned_data["coverage"] != "" else None)
 
     if "graph" in genomeScanResult:
         context["graph"] = genomeScanResult['graph']

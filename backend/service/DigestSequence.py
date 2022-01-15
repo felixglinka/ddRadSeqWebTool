@@ -49,7 +49,7 @@ def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, ge
 
     if genomeScanRadSnpDensity != None:
         genomeMutationAmount = genomeScanRadSnpDensity * genomeSize
-        totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
+        totalRareCutterDigestions = {rareCutter for rareCutter, amountEnzymeCuts in rareCutterCuts.items() if calculateBpInGenomeToBeSequenced(amountEnzymeCuts, sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
 
     return (totalRareCutterDigestions, genomeMutationAmount)
 
