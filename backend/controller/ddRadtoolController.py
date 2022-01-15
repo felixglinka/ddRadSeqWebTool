@@ -1,14 +1,14 @@
 import logging
 import numpy as np
 
-from backend.service.DoubleDigestedDna import DoubleDigestedDna
 from backend.service.DoubleDigestedDnaComparison import DoubleDigestedDnaComparison
 from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList, \
     getRestrictionEnzymeObjectByName
 from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutRareCutterAndFilterSmallest
 from backend.service.ReadInJsonFiles import readInPopoverTexts, readInInformationTexts
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDECORIFREQUENTCUTTERS, \
-    COMMONLYUSEDPSTIFREQUENTCUTTERS, COMMONLYUSEDSBFIFREQUENTCUTTERS, COMMONLYUSEDSPHIFREQUENTCUTTERS
+    COMMONLYUSEDPSTIFREQUENTCUTTERS, COMMONLYUSEDSBFIFREQUENTCUTTERS, COMMONLYUSEDSPHIFREQUENTCUTTERS, \
+    FIRST_BINNING_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -17,119 +17,153 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
 
     try:
 
-        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+        binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+        restrictionEnzymePairs = collectRestrictionEnzymePairs(restrictionEnzymePairList)
 
-        doubleDigestedSequencesFromFasta = countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList)
-        doubleDigestedDnaCollection = fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta)
-        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
+        doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
+        doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
 
-        if sequencingYield == None and coverage == None:
+        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        if doubleDigestedDnaComparison.sequencingCalculation:
+            for restrictionEnzymePair in restrictionEnzymePairs:
+                doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
+
+        if not doubleDigestedDnaComparison.sequencingCalculation:
             return {
-                'graph': digestedDnaComparison.createLineChart()
+                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs)
             }
         else:
             return {
-                'graph': digestedDnaComparison.createLineChart(),
-                'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection],
+                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
+                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
             }
 
     except Exception as e:
         logger.error(e)
 
-def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd):
+def createRestrictionEnzymePairList(restrictionEnzymePairs):
+
+    restrictionEnzymePairList = []
+
+    for restrictionEnzymePair in restrictionEnzymePairs:
+
+        restrictionEnzymes = restrictionEnzymePair.split('+')
+        rareCutter = restrictionEnzymes[0]
+        frequentCutter = restrictionEnzymes[1]
+
+        restrictionEnzymePairList.append((getRestrictionEnzymeObjectByName(rareCutter), getRestrictionEnzymeObjectByName(frequentCutter)))
+
+    return restrictionEnzymePairList
+
+
+def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd, sequencingYield=None, coverage=None):
 
     try:
 
-        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
+        binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
         rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
-        doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
-        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-        digestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph, pairedEnd)
-        digestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph, pairedEnd)
+        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairList = createRestrictionEnzymePairList(restrictionEnzymePairs)
 
-        if(len(digestedDnaComparison.DigestedDnaCollection) >= 1):
-            return {
-                'graph': digestedDnaComparison.createLineChart(),
-                'dataFrames':  [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in digestedDnaComparison.DigestedDnaCollection]
-            }
-        else:
+        doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
+        doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
+
+        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        if doubleDigestedDnaComparison.sequencingCalculation:
+            for restrictionEnzymePair in restrictionEnzymePairs:
+                doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
+
+        doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph)
+        doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
+
+        chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
+
+        if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {}
+        else:
+            return {
+                    'graph': doubleDigestedDnaComparison.createLineChart(chosenRestrictionEnzymePairs),
+                    'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
+                }
 
     except Exception as e:
         logger.error(e)
 
-def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph, sequenceLength, pairedEnd):
+def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph, sequenceLength, pairedEnd, sequencingYield=None, coverage=None):
 
     try:
 
-        binningSizes = np.append(np.arange(0, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
+        binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
                                  MAX_BINNING_LIMIT + BINNING_STEPS)
 
-        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
+        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph,
+                                                                                  sequenceLength, pairedEnd,
+                                                                                  genomeScanRadSnpDensity=genomeScanRadSnpDensity)
         genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
-        doubleDigestedDnaCollection = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
-        digestedDnaComparison = DoubleDigestedDnaComparison(doubleDigestedDnaCollection)
-        digestedDnaComparison.setFragmentCalculationDataframe(binningSizes, sequenceLength, pairedEnd)
-        digestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph, pairedEnd)
-        digestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph, pairedEnd)
 
-        if (len(digestedDnaComparison.DigestedDnaCollection) >= 1):
-            return {
-                'graph': digestedDnaComparison.createLineChart(),
-                'dataFrames': [digestedDna.fragmentCalculationDataframe.round().to_json() for digestedDna in
-                               digestedDnaComparison.DigestedDnaCollection],
-                'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
-            }
-        else:
+        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairList = createRestrictionEnzymePairList(restrictionEnzymePairs)
+
+        doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
+        doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
+
+        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        if doubleDigestedDnaComparison.sequencingCalculation:
+            for restrictionEnzymePair in restrictionEnzymePairs:
+                doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
+
+        doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph)
+        doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
+
+        chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
+
+        if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {
                 'expectedNumberOfSnps': 1
             }
+        else:
+            return {
+                'graph': doubleDigestedDnaComparison.createLineChart(chosenRestrictionEnzymePairs),
+                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
+                'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
+            }
 
     except Exception as e:
         logger.error(e)
 
-def fragmentDictToDigestedDnaCollection(doubleDigestedSequencesFromFasta):
+def combineFrequentCuttersCutsWithRareCutterCut(rareCutters):
 
-    listOfDigestedDna = []
+    enzymePairsToDoubleDigest = []
 
-    for enzymeName in doubleDigestedSequencesFromFasta.keys():
-        listOfDigestedDna.append(DoubleDigestedDna(enzymeName, doubleDigestedSequencesFromFasta[enzymeName]))
+    for rareCutter in rareCutters:
 
-    return listOfDigestedDna
-
-
-def combineFrequentCuttersCutsWithRareCutterCut(rareCutterCuts):
-
-    listOfDoubleDigestedDna = []
-
-    for rareCutterCut in rareCutterCuts.values():
-
-        storedRestrictionEnzymes = [doubleDigestedDna.restrictionEnzymeCombination for doubleDigestedDna in listOfDoubleDigestedDna]
-
-        if rareCutterCut.name == 'EcoRI':
+        if rareCutter == 'EcoRI':
             for frequentCutter in COMMONLYUSEDECORIFREQUENTCUTTERS:
-                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
 
-        if rareCutterCut.name == 'PstI':
+        if rareCutter == 'PstI':
             for frequentCutter in COMMONLYUSEDPSTIFREQUENTCUTTERS:
-                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
 
-        if rareCutterCut.name == 'SbfI':
+        if rareCutter == 'SbfI':
             for frequentCutter in COMMONLYUSEDSBFIFREQUENTCUTTERS:
-                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
 
-        if rareCutterCut.name == 'SphI':
+        if rareCutter == 'SphI':
             for frequentCutter in COMMONLYUSEDSPHIFREQUENTCUTTERS:
-                if(frequentCutter + '+' + rareCutterCut.name not in storedRestrictionEnzymes):
-                    listOfDoubleDigestedDna.append(rareCutterCut.digestDnaSecondTime(getRestrictionEnzymeObjectByName(frequentCutter)))
+                enzymePairsToDoubleDigest.append(rareCutter + '+' + frequentCutter)
 
-    return listOfDoubleDigestedDna
+    return enzymePairsToDoubleDigest
+
+def collectRestrictionEnzymePairs(restrictionEnzymePairList):
+
+    restrictionEnzymePairs = []
+
+    for restrictionEnzymePair in restrictionEnzymePairList:
+        restrictionEnzymePairs.append(restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name)
+
+    return restrictionEnzymePairs
 
 def requestRestrictionEnzymes():
 

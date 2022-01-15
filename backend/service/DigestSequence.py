@@ -1,12 +1,5 @@
-from backend.settings import MAX_BINNING_LIMIT
+from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, PAIRED_END_ENDING
 
-
-def doubleDigestFastaPart(fastaPart, restrictionEnzyme1, restrictionEnzyme2):
-
-    digestedFastaSeq = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzyme1, restrictionEnzyme2)
-    return {'fragmentLengths': list(map(len, digestedFastaSeq['fragmentsFlankedByTwoSites'])),
-            'countCutsByFirstRestrictionEnzyme': digestedFastaSeq['countCutsByFirstRestrictionEnzyme'],
-            'countCutsBySecondRestrictionEnzyme': digestedFastaSeq['countCutsBySecondRestrictionEnzyme']}
 
 def digestSequence(dnaSequence, restrictionEnzyme):
 
@@ -15,18 +8,20 @@ def digestSequence(dnaSequence, restrictionEnzyme):
 
     return str(dnaSequence).replace(restrictionEnzymeCutSite, restrictionEnzymeCutSitePattern).split('|')
 
-def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme):
+def doubleDigestSequence(digestedDnaFragments, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison):
 
     doubleDigestedDnaFragments = digestEveryDnaFragment(digestedDnaFragments, secondRestrictionEnzyme)
-    cutBySecondRestrictionEnzyme = len(doubleDigestedDnaFragments) - len(digestedDnaFragments)
 
-    fragmentsFlankedByTwoSites = list(filter(
-        lambda fragment: len(fragment) <= MAX_BINNING_LIMIT and (fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
+    lengthsFragmentsFlankedByTwoSites = list(filter(lambda fragLen: fragLen <= MAX_BINNING_LIMIT+BINNING_STEPS, (map(lambda frag: len(frag), filter(
+        lambda fragment: fragment.startswith(firstRestrictionEnzyme.cutSite3end) and fragment.endswith(
             secondRestrictionEnzyme.cutSite5end)
                          or fragment.startswith(secondRestrictionEnzyme.cutSite3end) and fragment.endswith(
-            firstRestrictionEnzyme.cutSite5end)), doubleDigestedDnaFragments))
+            firstRestrictionEnzyme.cutSite5end), doubleDigestedDnaFragments)))))
 
-    return {"fragmentsFlankedByTwoSites": fragmentsFlankedByTwoSites, "cutBySecondRestrictionEnzyme": cutBySecondRestrictionEnzyme}
+    restrictionEnzymeCombination = firstRestrictionEnzyme.name + '+' + secondRestrictionEnzyme.name
+
+    doubleDigestedDnaComparison.countGivenFragments(restrictionEnzymeCombination, lengthsFragmentsFlankedByTwoSites)
+
 
 def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
@@ -38,16 +33,11 @@ def digestEveryDnaFragment(digestedDnaFragment, secondRestrictionEnzyme):
 
     return allDigestedDnaFragments
 
-def digestFastaSequence(fastaSequence, firstRestrictionEnzyme, secondRestrictionEnzyme):
+def digestFastaSequence(fastaPart, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison):
 
-    firstDigestion = digestSequence(fastaSequence, firstRestrictionEnzyme)
-    secondDigestion = doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme)
+    firstDigestion = digestSequence(fastaPart, firstRestrictionEnzyme)
+    doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison)
 
-    return {
-        "countCutsByFirstRestrictionEnzyme": len(firstDigestion) - 1,
-        "countCutsBySecondRestrictionEnzyme": secondDigestion["cutBySecondRestrictionEnzyme"],
-        "fragmentsFlankedByTwoSites": secondDigestion["fragmentsFlankedByTwoSites"]
-    }
 
 def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
@@ -55,10 +45,21 @@ def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, ge
     genomeMutationAmount=0
 
     if numberOfSnps != None:
-        totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > numberOfSnps}
+        totalRareCutterDigestions = [rareCutter for rareCutter, amountEnzymeCuts in rareCutterCuts.items() if calculateBpInGenomeToBeSequenced(amountEnzymeCuts, sequenceLength, pairedEnd, expectPolyMorph) > numberOfSnps]
 
     if genomeScanRadSnpDensity != None:
         genomeMutationAmount = genomeScanRadSnpDensity * genomeSize
-        totalRareCutterDigestions = {rareCutter: singleDigestedDna for rareCutter, singleDigestedDna in rareCutterCuts.items() if singleDigestedDna.calculateBpInGenomeToBeSequenced(sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
+        totalRareCutterDigestions = {rareCutter for rareCutter, amountEnzymeCuts in rareCutterCuts.items() if calculateBpInGenomeToBeSequenced(amountEnzymeCuts, sequenceLength, pairedEnd, expectPolyMorph) > genomeMutationAmount}
 
     return (totalRareCutterDigestions, genomeMutationAmount)
+
+def calculateBpInGenomeToBeSequenced(countCutsByFirstRestrictionEnzyme, sequenceLength, pairedEnd, expectPolyMorph):
+
+    pairedEndModifier = 2
+
+    if pairedEnd == PAIRED_END_ENDING:
+        pairedEndModifier = 4
+
+    bpInGenomeToBeSequenced = countCutsByFirstRestrictionEnzyme * pairedEndModifier * sequenceLength
+
+    return bpInGenomeToBeSequenced * expectPolyMorph

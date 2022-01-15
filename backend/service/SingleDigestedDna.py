@@ -1,5 +1,4 @@
 from backend.service.DigestSequence import doubleDigestSequence
-from backend.service.DoubleDigestedDna import DoubleDigestedDna
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
 from backend.settings import PAIRED_END_ENDING
 
@@ -24,8 +23,8 @@ class SingleDigestedDna:
 
         return bpInGenomeToBeSequenced * expectPolyMorph
 
-    def digestDnaSecondTime(self, secondRestrictionEnzyme):
-
-        secondDigestion = doubleDigestSequence(self.fragments, getRestrictionEnzymeObjectByName(self.name), secondRestrictionEnzyme)
-
-        return DoubleDigestedDna(self.name + '+' + secondRestrictionEnzyme.name,  list(map(len, secondDigestion['fragmentsFlankedByTwoSites'])))
+    # def digestDnaSecondTime(self, secondRestrictionEnzyme):
+    #
+    #     secondDigestion = doubleDigestSequence(self.fragments, getRestrictionEnzymeObjectByName(self.name), secondRestrictionEnzyme)
+    #
+    #     return DoubleDigestedDna(self.name + '+' + secondRestrictionEnzyme.name,  list(map(len, secondDigestion['fragmentsFlankedByTwoSites'])))

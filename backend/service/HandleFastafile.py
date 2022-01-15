@@ -1,36 +1,24 @@
 import logging
 import os
-from tempfile import NamedTemporaryFile
 
 from Bio import SeqIO
 
-from backend.service.DigestSequence import doubleDigestFastaPart, digestSequence, beginnerModeSelectionFiltering
+from backend.service.DigestSequence import digestFastaSequence, digestSequence, beginnerModeSelectionFiltering
 from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
-from backend.service.SingleDigestedDna import SingleDigestedDna
-from backend.settings import COMMONLYUSEDRARECUTTERS, MAX_BINNING_LIMIT
+from backend.settings import COMMONLYUSEDRARECUTTERS
 
 logger = logging.getLogger(__name__)
 
-def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList):
+def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison):
 
     try:
-        digestedDNAFragmentsByRestrictionEnzymes = {}
-        for restrictionEnzymePair in restrictionEnzymePairList:
-            digestedDNAFragmentsByRestrictionEnzymes[restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name] = []
-
         with open(inputFasta, 'r') as fasta:
             fastaSequences = SeqIO.parse(fasta, 'fasta')
 
             for fastaPart in fastaSequences:
 
                 for restrictionEnzymePair in restrictionEnzymePairList:
-                    doubleDigestedFastaPart = doubleDigestFastaPart(fastaPart, restrictionEnzymePair[0],
-                                                                    restrictionEnzymePair[1])
-                    digestedDNAFragmentsByRestrictionEnzymes[
-                        restrictionEnzymePair[0].name + '+' + restrictionEnzymePair[1].name].extend(
-                        doubleDigestedFastaPart['fragmentLengths'])
-
-        return digestedDNAFragmentsByRestrictionEnzymes
+                    digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0], restrictionEnzymePair[1], doubleDigestedDnaComparison)
 
     except Exception as e:
         logger.error(e)
@@ -50,18 +38,18 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
         genomeSize = 0
 
         for rareCutter in COMMONLYUSEDRARECUTTERS:
-            totalRareCutterDigestions[rareCutter] = SingleDigestedDna(rareCutter)
+            totalRareCutterDigestions[rareCutter] = 0
 
         fastaSequences = SeqIO.parse(inputFasta, 'fasta')
 
         for fastaPart in fastaSequences:
 
-            genomeSize += len(fastaPart.seq)
+            if genomeScanRadSnpDensity != None:
+                genomeSize += len(fastaPart.seq)
 
             for rareCutter in COMMONLYUSEDRARECUTTERS:
                 rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
-                totalRareCutterDigestions[rareCutter].fragments.extend(rareCutterDigestion)
-                totalRareCutterDigestions[rareCutter].countCutsByFirstRestrictionEnzyme += len(rareCutterDigestion)
+                totalRareCutterDigestions[rareCutter] += len(rareCutterDigestion)
 
         totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
