@@ -95,17 +95,13 @@ class DoubleDigestedDnaComparison:
       allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe,np.arange(3, len(self.digestedDnaCollectionDataframe.columns), 3), axis=1)
 
     filteredDigestedDnaCollectionDataframe = []
-    indicesToDelete = []
 
-    for index, enzymeCuttingValue in enumerate(allEnzymeCuttingValues):
+    for enzymeCuttingValue in allEnzymeCuttingValues:
       sumMostCommonlySelectedFragmentSize = enzymeCuttingValue.iloc[30:70,:][enzymeCuttingValue.columns[1]].sum()
       if sumMostCommonlySelectedFragmentSize * expectPolyMorph < beginnerModeFilterNumber:
-        indicesToDelete.append(index)
+        allEnzymeCuttingValues.remove(enzymeCuttingValue)
       else:
         filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
-
-    for index in sorted(indicesToDelete, reverse=True):
-      del self.DigestedDnaCollection[index]
 
     self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1) if len(filteredDigestedDnaCollectionDataframe) > 0 else pd.DataFrame()
 
