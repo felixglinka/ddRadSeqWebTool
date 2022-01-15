@@ -101,7 +101,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
 function generateDataFrameTableHead(table) {
   tableCaption = table.createCaption()
-  tableCaption.innerHTML = fileName.concat('<br>').concat(pairedEndChoice).concat("<br>Sequencing Yield: ").concat(sequencingYield).concat(" reads - Coverage: ").concat(coverage)
+  tableCaption.innerHTML = pairedEndChoice.concat("<br>Sequencing Yield: ").concat(sequencingYield).concat(" reads - Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let firstHeaderRow = thead.insertRow();
   firstHeaderRow.style='text-align: center; vertical-align: middle;';
