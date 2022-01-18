@@ -208,7 +208,7 @@
 
     {% if graph %}
     <h5 id="resultTitle">Results</h5>
-    <span class="center link">{{ fileName }}</span>
+    <span id='resultFileName' class="center link">{{ fileName }}</span>
     <span id="explanationModLink" class="center link"> For a detailed explanation about the results, please click <a id="explanationModRef" href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer">here</a></span>
     <div id="graph">
         <img class="center" src="{{ graph }}" width="900" height="{{ graphHeight }}">
