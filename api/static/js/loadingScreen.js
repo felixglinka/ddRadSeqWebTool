@@ -133,6 +133,7 @@ function showLoading() {
     if (typeof graph !== 'undefined') {
         document.getElementById('resultTitle').style.display="none";
         document.getElementById('explanationModLink').style.display="none";
+        document.getElementById('resultFileName').style.display="none";
         document.getElementById('graph').style.display="none";
         document.getElementById('printButton').style.display="none";
     }

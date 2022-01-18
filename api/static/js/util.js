@@ -8,6 +8,17 @@ function createIcon(id){
     return questionIcon
 }
 
+function calculateMaxBasePairsToBeSequencedInLane(){
+
+    sequenceLength = parseInt(basepairLengthToBeSequenced)
+
+    if(pairedEndChoice === 'single end') {
+        sequenceLength = sequenceLength/2
+    }
+
+    return parseInt(sequencingYield) * sequenceLength / 10
+}
+
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
@@ -18,7 +29,7 @@ function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, re
    return {
         'currentSelectedFragmentSize': currentSelectedFragmentSize,
         'sumAllBasesOfEveryBin': sumAllBasesOfEveryBin,
-        'maxNumberOfPossibleSamples': maxNumberOfPossibleSamples,
+        'maxNumberOfPossibleSamples': Math.round(maxNumberOfPossibleSamples),
         'numberBasesToBeSequenced': numberBasesToBeSequenced
    }
 }
@@ -93,7 +104,7 @@ function sumUpFragmentLengths(inputArray){
 function calculateSamplesToBeMultiplexed(totalFragmentLength, sequencingYield, coverage){
 
     sequencingDepth = totalFragmentLength == 0 ? 0 : sequencingYield/totalFragmentLength;
-    return Math.round(sequencingDepth/coverage);
+    return sequencingDepth/coverage;
 }
 
 function printDiv() {

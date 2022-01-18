@@ -4,6 +4,8 @@ const sliderMaxValue = "100";
 let dataFrameValueTitles = []
 let overlapTitle = ""
 
+let maxNumberBasesToBeSequenced = 0
+
 function slideOne(sliderOne, sliderTwo, rowId, enzymeData) {
 
     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
@@ -70,13 +72,13 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    rowElement.cells[2].firstChild.innerText = currentSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].firstChild.innerText = theoreticalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[4+expectedNumberOfSnpsModifier].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[5+expectedNumberOfSnpsModifier].firstChild.innerText = (theoreticalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
+   rowElement.cells[5+expectedNumberOfSnpsModifier].firstChild.innerText =  String(Math.round(theoreticalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
    rowElement.cells[6+expectedNumberOfSnpsModifier].firstChild.innerText = String(adaptorContaminationValues.adaptorContamination).concat(' [').concat(adaptorContaminationValues.adaptorContaminationPercentage).concat('%]');
 
    rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].lastChild.innerText = experimentalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[4+expectedNumberOfSnpsModifier].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples;
-   rowElement.cells[5+expectedNumberOfSnpsModifier].lastChild.innerText = (experimentalDataFrameValues.numberBasesToBeSequenced).toLocaleString(undefined, { minimumFractionDigits: 0 });
+   rowElement.cells[5+expectedNumberOfSnpsModifier].lastChild.innerText = String(Math.round(experimentalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
    rowElement.cells[6+expectedNumberOfSnpsModifier].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
    if (typeof expectedNumberOfSnps !== "undefined") {
@@ -101,7 +103,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
 function generateDataFrameTableHead(table) {
   tableCaption = table.createCaption()
-  tableCaption.innerHTML = pairedEndChoice.concat("<br>Sequencing Yield: ").concat(sequencingYield).concat(" reads - Coverage: ").concat(coverage)
+  tableCaption.innerHTML = pairedEndChoice.concat("<br>Sequencing Yield: ").concat(parseInt(sequencingYield).toLocaleString(undefined, { minimumFractionDigits: 0 })).concat(" reads - Coverage: ").concat(coverage)
   let thead = table.createTHead();
   let firstHeaderRow = thead.insertRow();
   firstHeaderRow.style='text-align: center; vertical-align: middle;';
@@ -298,28 +300,25 @@ function buildUpDataFrame(inputElement, tableId, dataFrameData) {
 
 function initDataframe() {
 
-    if(document.body.contains(document.getElementById("dataFrame")) || document.body.contains(document.getElementById("dataFrames"))) {
+    if(document.body.contains(document.getElementById("dataFrame"))) {
         dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
         overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
 
         if (typeof expectedNumberOfSnps !== 'undefined') {
             dataFrameValueTitles.splice(4, 0, 'No. SNPs in digestion' );
         }
-    }
 
+        maxNumberBasesToBeSequenced = calculateMaxBasePairsToBeSequencedInLane()
 
-    if(document.body.contains(document.getElementById("dataFrame")))  {
+        if(pairedEndChoice === 'paired end') {
+           dataFrameValueTitles.push(overlapTitle);
+        }
 
-         if(pairedEndChoice === 'paired end') {
-            dataFrameValueTitles.push(overlapTitle);
-         }
+        dataFrameValueTitles.push('Range adjustment');
 
-         dataFrameValueTitles.push('Range adjustment');
+        dataFrameTableId = "dataFrameTable"
 
-         dataFrameTableId = "dataFrameTable"
-
-         buildUpDataFrame(document.getElementById("dataFrame"), dataFrameTableId, dataFrameData)
-
+        buildUpDataFrame(document.getElementById("dataFrame"), dataFrameTableId, dataFrameData)
     }
 }
 
