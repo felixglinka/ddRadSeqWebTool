@@ -13,7 +13,7 @@
   },
   "popStructPopSnpDensity": {
     "title": "Expected SNP density in study population",
-    "content": "Average number of SNPs per kilobase. For more information click here."
+    "content": "Average number of SNPs per kilobase. For more information click <a id='explanationModRef' href='/explanation#popStructureAnalysisTitle' target='_blank' rel='noopener noreferrer'>here</a>."
   },
   "genomeScanPopSnpDensity": {
     "title": "Expected average number of SNPs in a 100Kb window of genomic sequence",
