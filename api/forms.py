@@ -32,7 +32,7 @@ class BasicInputDDRadDataForm(forms.Form):
     popStructNumberOfSnps = forms.CharField(label="Number of SNPs to be genotyped", required=False)
     popStructExpectPolyMorph = forms.CharField(label="Expected SNP density", required=False)
     genomeScanExpectPolyMorph = forms.CharField(label="Expected SNP density", required=False)
-    genomeScanRadSnpDensity = forms.CharField(label="SNP density to be expected", required=False)
+    genomeScanRadSnpDensity = forms.CharField(label="Desired SNP density to be genotyped", required=False)
     linkageMappingNumberOfSnps = forms.CharField(label="Number Of SNPs to be sequenced ", required=False)
 
     for number in range(1, MAX_NUMBER_SELECTFIELDS):
@@ -41,4 +41,4 @@ class BasicInputDDRadDataForm(forms.Form):
     basepairLengthToBeSequenced = forms.CharField(label="Read length to be sequenced", required=False)
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), required=False)
     sequencingYield = forms.CharField(label="Sequencing yield", required=False)
-    coverage = forms.CharField(label="Depth", required=False)
+    coverage = forms.CharField(label="Desired depth", required=False)
