@@ -20,6 +20,9 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
                 for restrictionEnzymePair in restrictionEnzymePairList:
                     digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0], restrictionEnzymePair[1], doubleDigestedDnaComparison)
 
+    except EOFError as e:
+        logger.error(e)
+        raise Exception("An error occured while paring, please try again!")
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
@@ -40,21 +43,25 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
         for rareCutter in COMMONLYUSEDRARECUTTERS:
             totalRareCutterDigestions[rareCutter] = 0
 
-        fastaSequences = SeqIO.parse(inputFasta, 'fasta')
+        with open(inputFasta, 'r') as fasta:
+            fastaSequences = SeqIO.parse(fasta, 'fasta')
 
-        for fastaPart in fastaSequences:
+            for fastaPart in fastaSequences:
 
-            if genomeScanRadSnpDensity != None:
-                genomeSize += len(fastaPart.seq)
+                if genomeScanRadSnpDensity != None:
+                    genomeSize += len(fastaPart.seq)
 
-            for rareCutter in COMMONLYUSEDRARECUTTERS:
-                rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
-                totalRareCutterDigestions[rareCutter] += len(rareCutterDigestion)
+                for rareCutter in COMMONLYUSEDRARECUTTERS:
+                    rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
+                    totalRareCutterDigestions[rareCutter] += len(rareCutterDigestion)
 
-        totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
+            totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
         return totalRareCutterDigestionsAndGenomeMutationAmount
 
+    except EOFError as e:
+        logger.error(e)
+        raise Exception("An error occured while paring, please try again!")
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
