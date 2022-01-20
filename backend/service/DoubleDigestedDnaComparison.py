@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from backend.settings import MAX_GRAPH_VIEW, BINNING_STEPS, MAX_RECOMMENDATION_NUMBER, PAIRED_END_ENDING, \
-  FIRST_BINNING_LIMIT
+  FIRST_BINNING_LIMIT, COMMONLYUSEDRARECUTTERS
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +83,31 @@ class DoubleDigestedDnaComparison:
 
     return [self.digestedDnaCollectionDataframe[restrictionEnzymeCombination].iloc[row:int((maxSequenceLimit + 1) / 10)].sum() for row in contaminationList]
 
+  def filterFirstCutLessThanValue(self, rareCutters):
+
+    if (self.digestedDnaCollectionDataframe.empty):
+      return
+
+    if (self.pairedEnd == PAIRED_END_ENDING):
+      allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe,
+                                        np.arange(4, len(self.digestedDnaCollectionDataframe.columns), 4), axis=1)
+    else:
+      allEnzymeCuttingValues = np.split(self.digestedDnaCollectionDataframe,
+                                        np.arange(3, len(self.digestedDnaCollectionDataframe.columns), 3), axis=1)
+
+    filteredDigestedDnaCollectionDataframe = []
+
+    rareCutters = set(COMMONLYUSEDRARECUTTERS) & set(rareCutters)
+
+    for rareCutter in rareCutters:
+      for enzymeCuttingValue in allEnzymeCuttingValues:
+        if(enzymeCuttingValue.columns[0].startswith(rareCutter)):
+          filteredDigestedDnaCollectionDataframe.append(enzymeCuttingValue)
+
+    self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1) if len(
+      filteredDigestedDnaCollectionDataframe) > 0 else pd.DataFrame()
+
+    return [digestedDna.columns[0] for digestedDna in filteredDigestedDnaCollectionDataframe]
 
   def filterSecondCutLessThanExpectedSNP(self, beginnerModeFilterNumber, expectPolyMorph):
 

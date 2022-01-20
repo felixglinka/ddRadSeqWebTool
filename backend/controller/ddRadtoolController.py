@@ -8,7 +8,7 @@ from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, try
 from backend.service.ReadInJsonFiles import readInPopoverTexts, readInInformationTexts
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDECORIFREQUENTCUTTERS, \
     COMMONLYUSEDPSTIFREQUENTCUTTERS, COMMONLYUSEDSBFIFREQUENTCUTTERS, COMMONLYUSEDSPHIFREQUENTCUTTERS, \
-    FIRST_BINNING_LIMIT
+    FIRST_BINNING_LIMIT, COMMONLYUSEDRARECUTTERS
 
 logger = logging.getLogger(__name__)
 
@@ -62,16 +62,18 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
 
         binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT+BINNING_STEPS, BINNING_STEPS), MAX_BINNING_LIMIT+BINNING_STEPS)
 
-        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
-        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut()
         restrictionEnzymePairList = createRestrictionEnzymePairList(restrictionEnzymePairs)
 
         doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
         doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
 
-        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
+
+        restrictionEnzymePairList = doubleDigestedDnaComparison.filterFirstCutLessThanValue(rareCutterCutsAndGenomeMutationAmount[0])
+
         if doubleDigestedDnaComparison.sequencingCalculation:
-            for restrictionEnzymePair in restrictionEnzymePairs:
+            for restrictionEnzymePair in restrictionEnzymePairList:
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
         doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph)
@@ -97,20 +99,23 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
         binningSizes = np.append(np.arange(FIRST_BINNING_LIMIT, MAX_BINNING_LIMIT + BINNING_STEPS, BINNING_STEPS),
                                  MAX_BINNING_LIMIT + BINNING_STEPS)
 
-        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph,
-                                                                                  sequenceLength, pairedEnd,
-                                                                                  genomeScanRadSnpDensity=genomeScanRadSnpDensity)
-        genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
-
-        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairs = combineFrequentCuttersCutsWithRareCutterCut()
         restrictionEnzymePairList = createRestrictionEnzymePairList(restrictionEnzymePairs)
 
         doubleDigestedDnaComparison = DoubleDigestedDnaComparison(sequencingYield, coverage, sequenceLength, pairedEnd)
         doubleDigestedDnaComparison.createEmptyDataFrame(restrictionEnzymePairs, binningSizes)
 
-        countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison)
+        rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList,
+                                                                                  doubleDigestedDnaComparison,
+                                                                                  expectPolyMorph, sequenceLength,
+                                                                                  pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
+        genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
+
+        restrictionEnzymePairList = doubleDigestedDnaComparison.filterFirstCutLessThanValue(
+            rareCutterCutsAndGenomeMutationAmount[0])
+
         if doubleDigestedDnaComparison.sequencingCalculation:
-            for restrictionEnzymePair in restrictionEnzymePairs:
+            for restrictionEnzymePair in restrictionEnzymePairList:
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
         doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph)
@@ -132,11 +137,11 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
     except Exception as e:
         logger.error(e)
 
-def combineFrequentCuttersCutsWithRareCutterCut(rareCutters):
+def combineFrequentCuttersCutsWithRareCutterCut():
 
     enzymePairsToDoubleDigest = []
 
-    for rareCutter in rareCutters:
+    for rareCutter in COMMONLYUSEDRARECUTTERS:
 
         if rareCutter == 'EcoRI':
             for frequentCutter in COMMONLYUSEDECORIFREQUENTCUTTERS:
