@@ -314,7 +314,7 @@ function initDataframe() {
            dataFrameValueTitles.push(overlapTitle);
         }
 
-        dataFrameValueTitles.push('Range adjustment');
+        dataFrameValueTitles.push('Size selection');
 
         dataFrameTableId = "dataFrameTable"
 
