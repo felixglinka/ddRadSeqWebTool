@@ -34,7 +34,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
             logger.error("The file does not exist")
 
 
-def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
+def tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
     try:
         totalRareCutterDigestions = {}
@@ -48,12 +48,13 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
 
             for fastaPart in fastaSequences:
 
+                for restrictionEnzymePair in restrictionEnzymePairList:
+                    rareCutterDigestion = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0], restrictionEnzymePair[1],
+                                            doubleDigestedDnaComparison)
+                    totalRareCutterDigestions[restrictionEnzymePair[0].name] += len(rareCutterDigestion)
+
                 if genomeScanRadSnpDensity != None:
                     genomeSize += len(fastaPart.seq)
-
-                for rareCutter in COMMONLYUSEDRARECUTTERS:
-                    rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), getRestrictionEnzymeObjectByName(rareCutter))
-                    totalRareCutterDigestions[rareCutter] += len(rareCutterDigestion)
 
             totalRareCutterDigestionsAndGenomeMutationAmount = beginnerModeSelectionFiltering(totalRareCutterDigestions, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps, genomeScanRadSnpDensity)
 
@@ -65,3 +66,8 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, expectPolyMorph, sequenceLengt
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
+    finally:
+        if os.path.exists(inputFasta):
+            os.remove(inputFasta)
+        else:
+            logger.error("The file does not exist")

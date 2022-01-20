@@ -38,6 +38,7 @@ def digestFastaSequence(fastaPart, firstRestrictionEnzyme, secondRestrictionEnzy
     firstDigestion = digestSequence(fastaPart, firstRestrictionEnzyme)
     doubleDigestSequence(firstDigestion, firstRestrictionEnzyme, secondRestrictionEnzyme, doubleDigestedDnaComparison)
 
+    return firstDigestion
 
 def beginnerModeSelectionFiltering(rareCutterCuts, sequenceLength, pairedEnd, genomeSize, expectPolyMorph, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
