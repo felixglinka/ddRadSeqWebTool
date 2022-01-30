@@ -4,8 +4,11 @@ import os
 
 from Bio import SeqIO
 
-from backend.service.DigestSequence import digestFastaSequence, beginnerModeSelectionFiltering
-from backend.settings import COMMONLYUSEDRARECUTTERS
+from backend.service.DigestSequence import digestFastaSequence, beginnerModeSelectionFiltering, digestSequence, \
+    doubleDigestSequence
+from backend.service.ExtractRestrictionEnzymes import getRestrictionEnzymeObjectByName
+from backend.settings import COMMONLYUSEDRARECUTTERS, COMMONLYUSEDECORIFREQUENTCUTTERS, COMMONLYUSEDPSTIFREQUENTCUTTERS, \
+    COMMONLYUSEDSBFIFREQUENTCUTTERS, COMMONLYUSEDSPHIFREQUENTCUTTERS
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +52,7 @@ def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePai
                                 restrictionEnzymePair[1], doubleDigestedDnaComparison)
 
 
-def tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
+def tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
     try:
         totalRareCutterDigestions = {}
@@ -63,13 +66,13 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList, dou
 
                 totalRareCutterDigestionsAndGenomeMutationAmount = countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(
                     doubleDigestedDnaComparison, expectPolyMorph, fasta, genomeScanRadSnpDensity, genomeSize,
-                    numberOfSnps, pairedEnd, restrictionEnzymePairList, sequenceLength, totalRareCutterDigestions)
+                    numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions)
 
         else:
             with open(inputFasta, 'r') as fasta:
                 totalRareCutterDigestionsAndGenomeMutationAmount = countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(
                     doubleDigestedDnaComparison, expectPolyMorph, fasta, genomeScanRadSnpDensity, genomeSize,
-                    numberOfSnps, pairedEnd, restrictionEnzymePairList, sequenceLength, totalRareCutterDigestions)
+                    numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions)
 
         return totalRareCutterDigestionsAndGenomeMutationAmount
 
@@ -88,17 +91,38 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, restrictionEnzymePairList, dou
 
 def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubleDigestedDnaComparison, expectPolyMorph,
                                                                            fasta, genomeScanRadSnpDensity, genomeSize,
-                                                                           numberOfSnps, pairedEnd,
-                                                                           restrictionEnzymePairList, sequenceLength,
+                                                                           numberOfSnps, pairedEnd, sequenceLength,
                                                                            totalRareCutterDigestions):
     fastaSequences = SeqIO.parse(fasta, 'fasta')
     for fastaPart in fastaSequences:
 
-        for restrictionEnzymePair in restrictionEnzymePairList:
-            rareCutterDigestion = digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0],
-                                                      restrictionEnzymePair[1],
-                                                      doubleDigestedDnaComparison)
-            totalRareCutterDigestions[restrictionEnzymePair[0].name] += len(rareCutterDigestion)
+        for rareCutterName in COMMONLYUSEDRARECUTTERS:
+
+            rareCutter = getRestrictionEnzymeObjectByName(rareCutterName)
+
+            rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), rareCutter)
+
+            if rareCutterName == 'EcoRI':
+                for frequentCutterName in COMMONLYUSEDECORIFREQUENTCUTTERS:
+                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+                    doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
+
+            if rareCutterName == 'PstI':
+                for frequentCutterName in COMMONLYUSEDPSTIFREQUENTCUTTERS:
+                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+                    doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
+
+            if rareCutterName == 'SbfI':
+                for frequentCutterName in COMMONLYUSEDSBFIFREQUENTCUTTERS:
+                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+                    doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
+
+            if rareCutterName == 'SphI':
+                for frequentCutterName in COMMONLYUSEDSPHIFREQUENTCUTTERS:
+                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+                    doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
+
+            totalRareCutterDigestions[rareCutterName] += len(rareCutterDigestion)
 
         if genomeScanRadSnpDensity != None:
             genomeSize += len(fastaPart.seq)
