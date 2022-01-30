@@ -272,7 +272,7 @@ function addSliderMarkers(sliderTrackDiv, basepairLengthToBeSequenced, firstMark
     let line = document.createElement('div');
     line.className = "line";
     if(firstMarker) {
-        line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;top:-15px;height:30px")
+        line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;top:-17px;height:30px")
     } else {
         line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;")
     }
