@@ -195,9 +195,9 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
         rowElement.appendChild(tdSlider);
 
         let sliderTrackDiv = tdSlider.firstChild
-        addSliderMarkers(sliderTrackDiv, parseInt(basepairLengthToBeSequenced))
+        addSliderMarkers(sliderTrackDiv, parseInt(basepairLengthToBeSequenced), true)
         if(pairedEndChoice === 'paired end') {
-           addSliderMarkers(sliderTrackDiv, parseInt(basepairLengthToBeSequenced)*2)
+           addSliderMarkers(sliderTrackDiv, parseInt(basepairLengthToBeSequenced)*2, false)
         }
 }
 
@@ -261,7 +261,7 @@ function fillSlider(selfSlider, otherSlider, startingValue, id, inputFunction, r
     selfSlider.addEventListener('change', function() {inputFunction(selfSlider, otherSlider, rowId, enzymeData)}, true);
 }
 
-function addSliderMarkers(sliderTrackDiv, basepairLengthToBeSequenced){
+function addSliderMarkers(sliderTrackDiv, basepairLengthToBeSequenced, firstMarker){
 
     if(basepairLengthToBeSequenced > 1000){
         return;
@@ -271,7 +271,11 @@ function addSliderMarkers(sliderTrackDiv, basepairLengthToBeSequenced){
 
     let line = document.createElement('div');
     line.className = "line";
-    line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;")
+    if(firstMarker) {
+        line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;top:-15px;height:30px")
+    } else {
+        line.style = 'left:'.concat(String(markerPosition > 15 ? markerPosition : markerPosition + 1)).concat("%;")
+    }
 
     let lineTick = document.createElement('label');
     lineTick.className = "lineTick";
