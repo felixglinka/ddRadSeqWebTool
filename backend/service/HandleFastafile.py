@@ -94,35 +94,36 @@ def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubl
                                                                            numberOfSnps, pairedEnd, sequenceLength,
                                                                            totalRareCutterDigestions):
     fastaSequences = SeqIO.parse(fasta, 'fasta')
+
+    rareCutters = [getRestrictionEnzymeObjectByName(rareCutterName) for rareCutterName in COMMONLYUSEDRARECUTTERS]
+    frequentEcoRICutters = [getRestrictionEnzymeObjectByName(frequentEcoRICutterName) for frequentEcoRICutterName in COMMONLYUSEDECORIFREQUENTCUTTERS]
+    frequentPstICutters = [getRestrictionEnzymeObjectByName(frequentPstICutterName) for frequentPstICutterName in COMMONLYUSEDPSTIFREQUENTCUTTERS]
+    frequentSbfICutters = [getRestrictionEnzymeObjectByName(frequentSbfICutterName) for frequentSbfICutterName in COMMONLYUSEDSBFIFREQUENTCUTTERS]
+    frequentSphICutters = [getRestrictionEnzymeObjectByName(frequentSphICutterName) for frequentSphICutterName in COMMONLYUSEDSPHIFREQUENTCUTTERS]
+
     for fastaPart in fastaSequences:
 
-        for rareCutterName in COMMONLYUSEDRARECUTTERS:
-
-            rareCutter = getRestrictionEnzymeObjectByName(rareCutterName)
+        for rareCutter in rareCutters:
 
             rareCutterDigestion = digestSequence(str(fastaPart.seq.upper()), rareCutter)
 
-            if rareCutterName == 'EcoRI':
-                for frequentCutterName in COMMONLYUSEDECORIFREQUENTCUTTERS:
-                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+            if rareCutter.name == 'EcoRI':
+                for frequentCutter in frequentEcoRICutters:
                     doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
 
-            if rareCutterName == 'PstI':
-                for frequentCutterName in COMMONLYUSEDPSTIFREQUENTCUTTERS:
-                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+            if rareCutter.name == 'PstI':
+                for frequentCutter in frequentPstICutters:
                     doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
 
-            if rareCutterName == 'SbfI':
-                for frequentCutterName in COMMONLYUSEDSBFIFREQUENTCUTTERS:
-                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+            if rareCutter.name == 'SbfI':
+                for frequentCutter in frequentSbfICutters:
                     doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
 
-            if rareCutterName == 'SphI':
-                for frequentCutterName in COMMONLYUSEDSPHIFREQUENTCUTTERS:
-                    frequentCutter = getRestrictionEnzymeObjectByName(frequentCutterName)
+            if rareCutter.name == 'SphI':
+                for frequentCutter in frequentSphICutters:
                     doubleDigestSequence(rareCutterDigestion, rareCutter, frequentCutter, doubleDigestedDnaComparison)
 
-            totalRareCutterDigestions[rareCutterName] += len(rareCutterDigestion)
+            totalRareCutterDigestions[rareCutter.name] += len(rareCutterDigestion)
 
         if genomeScanRadSnpDensity != None:
             genomeSize += len(fastaPart.seq)
