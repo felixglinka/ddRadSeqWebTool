@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR
 from .forms import BasicInputDDRadDataForm
 from .models import fastaFileUpload
 
@@ -30,19 +30,21 @@ def webinterfaceViews(request):
 
             if inputForm.is_valid():
 
+                #preliminary step
+                os.rename(inputForm.cleaned_data['formFile'], os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + inputForm.cleaned_data['formFileName'])
+                inputForm.cleaned_data['formFile'] = os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + inputForm.cleaned_data['formFileName']
+
                 try:
                     checkCorrectSequenceCalculationFields(inputForm)
 
-                    uploadedFastaFile = inputForm.cleaned_data['formFile']
                     context["mode"] = inputForm.cleaned_data['formMode']
-                    context["fileName"] = os.path.splitext(inputForm.cleaned_data['formFileName'])[0]
 
                     if(inputForm.cleaned_data['formMode'] == 'tryOut'):
-                        context = tryOutRequest(inputForm, restrictionEnzymes, uploadedFastaFile, context)
+                        context = tryOutRequest(inputForm, restrictionEnzymes, context)
                     if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
-                        context = beginnerPopulationStructureRequest(inputForm, uploadedFastaFile, context)
+                        context = beginnerPopulationStructureRequest(inputForm, context)
                     if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
-                        context = beginnerGenomeScanRequest(inputForm, uploadedFastaFile, context)
+                        context = beginnerGenomeScanRequest(inputForm, context)
 
                 except Exception as e:
                     logger.error(e)
@@ -62,12 +64,12 @@ def webinterfaceViews(request):
 
     return render(request, "webinterface.html", context)
 
-def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
+def tryOutRequest(inputForm, restrictionEnzymes, context):
 
     if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
         raise Exception("Coverage cannot be 0")
 
-    ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, getPairsOfChosenRestrictionEnzyme(inputForm.cleaned_data, restrictionEnzymes),
+    ddRadSeqresult = handleDDRadSeqRequest(inputForm.cleaned_data['formFile'], getPairsOfChosenRestrictionEnzyme(inputForm.cleaned_data, restrictionEnzymes),
                                            int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None,
                                            int(inputForm.cleaned_data["coverage"]) if inputForm.cleaned_data["coverage"] != "" else None,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
@@ -82,7 +84,7 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 
     return context
 
-def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
+def beginnerPopulationStructureRequest(inputForm, context):
 
     checkAllBeginnerFieldEntries(inputForm)
 
@@ -90,7 +92,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
         "popStructExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the population structure analysis.")
 
-    populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
+    populationStructureResult = handlePopulationStructureRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
                                            int(inputForm.cleaned_data["popStructExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
@@ -112,7 +114,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 
     return context
 
-def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
+def beginnerGenomeScanRequest(inputForm, context):
 
     checkAllBeginnerFieldEntries(inputForm)
 
@@ -120,7 +122,7 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
         "genomeScanExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the genome scan.")
 
-    genomeScanResult = handleGenomeScanRequest(stringStreamFasta,
+    genomeScanResult = handleGenomeScanRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
                                            int(inputForm.cleaned_data["genomeScanExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
