@@ -38,6 +38,7 @@ def webinterfaceViews(request):
                     checkCorrectSequenceCalculationFields(inputForm)
 
                     context["mode"] = inputForm.cleaned_data['formMode']
+                    context["fileName"] = inputForm.cleaned_data['formFileName']
 
                     if(inputForm.cleaned_data['formMode'] == 'tryOut'):
                         context = tryOutRequest(inputForm, restrictionEnzymes, context)
