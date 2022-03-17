@@ -70,8 +70,10 @@ def checkIfFileIsNewlyuploaded(inputForm):
 
     if(inputForm.cleaned_data['formFile'] == '' and inputForm.cleaned_data['formFileName'] == '' and inputForm.data['ownFasta'] != 'uploadOneself'):
         getAlreadyUploadedFile(inputForm)
-    else:
+    elif (inputForm.cleaned_data['formFile'] != '' and inputForm.cleaned_data['formFileName'] != '' and inputForm.data['ownFasta'] == 'uploadOneself'):
         renameUploadedFile(inputForm)
+    else:
+        raise Exception('You cannot choose a file and upload at the same time.')
 
 def getAlreadyUploadedFile(inputForm):
 
@@ -89,7 +91,7 @@ def renameUploadedFile(inputForm):
 
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%H%M%S")
-    fileNameSplitPoint = inputForm.cleaned_data['formFileName'].split('.')
+    fileNameSplitPoint = inputForm.cleaned_data['formFileName'].rsplit('.', 1)
 
     newFilename = os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
     os.rename(inputForm.cleaned_data['formFile'],
