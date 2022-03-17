@@ -40,15 +40,19 @@
     "content": "Select a pair of restriction enzymes using the drop-down menu to in-silico digest the given fasta file. To compare multiple pairs of enzymes, click on '+' button to add more rows."
   },
   "coverageHelp": {
-    "title": "TO BE ANNOUNCED",
-    "content": "TO BE ANNOUNCED"
+    "title": "Desired depth",
+    "content": "The number of unique reads that include a given nucleotide in the reconstructed sequence."
   },
   "pairedEndHelp": {
-    "title": "TO BE ANNOUNCED",
-    "content": "TO BE ANNOUNCED"
+    "title": "Paired end vs Single end",
+    "content": "Paired-end sequencing allows users to sequence both ends of a fragment. Single-read sequencing involves sequencing DNA from only one end."
   },
   "fastaInputHelp": {
     "title": "Input fasta file",
     "content": "Insert the fasta file that you would like to be digested. The fasta file can be directly uploaded as a fasta file or as a gzipped fasta file. If your genome is larger (> 1Gb), it is recommended to gzip it beforehand."
+  },
+  "todayUploadedFilesHelp": {
+    "title": "Files uploaded today",
+    "content": "Here are the files listed that are uploaded today. Instead of uploading a fasta file again, you can select one of the given files and do the calculations using it."
   }
 }

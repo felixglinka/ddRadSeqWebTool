@@ -21,7 +21,7 @@
         <div id="customFile" class="col-10 d-flex justify-content-center">
             <label class="right4 col-form-label"> <b>Insert fasta file (or gzipped fasta file): </b> </label>
             <div class="input-group" style="width: 52%;">
-                <input type="file" name="fastaFile" title class="form-control" id="fastaFileUpload" enableviewstate="true">
+                <input type="file" name="fastaFile" title class="form-control" id="fastaFileUpload">
             </div>
             <div id='fastaInputHelp' class="questionIcon" style="margin-top:13px; margin-left:20px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
         </div>
@@ -31,13 +31,41 @@
             {% csrf_token %}
             <div class="row form-group">
                 <div id="buttonCard" class="col-12 d-flex justify-content-center">
+                    <div class="col-3"> </div>
                     <div class="card text-center" style="width: 50%;">
-                      <div class="card-body">
+                        <div class="card-body">
                             <h5 class="card-title">Do you know how to ddRAD?</h5>
                             <p class="card-text">Here are different analysis tools depending on your expertise of ddRad sequencing. For a detailed explanation, please click <a href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer"> here.</a><br> Have fun!</p>
                             <button id="beginnerButton" type="button" class="btn btn-outline-danger right10">I have no idea!</button>
                             <button id="tryoutButton" type="button" class="btn btn-outline-success right10">Lemme try out!</button>
-                      </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card" style="margin-left:5px">
+                            <div class="card-body">
+                                <span class="card-body col-sm-10 offset-sm-0">
+                                    <h6>Files uploaded today
+                                        <span id='todayUploadedFilesHelp' class="questionIcon" style="display: inline-block" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></span>
+                                    </h6>
+                                    <div id="'todayUploadedFiles">
+                                       <div class="form-check">
+                                      <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id="ownFastaRadio" value='uploadOneself' onchange="toggleSelectedRadioButton()" checked>
+                                      <label class="form-check-label" for="ownFastaRadio">
+                                        Insert own fasta file
+                                      </label>
+                                    </div>
+                                    {% for fastaFile in todaysFastaFiles %}
+                                      <div class="form-check">
+                                          <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id={{ fastaFile|safe }} value={{ fastaFile|safe }} onchange="toggleSelectedRadioButton()">
+                                          <label class="form-check-label" for={{ fastaFile|safe }}>
+                                            {{ fastaFile|safe }}
+                                          </label>
+                                      </div>
+                                    {% endfor %}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     {{ form.formFileName }}
                     {{ form.formFile }}
@@ -236,6 +264,7 @@ const popoverContents = {{ popoverContents|safe }};
 const adaptorContaminationSlope ="{{ adaptorContaminationSlope }}"
 const overlapSlope ="{{ overlapSlope }}"
 const fileName ="{{ fileName }}"
+const todaysFastaFiles = {{ todaysFastaFiles|safe }};
 
 {% if noRecommendation %}
 const noRecommendation = "{{ noRecommendation }}"
@@ -254,8 +283,7 @@ const coverage = "{{ coverage }}"
 
 const dataFrameData = {{ dataFrames|safe }};
 {% endif %}
-</script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery.ui.widget@1.10.3/jquery.ui.widget.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery.iframe-transport@1.0.0/jquery.iframe-transport.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@10.32.0/js/jquery.fileupload.min.js"></script>
@@ -268,7 +296,8 @@ const dataFrameData = {{ dataFrames|safe }};
 <script src="{% static 'js/beginnerForm.js' %}"></script>
 <script src="{% static 'js/tryOutForm.js' %}"></script>
 <script src="{% static 'js/form.js' %}"></script>
+<script src="{% static 'js/screenUtils.js' %}"></script>
+<script src="{% static 'js/fileUpload.js' %}"></script>
 <script src="{% static 'js/popovers.js' %}"></script>
-<script src="{% static 'js/loadingScreen.js' %}"></script>
 </body>
 </html>
