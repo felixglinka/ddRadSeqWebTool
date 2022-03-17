@@ -49,17 +49,22 @@
                                     </h6>
                                     <div id="'todayUploadedFiles">
                                        <div class="form-check">
-                                      <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id="ownFastaRadio" value='uploadOneself' onchange="toggleSelectedRadioButton()" checked>
-                                      <label class="form-check-label" for="ownFastaRadio">
-                                        Insert own fasta file
-                                      </label>
-                                    </div>
+                                           <span>
+                                              <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id="ownFastaRadio" value='uploadOneself' onchange="toggleSelectedRadioButton()" checked>
+                                              <label class="form-check-label" for="ownFastaRadio">
+                                                Insert own fasta file
+                                              </label>
+                                           </span>
+                                        </div>
                                     {% for fastaFile in todaysFastaFiles %}
                                       <div class="form-check">
-                                          <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id={{ fastaFile|safe }} value={{ fastaFile|safe }} onchange="toggleSelectedRadioButton()">
-                                          <label class="form-check-label" for={{ fastaFile|safe }}>
-                                            {{ fastaFile|safe }}
-                                          </label>
+                                          <span>
+                                              <input class="uploadedFileButton form-check-input" type="radio" name="ownFasta" id={{ fastaFile|safe }} value={{ fastaFile|safe }} onchange="toggleSelectedRadioButton()">
+                                              <label class="form-check-label" for={{ fastaFile|safe }}>
+                                                {{ fastaFile|safe }}
+                                              </label>
+                                          </span>
+
                                       </div>
                                     {% endfor %}
                                     </div>
