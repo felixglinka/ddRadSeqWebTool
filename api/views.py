@@ -246,7 +246,7 @@ def getCurrentLoadedFiles():
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    todaysDirectory = os.path.join(os.path.join(os.path.join(os.path.join(os.path.join(BASE_DIR, CHUNKED_BASE_DIR), currentYear), currentMonth), currentDay))
+    todaysDirectory = os.path.join(os.path.join(os.path.join(os.path.join(os.path.join('..', CHUNKED_BASE_DIR), currentYear), currentMonth), currentDay))
 
     return os.listdir(todaysDirectory) if os.path.exists(todaysDirectory) else []
 
