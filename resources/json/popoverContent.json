@@ -53,6 +53,6 @@
   },
   "todayUploadedFilesHelp": {
     "title": "Files uploaded today",
-    "content": "Here are the files listed that are uploaded today. Instead of uploading a fasta file again, you can select one of the given files and do the calculations using it."
+    "content": "Here are the files listed that were uploaded today. Instead of uploading a fasta file again, you can select one of the given files and do the calculations."
   }
 }
