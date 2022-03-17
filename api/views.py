@@ -1,14 +1,15 @@
 import logging
 import os
+from datetime import datetime
 
 from chunked_upload.views import ChunkedUploadCompleteView, ChunkedUploadView
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR, BASE_DIR
 from .forms import BasicInputDDRadDataForm
 from .models import fastaFileUpload
 
@@ -30,19 +31,21 @@ def webinterfaceViews(request):
 
             if inputForm.is_valid():
 
+                #preliminary step
+                checkIfFileIsNewlyuploaded(inputForm)
+
                 try:
                     checkCorrectSequenceCalculationFields(inputForm)
 
-                    uploadedFastaFile = inputForm.cleaned_data['formFile']
                     context["mode"] = inputForm.cleaned_data['formMode']
-                    context["fileName"] = os.path.splitext(inputForm.cleaned_data['formFileName'])[0]
+                    context["fileName"] = inputForm.cleaned_data['formFileName']
 
                     if(inputForm.cleaned_data['formMode'] == 'tryOut'):
-                        context = tryOutRequest(inputForm, restrictionEnzymes, uploadedFastaFile, context)
+                        context = tryOutRequest(inputForm, restrictionEnzymes, context)
                     if(inputForm.cleaned_data['formMode'] == 'beginner-populationStructure'):
-                        context = beginnerPopulationStructureRequest(inputForm, uploadedFastaFile, context)
+                        context = beginnerPopulationStructureRequest(inputForm, context)
                     if(inputForm.cleaned_data['formMode'] == 'beginner-genomeScan'):
-                        context = beginnerGenomeScanRequest(inputForm, uploadedFastaFile, context)
+                        context = beginnerGenomeScanRequest(inputForm, context)
 
                 except Exception as e:
                     logger.error(e)
@@ -58,16 +61,48 @@ def webinterfaceViews(request):
     else:
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
 
+    context['todaysFastaFiles'] = getCurrentLoadedFiles()
     context["form"] = inputForm
 
     return render(request, "webinterface.html", context)
 
-def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
+def checkIfFileIsNewlyuploaded(inputForm):
+
+    if(inputForm.cleaned_data['formFile'] == '' and inputForm.cleaned_data['formFileName'] == '' and inputForm.data['ownFasta'] != 'uploadOneself'):
+        getAlreadyUploadedFile(inputForm)
+    else:
+        renameUploadedFile(inputForm)
+
+def getAlreadyUploadedFile(inputForm):
+
+    currentTime = datetime.now()
+    currentYear = currentTime.strftime('%Y')
+    currentMonth = currentTime.strftime('%m')
+    currentDay = currentTime.strftime('%d')
+
+    ownFastaSplit = inputForm.data['ownFasta'].split('.')
+
+    inputForm.cleaned_data['formFile'] = os.path.join(os.path.join(os.path.join(CHUNKED_BASE_DIR, currentYear), currentMonth), currentDay) + '/' + inputForm.data['ownFasta']
+    inputForm.cleaned_data['formFileName'] = ownFastaSplit[0].rsplit('_', 1)[0] + '.' + ownFastaSplit[1]
+
+def renameUploadedFile(inputForm):
+
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%H%M%S")
+    fileNameSplitPoint = inputForm.cleaned_data['formFileName'].split('.')
+
+    newFilename = os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
+    os.rename(inputForm.cleaned_data['formFile'],
+              newFilename)
+    inputForm.cleaned_data['formFile'] = newFilename
+
+
+def tryOutRequest(inputForm, restrictionEnzymes, context):
 
     if inputForm.cleaned_data["coverage"] != "" and int(inputForm.cleaned_data["coverage"]) == 0:
         raise Exception("Coverage cannot be 0")
 
-    ddRadSeqresult = handleDDRadSeqRequest(stringStreamFasta, getPairsOfChosenRestrictionEnzyme(inputForm.cleaned_data, restrictionEnzymes),
+    ddRadSeqresult = handleDDRadSeqRequest(inputForm.cleaned_data['formFile'], getPairsOfChosenRestrictionEnzyme(inputForm.cleaned_data, restrictionEnzymes),
                                            int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None,
                                            int(inputForm.cleaned_data["coverage"]) if inputForm.cleaned_data["coverage"] != "" else None,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
@@ -82,7 +117,7 @@ def tryOutRequest(inputForm, restrictionEnzymes, stringStreamFasta, context):
 
     return context
 
-def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
+def beginnerPopulationStructureRequest(inputForm, context):
 
     checkAllBeginnerFieldEntries(inputForm)
 
@@ -90,7 +125,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
         "popStructExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the population structure analysis.")
 
-    populationStructureResult = handlePopulationStructureRequest(stringStreamFasta,
+    populationStructureResult = handlePopulationStructureRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
                                            int(inputForm.cleaned_data["popStructExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
@@ -112,7 +147,7 @@ def beginnerPopulationStructureRequest(inputForm, stringStreamFasta, context):
 
     return context
 
-def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
+def beginnerGenomeScanRequest(inputForm, context):
 
     checkAllBeginnerFieldEntries(inputForm)
 
@@ -120,7 +155,7 @@ def beginnerGenomeScanRequest(inputForm, stringStreamFasta, context):
         "genomeScanExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the genome scan.")
 
-    genomeScanResult = handleGenomeScanRequest(stringStreamFasta,
+    genomeScanResult = handleGenomeScanRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
                                            int(inputForm.cleaned_data["genomeScanExpectPolyMorph"])/POLYMORPHISM_MODIFIER,
                                            int(inputForm.cleaned_data['basepairLengthToBeSequenced']) if inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" else None,
@@ -203,6 +238,17 @@ def explanationsViews(request):
     context = {'mode': 'none', 'explantionTexts': requestInformationTexts()}
 
     return render(request, "explanations.html", context)
+
+def getCurrentLoadedFiles():
+
+    currentTime = datetime.now()
+    currentYear = currentTime.strftime('%Y')
+    currentMonth = currentTime.strftime('%m')
+    currentDay = currentTime.strftime('%d')
+
+    todaysDirectory = os.path.join(os.path.join(os.path.join(os.path.join(os.path.join(BASE_DIR, CHUNKED_BASE_DIR), currentYear), currentMonth), currentDay))
+
+    return os.listdir(todaysDirectory) if os.path.exists(todaysDirectory) else []
 
 class FastaFileUploadView(ChunkedUploadView):
 

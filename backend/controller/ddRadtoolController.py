@@ -12,7 +12,6 @@ from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDECORI
 
 logger = logging.getLogger(__name__)
 
-
 def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield=None, coverage=None, sequenceLength=None, pairedEnd=None):
 
     try:

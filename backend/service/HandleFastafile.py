@@ -36,11 +36,11 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
 
-    finally:
-        if os.path.exists(inputFasta):
-            os.remove(inputFasta)
-        else:
-            logger.error("The file does not exist")
+    # finally:
+    #     if os.path.exists(inputFasta):
+    #         os.remove(inputFasta)
+    #     else:
+    #         logger.error("The file does not exist")
 
 
 def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePairList):
@@ -82,11 +82,11 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, e
     except Exception as e:
         logger.error(e)
         raise Exception("No proper fasta file has been uploaded")
-    finally:
-        if os.path.exists(inputFasta):
-            os.remove(inputFasta)
-        else:
-            logger.error("The file does not exist")
+    # finally:
+    #     if os.path.exists(inputFasta):
+    #         os.remove(inputFasta)
+    #     else:
+    #         logger.error("The file does not exist")
 
 
 def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubleDigestedDnaComparison, expectPolyMorph,

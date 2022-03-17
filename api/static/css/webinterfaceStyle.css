@@ -133,6 +133,10 @@ caption {
     border-width: 1px;
 }
 
+.bs-popover-left>.popover-arrow::before{
+    border-color: #0d6efd;
+}
+
 .bs-popover-end>.popover-arrow::before{
     border-left-color: #0d6efd;
     border-right-color: #0d6efd;
