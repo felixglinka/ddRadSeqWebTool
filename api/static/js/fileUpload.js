@@ -62,6 +62,7 @@ function fillFastaUploader() {
                      showLoading()
                      data.submit();
                  } else {
+                     console.log('here')
                      initHiddenFormFields()
                      showLoading();
                      inputForm = document.getElementById('ddGraderForm')
