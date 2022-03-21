@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 def webinterfaceViews(request):
 
-    context = {"graph": "", 'mode': 'none', 'popoverContents': requestPopoverTexts(),
+    context = {"graph": "",'mode': 'none', 'popoverContents': requestPopoverTexts(),
                'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
     restrictionEnzymes = requestRestrictionEnzymes()
 
@@ -111,6 +111,7 @@ def tryOutRequest(inputForm, restrictionEnzymes, context):
                                            inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None)
 
     context["graph"] = ddRadSeqresult['graph']
+    context["fragmentList"] = ddRadSeqresult['fragmentList']
     if "dataFrames" in ddRadSeqresult: context["dataFrames"] = ddRadSeqresult['dataFrames']
     context["basepairLengthToBeSequenced"] = inputForm.cleaned_data['basepairLengthToBeSequenced']
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
@@ -137,6 +138,7 @@ def beginnerPopulationStructureRequest(inputForm, context):
 
     if "graph" in populationStructureResult:
         context["graph"] = populationStructureResult['graph']
+        context["fragmentList"] = populationStructureResult['fragmentList']
     else:
         context["noRecommendation"] = 'n'
     if "dataFrames" in populationStructureResult: context["dataFrames"] = populationStructureResult['dataFrames']
@@ -167,6 +169,7 @@ def beginnerGenomeScanRequest(inputForm, context):
 
     if "graph" in genomeScanResult:
         context["graph"] = genomeScanResult['graph']
+        context["fragmentList"] = genomeScanResult['fragmentList']
     else:
         context["noRecommendation"] = 'n'
     if "dataFrames" in genomeScanResult: context["dataFrames"] = genomeScanResult['dataFrames']
