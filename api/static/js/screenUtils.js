@@ -57,7 +57,7 @@ function downloadFragmentListAsCSV(){
 
     var actualDownloadDiv = document.createElement('a');
     actualDownloadDiv.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fragmentList));
-    actualDownloadDiv.setAttribute('download', 'fragments_' + fileName.split(".")[0] + '.csv');
+    actualDownloadDiv.setAttribute('download', 'fragments_' + fileName.split(/\.(?=[^\.]+$)/)[0] + '.csv');
 
     actualDownloadDiv.style.display = 'none';
     document.body.appendChild(actualDownloadDiv);
