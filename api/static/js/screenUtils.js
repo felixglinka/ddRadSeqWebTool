@@ -40,6 +40,7 @@ function showLoading() {
         document.getElementById('explanationModLink').style.display="none";
         document.getElementById('resultFileName').style.display="none";
         document.getElementById('graph').style.display="none";
+        document.getElementById('csvButton').style.display="none";
         document.getElementById('printButton').style.display="none";
     }
 
@@ -52,12 +53,39 @@ function showLoading() {
     }, 0.5);
 }
 
+function downloadFragmentListAsCSV(){
+
+    var actualDownloadDiv = document.createElement('a');
+    actualDownloadDiv.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fragmentList));
+    actualDownloadDiv.setAttribute('download', 'fragments_' + fileName.split(".")[0] + '.csv');
+
+    actualDownloadDiv.style.display = 'none';
+    document.body.appendChild(actualDownloadDiv);
+
+    actualDownloadDiv.click();
+
+    document.body.removeChild(actualDownloadDiv);
+}
+
 function getResultsOnPage(){
-     if (typeof graph !== 'undefined') {
-         $('html, body').animate({
+
+    if (typeof graph !== 'undefined') {
+        $('html, body').animate({
           scrollTop: $("#explanationModLink").offset().top
         }, 0.5);
-     }
+    }
+}
+
+function printDiv() {
+      window.print();
+//    let divContents = document.getElementById("results").innerHTML;
+//    let a = window.open('', '', 'height=500, width=500');
+//    a.document.write('<html>');
+//    a.document.write('<body >');
+//    a.document.write(divContents);
+//    a.document.write('</body></html>');
+//    a.print();
+//    a.document.close();
 }
 
 window.addEventListener('load', getResultsOnPage)

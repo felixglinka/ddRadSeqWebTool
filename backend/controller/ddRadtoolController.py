@@ -27,14 +27,18 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
             for restrictionEnzymePair in restrictionEnzymePairs:
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
+
         if not doubleDigestedDnaComparison.sequencingCalculation:
             return {
-                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs)
+                'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
+                'fragmentList': digestedDnaCollectionObject
             }
         else:
             return {
                 'graph': doubleDigestedDnaComparison.createLineChart(restrictionEnzymePairs),
-                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
+                'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
+                'fragmentList': digestedDnaCollectionObject
             }
 
     except Exception as e:
@@ -65,13 +69,15 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {}
         else:
             return {
                     'graph': doubleDigestedDnaComparison.createLineChart(chosenRestrictionEnzymePairs),
-                    'dataFrames': doubleDigestedDnaComparison.prepareDataframeData()
+                    'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
+                    'fragmentList': digestedDnaCollectionObject
                 }
 
     except Exception as e:
@@ -106,6 +112,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {
@@ -115,7 +122,8 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
             return {
                 'graph': doubleDigestedDnaComparison.createLineChart(chosenRestrictionEnzymePairs),
                 'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
-                'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1]
+                'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1],
+                'fragmentList': digestedDnaCollectionObject
             }
 
     except Exception as e:
