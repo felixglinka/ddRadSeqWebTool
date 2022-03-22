@@ -1,9 +1,9 @@
 import logging
+
 import numpy as np
 
 from backend.service.DoubleDigestedDnaComparison import DoubleDigestedDnaComparison
-from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList, \
-    getRestrictionEnzymeObjectByName
+from backend.service.ExtractRestrictionEnzymes import extractRestrictionEnzymesFromNewEnglandList
 from backend.service.HandleFastafile import countFragmentLengthOfInputFasta, tryOutRareCutterAndFilterSmallest
 from backend.service.ReadInJsonFiles import readInPopoverTexts, readInInformationTexts
 from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, COMMONLYUSEDECORIFREQUENTCUTTERS, \
