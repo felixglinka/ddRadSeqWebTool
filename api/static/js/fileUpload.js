@@ -58,10 +58,12 @@ function fillFastaUploader() {
              form_data.splice(1);
              calculate_md5(data.files[0], 2000000);
              $("#submitButton").off('click').on("click", function () {
-                 showLoading();
                  if($('#ownFastaRadio').is(":checked")) {
+                     showLoading();
                      data.submit();
-                 } else {
+                 }
+                 if($('#ownFastaRadio').not(":checked")) {
+                     showLoading();
                      inputForm = document.getElementById('ddGraderForm')
                      inputForm.submit()
                  }
