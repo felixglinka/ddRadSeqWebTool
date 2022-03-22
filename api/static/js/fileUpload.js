@@ -58,6 +58,7 @@ function fillFastaUploader() {
              form_data.splice(1);
              calculate_md5(data.files[0], 2000000);
              $("#submitButton").off('click').on("click", function () {
+                 showLoading()
                  if($('#ownFastaRadio').is(":checked")) {
                      data.submit();
                  }
