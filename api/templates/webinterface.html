@@ -27,7 +27,7 @@
         </div>
     </div>
     <div id="formWrapper" class="container-sm">
-        <form id='ddGraderForm' action='.' method="POST" mode="" enctype="multipart/form-data" >
+        <form id='ddGraderForm' action='.' method="POST" mode="" onsubmit="showLoading()" enctype="multipart/form-data" >
             {% csrf_token %}
             <div class="row form-group">
                 <div id="buttonCard" class="col-12 d-flex justify-content-center">
@@ -228,7 +228,7 @@
 
             <div class="row form-group">
                 <div class="col-12 d-flex justify-content-center">
-                    <input id="submitButton" disabled class="btn btn-primary" type="submit" value="Submit" onclick="showLoading();">
+                    <input id="submitButton" disabled class="btn btn-primary" type="submit" value="Submit">
                 </div>
             </div>
         </form>
