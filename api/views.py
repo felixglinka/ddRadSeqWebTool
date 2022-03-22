@@ -27,7 +27,7 @@ def webinterfaceViews(request):
 
         try:
             inputForm = BasicInputDDRadDataForm(request.POST, restrictionEnzymes=restrictionEnzymes)
-            checkIfThereIsAnInputFastaFile(inputForm)
+            checkIfThereIsAnUploadError(inputForm)
 
             if inputForm.is_valid():
 
@@ -68,12 +68,14 @@ def webinterfaceViews(request):
 
 def checkIfFileIsNewlyuploaded(inputForm):
 
-    if(inputForm.cleaned_data['formFile'] == '' and inputForm.cleaned_data['formFileName'] == '' and inputForm.data['ownFasta'] != 'uploadOneself'):
+    if (inputForm.cleaned_data['formFile'] == '' and inputForm.cleaned_data['formFileName'] == '' and inputForm.data['ownFasta'] != 'uploadOneself'):
         getAlreadyUploadedFile(inputForm)
     elif (inputForm.cleaned_data['formFile'] != '' and inputForm.cleaned_data['formFileName'] != '' and inputForm.data['ownFasta'] == 'uploadOneself'):
         renameUploadedFile(inputForm)
-    else:
+    elif (inputForm.cleaned_data['formFile'] != '' and inputForm.cleaned_data['formFileName'] != '' and inputForm.data['ownFasta'] != 'uploadOneself'):
         raise Exception('You cannot choose a file and upload at the same time.')
+    else:
+        raise Exception("Input Fasta File is needed")
 
 def getAlreadyUploadedFile(inputForm):
 
@@ -185,13 +187,11 @@ def checkAllBeginnerFieldEntries(inputForm):
         "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
         raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
-def checkIfThereIsAnInputFastaFile(inputForm):
+def checkIfThereIsAnUploadError(inputForm):
 
     if (inputForm.data['formMode'] == 'uploadError'):
         raise Exception("Something went wrong while uploading. Please try again.")
 
-    if ('formFile' not in inputForm.data or inputForm.data["formFile"] == None):
-        raise Exception("Input Fasta File is needed")
 
 def checkCorrectSequenceCalculationFields(inputForm):
 
