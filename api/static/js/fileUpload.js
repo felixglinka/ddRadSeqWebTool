@@ -100,10 +100,4 @@ function fillFastaUploader() {
     });
 }
 
-function initHiddenFormFields(){
-    $('#id_formFile').val('')
-    $('#id_formFileName').val('')
-}
-
-window.addEventListener('load', initHiddenFormFields)
 window.addEventListener('load', fillFastaUploader)
