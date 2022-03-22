@@ -6,6 +6,7 @@ function toggleSelectedRadioButton(selectedRadio) {
     if(document.getElementById('ownFastaRadio').checked) {
         document.getElementById("fastaFileUpload").disabled = false;
     } else {
+        initHiddenFormFields()
         document.getElementById("fastaFileUpload").disabled = true;
     }
 }
