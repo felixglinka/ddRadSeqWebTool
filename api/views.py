@@ -82,10 +82,8 @@ def getAlreadyUploadedFile(inputForm):
     currentMonth = currentTime.strftime('%m')
     currentDay = currentTime.strftime('%d')
 
-    ownFastaSplit = inputForm.data['ownFasta'].rsplit('_', 1)
-
     inputForm.cleaned_data['formFile'] = os.path.join(os.path.join(os.path.join(CHUNKED_BASE_DIR, currentYear), currentMonth), currentDay) + '/' + inputForm.data['ownFasta']
-    inputForm.cleaned_data['formFileName'] = ownFastaSplit[0] + '.' + ownFastaSplit[1]
+    inputForm.cleaned_data['formFileName'] = inputForm.data['ownFasta']
 
 def renameUploadedFile(inputForm):
 
