@@ -4,7 +4,7 @@ body {
 
 /* headers */
 
-h1, h4, h5, .link {
+h1, h2, h4, h5, .link {
   text-align: center;
 }
 
@@ -115,6 +115,15 @@ caption {
     height: 15px;
     width: 15px;
     margin-top: 6px;
+}
+
+.documentationButton {
+    background: url('../icons/info-empty.svg');
+    background-size: 100% 100%;
+    height: 100px;
+    width: 100px;
+    margin-left: 60px;
+    cursor: pointer;
 }
 
 .questionIcon, .extendIcon {
@@ -303,6 +312,17 @@ input[type='range']:active::-webkit-slider-thumb{
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1rem;
+}
+
+#tableContentBody > li > a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: underline;
+}
+#tableContentBody > li > a:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 .All {

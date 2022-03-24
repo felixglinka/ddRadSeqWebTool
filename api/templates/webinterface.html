@@ -31,7 +31,12 @@
             {% csrf_token %}
             <div class="row form-group">
                 <div id="buttonCard" class="col-12 d-flex justify-content-center">
-                    <div class="col-3"> </div>
+                    <div class="col-3">
+                        <a href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer">
+                            <div id='userguideLink' class="documentationButton"></div>
+                        </a>
+                        <a style="margin-left: 74px; cursor:pointer" href="{% url 'explanation'%}" target="_blank" rel="noopener noreferrer"">UserGuide</a>
+                    </div>
                     <div class="card text-center" style="width: 50%;">
                         <div class="card-body">
                             <h5 class="card-title">Do you know how to ddRAD?</h5>
