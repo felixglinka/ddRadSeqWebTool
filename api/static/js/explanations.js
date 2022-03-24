@@ -17,6 +17,7 @@ function fillBeginnerExplanation() {
         let overlapsContaminationContent = document.getElementById("overlapsContaminationContent")
         let tableMetricsGraph = document.getElementById("tableMetricsGraph")
         let tableMetricsTable = document.getElementById("tableMetricsTable")
+        let howToCite = document.getElementById("howToCite")
 
         introductionContent.innerHTML = explantionTexts.introductionContent
         goalContent.innerHTML = explantionTexts.goalContent
@@ -30,6 +31,7 @@ function fillBeginnerExplanation() {
         overlapsContaminationContent.innerHTML = explantionTexts.overlapsContaminationContent
         tableMetricsGraph.innerHTML = explantionTexts.tableMetricsGraph
         tableMetricsTable.innerHTML = explantionTexts.tableMetricsTable
+        howToCite.innerHTML = explantionTexts.howToCite
     }
 }
 

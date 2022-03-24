@@ -15,18 +15,34 @@
 <body>
 
     <h1> ddgRADer </h1>
-    <h4> User guide </h4>
+    <h2> User guide </h2>
 
-
+    <div class="row" style="padding-bottom: 20px">
+        <div class="col-4 d-flex"></div>
+        <div class="col-4 d-flex justify-content-center">
+            <div class="card" style="width: 80%;text-align: justify;">
+              <div id="tableContentBody" class="card-body">
+                  <h4 class="card-title">Table of Content</h4>
+                  <li><a href="#goalContentTitle">Goal of this tool</a></li>
+                  <li><a href="#estimatingSNPIntroTitle">Estimating SNP density</a></li>
+                  <li><a href="#overlapsContaminationContentTitle">Read overlaps and adaptor contamination</a></li>
+                  <li><a href="#enzymeChoiceTitle">Enzyme choice</a></li>
+                  <li><a href="#tableMetrics">Table metrics</a></li>
+                  <li><a href="#howToCiteTitle">How to cite</a></li>
+              </div>
+            </div>
+        </div>
+        <div class="col-4 d-flex"></div>
+    </div>
     <div class="col-12 d-flex justify-content-center">
             <div class="card" style="width: 75%;text-align: justify;">
               <div class="card-body">
                   <p class="card-text" id="introductionContent"></p>
 
-                  <h4 class="card-title">Goal of this tool</h4>
+                  <h4 class="card-title" id="goalContentTitle">Goal of this tool</h4>
                   <p class="card-text" id="goalContent"></p>
 
-                  <h4 class="card-title">Estimating SNP density</h4>
+                  <h4 class="card-title" id="estimatingSNPIntroTitle">Estimating SNP density</h4>
                   <p class="card-text" id="estimatingSNPIntro"></p>
 
                   <h6 class="card-title text-center" id="popStructureAnalysisTitle">Population Structure Analysis</h6>
@@ -41,14 +57,14 @@
                   <h6 class="card-title text-center">Factors influencing number of SNPs</h6>
                   <p class="card-text" id="influencingFactors"></p>
 
-                  <h4 class="card-title text-center">Enzyme choice</h4>
+                  <h4 class="card-title text-center" id="enzymeChoiceTitle">Enzyme choice</h4>
                   <h6 class="card-title text-center">4- 6- 8- base cutters</h6>
                   <p class="card-text" id="baseCutters"></p>
 
                   <h6 class="card-title text-center">GC content of restriction site of genome</h6>
                   <p class="card-text" id="gcContentRestrictionSite"></p>
 
-                  <h4 class="card-title text-center">Read overlaps and adaptor contamination</h4>
+                  <h4 class="card-title text-center" id="overlapsContaminationContentTitle">Read overlaps and adaptor contamination</h4>
                   <p class="card-text" id="overlapsContaminationContent"></p>
 
                   <h4 class="card-title text-center" id="tableMetrics">Table metrics</h4>
@@ -56,6 +72,9 @@
                   <p class="card-text" id="tableMetricsGraph"></p>
                   <h6 class="card-title text-center">Table</h6>
                   <p class="card-text" id="tableMetricsTable"></p>
+
+                  <h4 class="card-title text-center" id="howToCiteTitle">How to cite</h4>
+                  <p class="card-text" id="howToCite"></p>
               </div>
             </div>
     </div>
