@@ -27,7 +27,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
             for restrictionEnzymePair in restrictionEnzymePairs:
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
-        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
 
         if not doubleDigestedDnaComparison.sequencingCalculation:
             return {
@@ -69,7 +69,7 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
-        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
+        digestedDnaCollectionObject =  doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {}
@@ -112,7 +112,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
-        digestedDnaCollectionObject = doubleDigestedDnaComparison.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
+        digestedDnaCollectionObject =  doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {
