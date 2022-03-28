@@ -112,7 +112,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
-        digestedDnaCollectionObject =  doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {

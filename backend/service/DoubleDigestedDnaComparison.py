@@ -197,7 +197,7 @@ class DoubleDigestedDnaComparison:
         if(not self.sequencingCalculation):
             return self.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
         else:
-            return self.getRestrictionEnzymeList().to_csv(encoding='utf-8')
+            return self.digestedDnaCollectionDataframe[self.getRestrictionEnzymeList()].to_csv(encoding='utf-8')
 
 
     def createLineChart(self, restrictionEnzymePairs):
