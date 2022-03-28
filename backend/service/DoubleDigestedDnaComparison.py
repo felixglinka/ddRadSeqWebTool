@@ -191,6 +191,15 @@ class DoubleDigestedDnaComparison:
 
         return [fragmentCounts.round().to_json() for fragmentCounts in allEnzymeCuttingValues]
 
+
+    def getFragmentsOfEnzymesCsv(self):
+
+        if(not self.sequencingCalculation):
+            return self.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
+        else:
+            return self.getRestrictionEnzymeList().to_csv(encoding='utf-8')
+
+
     def createLineChart(self, restrictionEnzymePairs):
 
         self.digestedDnaCollectionDataframe.index = self.digestedDnaCollectionDataframe.index / 10
