@@ -179,7 +179,7 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
                 connectedTD.style = 'width: 1%;'
             }
 
-            if(title === 'No. basepairs in insilico digested sample' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
+            if(title === 'Sequencing efficiency' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
                 connectedTD.style = 'width: 11%;'
             }
 
@@ -305,7 +305,7 @@ function buildUpDataFrame(inputElement, tableId, dataFrameData) {
 function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame"))) {
-        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
+        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'Sequencing efficiency', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
         overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
 
         if (typeof expectedNumberOfSnps !== 'undefined') {
