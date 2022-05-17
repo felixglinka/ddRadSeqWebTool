@@ -40,7 +40,12 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
                 'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
                 'fragmentList': digestedDnaCollectionObject
             }
-
+    except EOFError as e:
+        logger.error(e)
+        raise e
+    except FileExistsError as e:
+        logger.error(e)
+        raise e
     except Exception as e:
         logger.error(e)
         raise e
@@ -78,8 +83,14 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
                     'graph': doubleDigestedDnaComparison.createLineChart(chosenRestrictionEnzymePairs),
                     'dataFrames': doubleDigestedDnaComparison.prepareDataframeData(),
                     'fragmentList': digestedDnaCollectionObject
-                }
 
+              }
+    except EOFError as e:
+        logger.error(e)
+        raise e
+    except FileExistsError as e:
+        logger.error(e)
+        raise e
     except Exception as e:
         logger.error(e)
         raise e
@@ -126,7 +137,12 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
                 'expectedNumberOfSnps': rareCutterCutsAndGenomeMutationAmount[1],
                 'fragmentList': digestedDnaCollectionObject
             }
-
+    except EOFError as e:
+        logger.error(e)
+        raise e
+    except FileExistsError as e:
+        logger.error(e)
+        raise e
     except Exception as e:
         logger.error(e)
         raise e
