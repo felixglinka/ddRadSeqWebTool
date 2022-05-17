@@ -34,6 +34,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
         raise Exception("An error occurred while paring, please try again!")
     except Exception as e:
         logger.error(e)
+        os.remove(inputFasta)
         raise Exception("No proper fasta file has been uploaded")
 
     # finally:
