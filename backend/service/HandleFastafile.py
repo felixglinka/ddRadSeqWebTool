@@ -1,6 +1,9 @@
 import gzip
+import io
+import zipfile
 import logging
 import os
+from io import StringIO, BytesIO
 
 from Bio import SeqIO
 
@@ -20,28 +23,47 @@ def is_gz_file(inputFasta):
 def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubleDigestedDnaComparison):
 
     try:
-
         if(is_gz_file(inputFasta)):
             with gzip.open(inputFasta, 'rt') as fasta:
                 countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePairList)
-
+        elif(zipfile.is_zipfile(inputFasta)):
+            handleZipFile(doubleDigestedDnaComparison, inputFasta, restrictionEnzymePairList)
         else:
             with open(inputFasta, 'r') as fasta:
                 countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePairList)
 
     except EOFError as e:
         logger.error(e)
-        raise Exception("An error occurred while paring, please try again!")
+        raise Exception("An error occurred while parsing, please try again!")
+    except FileExistsError as e:
+        logger.error(e)
+        os.remove(inputFasta)
+        raise Exception("Too many files in the zip directory!")
     except Exception as e:
         logger.error(e)
         os.remove(inputFasta)
-        raise Exception("No proper (gzipped) fasta file has been uploaded")
+        raise Exception("No proper (g(zipped)) fasta file has been uploaded")
 
     # finally:
     #     if os.path.exists(inputFasta):
     #         os.remove(inputFasta)
     #     else:
     #         logger.error("The file does not exist")
+
+
+def handleZipFile(doubleDigestedDnaComparison, inputFasta, restrictionEnzymePairList):
+
+    with zipfile.ZipFile(inputFasta) as archive:
+            if (len(archive.infolist()) != 1):
+                raise FileExistsError
+            else:
+                files = archive.namelist()
+                if archive.getinfo(files[0]).is_dir():
+                    raise Exception
+                else:
+                    with archive.open(files[0]) as fasta:
+                        fasta_as_text = io.TextIOWrapper(fasta)
+                        countFragmentLength(doubleDigestedDnaComparison, fasta_as_text, restrictionEnzymePairList)
 
 
 def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePairList):

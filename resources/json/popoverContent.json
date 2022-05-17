@@ -49,7 +49,7 @@
   },
   "fastaInputHelp": {
     "title": "Input fasta file",
-    "content": "Insert the fasta file that you would like to be digested. The fasta file can be directly uploaded as a fasta file or as a gzipped fasta file. If your genome is larger (> 1Gb), it is recommended to gzip it beforehand."
+    "content": "Insert the fasta file that you would like to be digested. The fasta file can be directly uploaded as a fasta file or as a (g)zipped fasta file. If your genome is larger (> 1Gb), it is recommended to gzip it beforehand."
   },
   "todayUploadedFilesHelp": {
     "title": "Files uploaded today",
