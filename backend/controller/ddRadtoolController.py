@@ -43,7 +43,7 @@ def handleDDRadSeqRequest(inputFasta, restrictionEnzymePairList, sequencingYield
 
     except Exception as e:
         logger.error(e)
-
+        raise e
 
 
 def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, sequenceLength, pairedEnd, sequencingYield=None, coverage=None):
@@ -82,6 +82,7 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
 
     except Exception as e:
         logger.error(e)
+        raise e
 
 def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph, sequenceLength, pairedEnd, sequencingYield=None, coverage=None):
 
@@ -128,6 +129,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
 
     except Exception as e:
         logger.error(e)
+        raise e
 
 def combineFrequentCuttersCutsWithRareCutterCut():
 
