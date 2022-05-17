@@ -117,7 +117,7 @@ function generateDataFrameTableHead(table) {
         th.style='text-align: left;'
       }
 
-      if(title === "No. basepairs sequenced in the lane") {
+      if(title === "Sequencing efficiency") {
        icon = createIcon("basepairsSequencedHelp")
        icon.style = 'display: inline-block; margin-top: 0px; margin-left: 4px;'
        th.appendChild(icon);
@@ -305,7 +305,7 @@ function buildUpDataFrame(inputElement, tableId, dataFrameData) {
 function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame"))) {
-        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'Sequencing efficiency', 'No. samples multiplexable', 'No. basepairs sequenced in the lane', 'Fragments under '.concat(basepairLengthToBeSequenced)]
+        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'Sequencing efficiency', 'No. samples multiplexable', 'Sequencing efficiency', 'Fragments under '.concat(basepairLengthToBeSequenced)]
         overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
 
         if (typeof expectedNumberOfSnps !== 'undefined') {
