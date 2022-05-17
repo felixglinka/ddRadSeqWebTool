@@ -35,7 +35,7 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
     except Exception as e:
         logger.error(e)
         os.remove(inputFasta)
-        raise Exception("No proper fasta file has been uploaded")
+        raise Exception("No proper (gzipped) fasta file has been uploaded")
 
     # finally:
     #     if os.path.exists(inputFasta):
