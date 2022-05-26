@@ -74,7 +74,7 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
         doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
-        digestedDnaCollectionObject =  doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
+        digestedDnaCollectionObject = doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
 
         if (doubleDigestedDnaComparison.digestedDnaCollectionDataframe.empty):
             return {}
