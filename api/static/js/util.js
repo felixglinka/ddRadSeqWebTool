@@ -86,6 +86,8 @@ function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequence
 
     if(sliderOneValue >= parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;
+    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
+        return overlapValue;
     } else {
         return overlapValue + numberOfOverlaps;
     }
