@@ -180,7 +180,7 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
             }
 
             if(title === 'No. basepairs in insilico digested sample' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
-                connectedTD.style = 'width: 11%;'
+                connectedTD.style = 'width: 14%;'
             }
 
             connectedTD.appendChild(theoreticalTD);

@@ -11,12 +11,13 @@ function createIcon(id){
 function calculateMaxBasePairsToBeSequencedInLane(){
 
     sequenceLength = parseInt(basepairLengthToBeSequenced)
+    pairedEndModifier = 2
 
     if(pairedEndChoice === 'single end') {
-        sequenceLength = sequenceLength/2
+        pairedEndModifier = 1
     }
 
-    return parseInt(sequencingYield) * sequenceLength / 10
+    return parseInt(sequencingYield) * sequenceLength * pairedEndModifier/ coverage
 }
 
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
@@ -63,7 +64,7 @@ function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSel
 function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneValue, sequenceLength, contaminationValue) {
 
     selectedFragmentLength = parseInt(sliderOneValue) == 0 ? Object.values(fragmentLengths)[0] :
-                             parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
+                             parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)+1))[0] :
                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
 
     numberOfAdaptorContamination = Math.round(selectedFragmentLength*parseFloat(adaptorContaminationSlope))
@@ -103,6 +104,6 @@ function sumUpFragmentLengths(inputArray){
 
 function calculateSamplesToBeMultiplexed(totalFragmentLength, sequencingYield, coverage){
 
-    sequencingDepth = totalFragmentLength == 0 ? 0 : sequencingYield/totalFragmentLength;
+    sequencingDepth = totalFragmentLength === 0 ? 0 : sequencingYield/totalFragmentLength;
     return sequencingDepth/coverage;
 }
