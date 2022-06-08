@@ -179,8 +179,8 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
                 connectedTD.style = 'width: 1%;'
             }
 
-            if(title === 'No. basepairs in insilico digested sample' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
-                connectedTD.style = 'width: 14%;'
+            if(title === 'Sequence efficiency' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
+                connectedTD.style = 'width: 10%;'
             }
 
             connectedTD.appendChild(theoreticalTD);
