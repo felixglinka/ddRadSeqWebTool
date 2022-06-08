@@ -6,12 +6,12 @@ function fillBeginnerExplanation() {
 
     if(typeof explantionTexts != 'undefined') {
         let introductionContent = document.getElementById("introductionContent")
+        let sequencyEffiencyOfPairedEndSequencing = document.getElementById("sequencyEffiencyOfPairedEndSequencing")
         let goalContent = document.getElementById("goalContent")
+        let noIdea = document.getElementById("noIdea")
+        let lemmeTryOut = document.getElementById("lemmeTryOut")
         let estimatingSNPIntro = document.getElementById("estimatingSNPIntro")
-        let popStructureAnalysis = document.getElementById("popStructureAnalysis")
-        let genomeScan = document.getElementById("genomeScan")
         let exampleSNPDensity = document.getElementById("exampleSNPDensity")
-        let influencingFactors = document.getElementById("influencingFactors")
         let baseCutters = document.getElementById("baseCutters")
         let gcContentRestrictionSite = document.getElementById("gcContentRestrictionSite")
         let overlapsContaminationContent = document.getElementById("overlapsContaminationContent")
@@ -20,12 +20,12 @@ function fillBeginnerExplanation() {
         let howToCite = document.getElementById("howToCite")
 
         introductionContent.innerHTML = explantionTexts.introductionContent
+        sequencyEffiencyOfPairedEndSequencing.innerHTML = explantionTexts.sequencyEffiencyOfPairedEndSequencing
         goalContent.innerHTML = explantionTexts.goalContent
+        noIdea.innerHTML = explantionTexts.noIdea
+        lemmeTryOut.innerHTML = explantionTexts.lemmeTryOut
         estimatingSNPIntro.innerHTML = explantionTexts.estimatingSNPIntro
-        popStructureAnalysis.innerHTML = explantionTexts.popStructureAnalysis
-        genomeScan.innerHTML = explantionTexts.genomeScan
         exampleSNPDensity.innerHTML = explantionTexts.exampleSNPDensity
-        influencingFactors.innerHTML = explantionTexts.influencingFactors
         baseCutters.innerHTML = explantionTexts.baseCutters
         gcContentRestrictionSite.innerHTML = explantionTexts.gcContentRestrictionSite
         overlapsContaminationContent.innerHTML = explantionTexts.overlapsContaminationContent
