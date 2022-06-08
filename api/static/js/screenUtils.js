@@ -92,9 +92,8 @@ function printDiv() {
 
 function initChosenFastaFile(){
     if(fileName != ''){
-       test = $("#"+fileName).prop( "checked", true );
+       document.getElementById(fileName).checked = true;
     }
-
 }
 
 function initHiddenFormFields(){
