@@ -90,10 +90,18 @@ function printDiv() {
 //    a.document.close();
 }
 
+function initChosenFastaFile(){
+    if(fileName != ''){
+       test = $("#"+fileName).prop( "checked", true );
+    }
+
+}
+
 function initHiddenFormFields(){
     $('#id_formFile').val('')
     $('#id_formFileName').val('')
 }
 
 window.addEventListener('load', initHiddenFormFields)
+window.addEventListener('load', initChosenFastaFile)
 window.addEventListener('load', getResultsOnPage)
