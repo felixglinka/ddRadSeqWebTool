@@ -325,6 +325,17 @@ input[type='range']:active::-webkit-slider-thumb{
   text-decoration: underline;
 }
 
+.imagesubtitle{
+    text-align: center;
+    font-size: 0.6rem
+}
+
+.formula{
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+}
+
 .All {
   display: block;
   margin: auto;
