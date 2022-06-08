@@ -50,7 +50,6 @@ def countFragmentLengthOfInputFasta(inputFasta, restrictionEnzymePairList, doubl
     #     else:
     #         logger.error("The file does not exist")
 
-
 def handleZipFile(doubleDigestedDnaComparison, inputFasta, restrictionEnzymePairList):
 
     with zipfile.ZipFile(inputFasta) as archive:
@@ -65,6 +64,21 @@ def handleZipFile(doubleDigestedDnaComparison, inputFasta, restrictionEnzymePair
                         fasta_as_text = io.TextIOWrapper(fasta)
                         countFragmentLength(doubleDigestedDnaComparison, fasta_as_text, restrictionEnzymePairList)
 
+def handleZipFileBeginnerMode(doubleDigestedDnaComparison, inputFasta, expectPolyMorph, genomeScanRadSnpDensity, genomeSize,
+                            numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions):
+    with zipfile.ZipFile(inputFasta) as archive:
+            if (len(archive.infolist()) != 1):
+                raise FileExistsError
+            else:
+                files = archive.namelist()
+                if archive.getinfo(files[0]).is_dir():
+                    raise Exception
+                else:
+                    with archive.open(files[0]) as fasta:
+                        fasta_as_text = io.TextIOWrapper(fasta)
+                        return countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(
+                            doubleDigestedDnaComparison, expectPolyMorph, fasta_as_text, genomeScanRadSnpDensity, genomeSize,
+                            numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions)
 
 def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePairList):
     fastaSequences = SeqIO.parse(fasta, 'fasta')
@@ -91,6 +105,10 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, e
                     doubleDigestedDnaComparison, expectPolyMorph, fasta, genomeScanRadSnpDensity, genomeSize,
                     numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions)
 
+        elif (zipfile.is_zipfile(inputFasta)):
+            totalRareCutterDigestionsAndGenomeMutationAmount = handleZipFileBeginnerMode(doubleDigestedDnaComparison, inputFasta, expectPolyMorph, genomeScanRadSnpDensity, genomeSize,
+                            numberOfSnps, pairedEnd, sequenceLength, totalRareCutterDigestions)
+
         else:
             with open(inputFasta, 'r') as fasta:
                 totalRareCutterDigestionsAndGenomeMutationAmount = countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(
@@ -99,18 +117,18 @@ def tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, e
 
         return totalRareCutterDigestionsAndGenomeMutationAmount
 
+
     except EOFError as e:
         logger.error(e)
-        raise Exception("An error occured while paring, please try again!")
+        raise Exception("An error occurred while parsing, please try again!")
+    except FileExistsError as e:
+        logger.error(e)
+        os.remove(inputFasta)
+        raise Exception("Too many files in the zip directory!")
     except Exception as e:
         logger.error(e)
-        raise Exception("No proper fasta file has been uploaded")
-    # finally:
-    #     if os.path.exists(inputFasta):
-    #         os.remove(inputFasta)
-    #     else:
-    #         logger.error("The file does not exist")
-
+        os.remove(inputFasta)
+        raise Exception("No proper (g(zipped)) fasta file has been uploaded")
 
 def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubleDigestedDnaComparison, expectPolyMorph,
                                                                            fasta, genomeScanRadSnpDensity, genomeSize,
