@@ -24,7 +24,7 @@
     "content": "For studies that require SNPs to be distributed across the genome, such as Fst scans across the genome or other methods looking for signatures of selection."
   },
   "basepairsSequencedHelp": {
-    "title": "No. basepairs sequenced in the lane",
+    "title": "Sequence efficiency",
     "content": "Percentage of sequenced bases that are not wasted due to adaptor contamination and read overlaps."
   },
   "adapterContaminationHelp": {
