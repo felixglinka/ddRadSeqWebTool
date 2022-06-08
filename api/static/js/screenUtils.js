@@ -92,7 +92,8 @@ function printDiv() {
 
 function initChosenFastaFile(){
     if(fileName != ''){
-       document.getElementById(fileName).checked = true;
+        document.getElementById(fileName).checked = true;
+        toggleSelectedRadioButton(document.getElementById(fileName))
     }
 }
 
