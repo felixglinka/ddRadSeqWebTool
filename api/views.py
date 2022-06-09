@@ -1,5 +1,6 @@
 import logging
 import os
+import asyncio
 from datetime import datetime
 
 from chunked_upload.views import ChunkedUploadCompleteView, ChunkedUploadView
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-def webinterfaceViews(request):
+async def webinterfaceViews(request):
 
     context = {"graph": "",'mode': 'none', 'popoverContents': requestPopoverTexts(),
                'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
