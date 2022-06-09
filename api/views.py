@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-async def webinterfaceViews(request):
+def webinterfaceViews(request):
 
     context = {"graph": "",'mode': 'none', 'popoverContents': requestPopoverTexts(),
                'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
