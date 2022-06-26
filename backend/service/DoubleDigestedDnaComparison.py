@@ -194,6 +194,9 @@ class DoubleDigestedDnaComparison:
 
     def getFragmentsOfEnzymesCsv(self):
 
+        if (self.digestedDnaCollectionDataframe.empty):
+            return
+
         if(not self.sequencingCalculation):
             return self.digestedDnaCollectionDataframe.to_csv(encoding='utf-8')
         else:

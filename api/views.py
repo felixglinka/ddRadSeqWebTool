@@ -1,6 +1,5 @@
 import logging
 import os
-import asyncio
 from datetime import datetime
 
 from chunked_upload.views import ChunkedUploadCompleteView, ChunkedUploadView
@@ -10,7 +9,7 @@ from django.shortcuts import render
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR, BASE_DIR
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR
 from .forms import BasicInputDDRadDataForm
 from .models import fastaFileUpload
 
