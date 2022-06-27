@@ -76,6 +76,12 @@ function getResultsOnPage(){
           scrollTop: $("#explanationModLink").offset().top
         }, 0.5);
     }
+
+    if (typeof noRecommendation !== 'undefined') {
+        $('html, body').animate({
+          scrollTop: $("#noRecommendation").offset().top
+        }, 0.5);
+    }
 }
 
 function printDiv() {
