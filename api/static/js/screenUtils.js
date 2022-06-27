@@ -77,7 +77,7 @@ function getResultsOnPage(){
         }, 0.5);
     }
 
-    if (typeof noRecommendation === 'n') {
+    if (noRecommendation === 'n') {
         $('html, body').animate({
           scrollTop: $("#noRecommendation").offset().top
         }, 0.5);
