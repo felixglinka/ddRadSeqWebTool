@@ -64,14 +64,14 @@ def handlePopulationStructureRequest(inputFasta, numberOfSnps, expectPolyMorph, 
 
         rareCutterCutsAndGenomeMutationAmount = tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=numberOfSnps)
 
-        restrictionEnzymePairList = doubleDigestedDnaComparison.filterFirstCutLessThanValue(rareCutterCutsAndGenomeMutationAmount[0])
+        restrictionEnzymePairList = doubleDigestedDnaComparison.filterForPairsHavingEnoughCuts(rareCutterCutsAndGenomeMutationAmount[0])
 
         if doubleDigestedDnaComparison.sequencingCalculation:
             for restrictionEnzymePair in restrictionEnzymePairList:
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
         doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(numberOfSnps, expectPolyMorph)
-        doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(numberOfSnps, expectPolyMorph)
+        doubleDigestedDnaComparison.sortEnzymeCutForSumTimesExpectPolyMorphToDesiredSNPs(numberOfSnps, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
         digestedDnaCollectionObject = doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
@@ -113,7 +113,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
                                                                                   pairedEnd, genomeScanRadSnpDensity=genomeScanRadSnpDensity)
         genomeMutationAmount = rareCutterCutsAndGenomeMutationAmount[1]
 
-        restrictionEnzymePairList = doubleDigestedDnaComparison.filterFirstCutLessThanValue(
+        restrictionEnzymePairList = doubleDigestedDnaComparison.filterForPairsHavingEnoughCuts(
             rareCutterCutsAndGenomeMutationAmount[0])
 
         if doubleDigestedDnaComparison.sequencingCalculation:
@@ -121,7 +121,7 @@ def handleGenomeScanRequest(inputFasta, genomeScanRadSnpDensity, expectPolyMorph
                 doubleDigestedDnaComparison.calculateBaseSequencingCosts(restrictionEnzymePair)
 
         doubleDigestedDnaComparison.filterSecondCutLessThanExpectedSNP(genomeMutationAmount, expectPolyMorph)
-        doubleDigestedDnaComparison.filterSecondCutForTooManySNPs(genomeMutationAmount, expectPolyMorph)
+        doubleDigestedDnaComparison.sortEnzymeCutForSumTimesExpectPolyMorphToDesiredSNPs(genomeMutationAmount, expectPolyMorph)
 
         chosenRestrictionEnzymePairs = doubleDigestedDnaComparison.getRestrictionEnzymeList()
         digestedDnaCollectionObject = doubleDigestedDnaComparison.getFragmentsOfEnzymesCsv()
