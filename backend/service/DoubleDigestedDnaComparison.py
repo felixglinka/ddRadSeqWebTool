@@ -71,12 +71,8 @@ class DoubleDigestedDnaComparison:
         multiplyVectorForSequencedBasesCalculation = np.array(self.digestedDnaCollectionDataframe.index)
         multiplyVectorForSequencedBasesCalculation[
             multiplyVectorForSequencedBasesCalculation > sequencingThreshold] = sequencingThreshold
-        self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' numberSequencedBasesOfBin'] = \
-        self.digestedDnaCollectionDataframe[restrictionEnzymeCombination].multiply(
-            multiplyVectorForSequencedBasesCalculation)
-        self.digestedDnaCollectionDataframe[
-            restrictionEnzymeCombination + ' adaptorContamination'] = self.sumColumnUntilLimit(
-            restrictionEnzymeCombination, 0, self.sequenceLength if self.sequenceLength < 1000 else 1000)
+        self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' numberSequencedBasesOfBin'] = self.digestedDnaCollectionDataframe[restrictionEnzymeCombination].multiply(multiplyVectorForSequencedBasesCalculation)
+        self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeCombination, 0, self.sequenceLength if self.sequenceLength < 1000 else 1000)
         if (self.pairedEnd == PAIRED_END_ENDING):
             self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' overlaps'] = self.sumColumnUntilLimit(
                 restrictionEnzymeCombination, self.sequenceLength,
@@ -93,7 +89,7 @@ class DoubleDigestedDnaComparison:
         return [self.digestedDnaCollectionDataframe[restrictionEnzymeCombination].iloc[
                 row:int((maxSequenceLimit + 1) / 10)].sum() for row in contaminationList]
 
-    def filterFirstCutLessThanValue(self, rareCutters):
+    def filterForPairsHavingEnoughCuts(self, rareCutters):
 
         if (self.digestedDnaCollectionDataframe.empty):
             return
@@ -133,7 +129,7 @@ class DoubleDigestedDnaComparison:
         self.digestedDnaCollectionDataframe = pd.concat(filteredDigestedDnaCollectionDataframe, axis=1) if len(
             filteredDigestedDnaCollectionDataframe) > 0 else pd.DataFrame()
 
-    def filterSecondCutForTooManySNPs(self, beginnerModeFilterNumber, expectPolyMorph):
+    def sortEnzymeCutForSumTimesExpectPolyMorphToDesiredSNPs(self, beginnerModeFilterNumber, expectPolyMorph):
 
         if (self.digestedDnaCollectionDataframe.empty):
             return
