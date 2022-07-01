@@ -89,7 +89,7 @@ def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePai
                                 restrictionEnzymePair[1], doubleDigestedDnaComparison)
 
 
-def tryOutRareCutterAndFilterSmallest(inputFasta, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
+def tryOutRareCutterAndFilterRareCutterWithNotHighEnoughValue(inputFasta, doubleDigestedDnaComparison, expectPolyMorph, sequenceLength, pairedEnd, numberOfSnps=None, genomeScanRadSnpDensity=None):
 
     try:
         totalRareCutterDigestions = {}
