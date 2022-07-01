@@ -89,15 +89,13 @@ class DoubleDigestedDnaComparison:
         return [self.digestedDnaCollectionDataframe[restrictionEnzymeCombination].iloc[
                 row:int((maxSequenceLimit + 1) / 10)].sum() for row in contaminationList]
 
-    def filterForPairsHavingEnoughCuts(self, rareCutters):
+    def filterAllPairsHavingEnoughRareCutterCutsOfBasicDataframe(self, rareCutters):
 
         if (self.digestedDnaCollectionDataframe.empty):
             return
 
         allEnzymeCuttingValues = self.splitDigestedDnaCollectionDataframe()
-
         filteredDigestedDnaCollectionDataframe = []
-
         rareCutters = set(COMMONLYUSEDRARECUTTERS) & set(rareCutters)
 
         for rareCutter in rareCutters:
