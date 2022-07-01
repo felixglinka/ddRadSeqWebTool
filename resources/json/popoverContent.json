@@ -13,11 +13,11 @@
   },
   "popStructPopSnpDensity": {
     "title": "Expected SNP density in study population",
-    "content": "Average number of SNPs per kilobase. For more information click <a id='explanationModRef' href='/explanation#noIdeaTitle' target='_blank' rel='noopener noreferrer'>here</a>."
+    "content": "Average number of SNPs per kilobase. For a detailed explanation see the user guide. The expected number of single nucleotide polymorphisms  (SNPs) varies greatly depending on the study organism, the population sampled, and the number of samples. For example, in pedigree or linkage map analyses the number of SNPs  would be smaller, as samples are from a single family, compared to phylogeographic studies that involve samples from multiple populations across the entire species range. A sample from a single location/population would have an intermediate number of SNPs, which would depend on the genetic diversity of that population (e.g. whether it has recently undergone a population bottleneck)."
   },
   "genomeScanPopSnpDensity": {
-    "title": "Expected average number of SNPs in a 100Kb window of genomic sequence",
-    "content": "The expected number of single nucleotide polymorphisms  (SNPs) varies greatly depending on the study organism, the population sampled, and the number of samples. For example, in pedigree or linkage map analyses the number of SNPs  would be smaller, as samples are from a single family, compared to phylogeographic studies that involve samples from multiple populations across the entire species range. A sample from a single location/population would have an intermediate number of SNPs, which would depend on the genetic diversity of that population (e.g. whether it has recently undergone a population bottleneck)."
+    "title": "Expected SNP density in study population",
+    "content": "Average number of SNPs per kilobase. For a detailed explanation see the user guide. The expected number of single nucleotide polymorphisms  (SNPs) varies greatly depending on the study organism, the population sampled, and the number of samples. For example, in pedigree or linkage map analyses the number of SNPs  would be smaller, as samples are from a single family, compared to phylogeographic studies that involve samples from multiple populations across the entire species range. A sample from a single location/population would have an intermediate number of SNPs, which would depend on the genetic diversity of that population (e.g. whether it has recently undergone a population bottleneck)."
   },
   "genomeScanRadSnpDensity": {
     "title": "Average number of SNPs in a 100Kb window that is required for the study",
