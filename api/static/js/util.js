@@ -66,12 +66,7 @@ function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneVal
     selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
 
-    console.log(selectedFragmentLength)
-
     numberOfAdaptorContamination = Math.round(selectedFragmentLength*parseFloat(adaptorContaminationSlope))
-
-    console.log(numberOfAdaptorContamination)
-
 
     if(sliderOneValue == 0) {
          return contaminationValue
