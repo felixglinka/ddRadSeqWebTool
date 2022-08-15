@@ -97,7 +97,7 @@ def renameUploadedFile(inputForm):
     os.rename(inputForm.cleaned_data['formFile'],
               newFilename)
     inputForm.cleaned_data['formFile'] = newFilename
-    inputForm.cleaned_data['formFileName'] = newFilename
+    inputForm.cleaned_data['formFileName'] = fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
 
 
 def tryOutRequest(inputForm, restrictionEnzymes, context):
