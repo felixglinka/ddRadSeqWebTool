@@ -135,7 +135,7 @@ class DoubleDigestedDnaComparison:
         allEnzymeCuttingValues = self.splitDigestedDnaCollectionDataframe()
 
         sortedEnzymeCuttingValues = sorted(allEnzymeCuttingValues, key=lambda enzymeCut: abs(
-            beginnerModeFilterNumber - enzymeCut.iloc[:, 0].sum() * expectPolyMorph))
+            beginnerModeFilterNumber - enzymeCut.iloc[:, 1].sum() * expectPolyMorph))
 
         if (len(sortedEnzymeCuttingValues) > MAX_RECOMMENDATION_NUMBER):
             sortedEnzymeCuttingValues = sortedEnzymeCuttingValues[:MAX_RECOMMENDATION_NUMBER]
