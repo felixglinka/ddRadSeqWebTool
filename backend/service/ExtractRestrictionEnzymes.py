@@ -21,8 +21,8 @@ def extractRestrictionEnzymesFromNewEnglandList():
 
 def removeAllHFFromList(enzymeList):
 
-    for enzyme in enzymeList:
-        enzyme.update((enzymeKey, enzymeValue.removesuffix('-HF')) for enzymeKey, enzymeValue in enzyme.items())
+    # for enzyme in enzymeList:
+    #     enzyme.update((enzymeKey, enzymeValue.removesuffix('-HF')) for enzymeKey, enzymeValue in enzyme.items())
 
     # enzyme_list_ = [dict(enzymeTuple) for enzymeTuple in {tuple(enzymes.items()) for enzymes in enzymeList}]
     # sorted_enzyme_list_ = sorted(enzyme_list_, key=lambda enzyme: enzyme['Enzyme'])
