@@ -24,6 +24,8 @@ def removeAllHFFromList(enzymeList):
     # for enzyme in enzymeList:
     #     enzyme.update({enzyme['Enzyme'].removesuffix('-HF')})
 
+    "fdfd-HF".removesuffix('-HF')
+
     return sorted([dict(enzymeTuple) for enzymeTuple in {tuple(enzymes.items()) for enzymes in enzymeList}], key=lambda enzyme: enzyme['Enzyme'])
 
 def createRestrictionEnzymeObjectFromDictionary(dictionaryOfRestrictionEnzyme):
