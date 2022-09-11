@@ -14,9 +14,17 @@ def extractRestrictionEnzymesFromNewEnglandList():
                                                               enzyme["Sequence"] != "" and
                                                               all(character in "ACGT/" for character in enzyme["Sequence"]), newEnglandEnzymeList))
 
+    filteredNewEnglandEnzymeList = removeAllHFFromList(filteredNewEnglandEnzymeList)
     allAvailableRestrictionEnzymes = list(map(lambda restrictionEnzyme: createRestrictionEnzymeObjectFromDictionary(restrictionEnzyme), filteredNewEnglandEnzymeList))
 
     return allAvailableRestrictionEnzymes
+
+def removeAllHFFromList(enzymeList):
+
+    for enzyme in enzymeList:
+        enzyme.update((enzymeKey, enzymeValue.removesuffix('-HF')) for enzymeKey, enzymeValue in enzyme.items())
+
+    return sorted([dict(enzymeTuple) for enzymeTuple in {tuple(enzymes.items()) for enzymes in enzymeList}], key=lambda enzyme: enzyme['Enzyme'])
 
 def createRestrictionEnzymeObjectFromDictionary(dictionaryOfRestrictionEnzyme):
 
