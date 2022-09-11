@@ -21,8 +21,6 @@ def extractRestrictionEnzymesFromNewEnglandList():
 
 def removeAllHFFromList(enzymeList):
 
-    'fdf'.removesuffix('df')
-
     # for enzyme in enzymeList:
     #     enzyme.update({enzyme['Enzyme'].removesuffix('-HF')})
 
