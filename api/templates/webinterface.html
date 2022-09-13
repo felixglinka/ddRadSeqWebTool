@@ -176,48 +176,48 @@
 
             <div id="sequenceCalculation" style="display: none">
                 <div class="row form-group">
-                 <div class="center h6 bot15"> Sequencing parameters
-                    <br>
+                     <div class="center h6 bot15"> Sequencing parameters</div>
+                     <span style="text-align: center;"> Please fill in every parameter in this section.</span>
+                     <br>
                 </div>
-            </div>
 
-            <div class="row form-group">
-                <div class="col-6 d-flex justify-content-end">
-                    <label class="bottom15 right4 col-form-label"> <b>{{ form.basepairLengthToBeSequenced.label }}: </b> </label>
-                    <div id='basepairLengthToBeSequencedHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                    <div class="col-xs-10">
-                        {{ form.basepairLengthToBeSequenced }}
-                        <small class="optional text-muted" style="display: none;">Optional</small>
-                        <small class="text-mandatory" style="display: none;">Mandatory</small>
-                    </div>
-                </div>
-                <div class="col-6 d-flex">
-                    <div class="col-xs-10" style="margin-left: 62px; height: 62px;">
-                        <div class="alignRadioButton">
-                            {% for choice in form.pairedEndChoice %}
-                                {{ choice.tag }} <span class="left2 right10"> {{ choice.choice_label }} </span>
-                            {% endfor %}
+                <div class="row form-group">
+                    <div class="col-6 d-flex justify-content-end">
+                        <label class="bottom15 right4 col-form-label"> <b>{{ form.basepairLengthToBeSequenced.label }}: </b> </label>
+                        <div id='basepairLengthToBeSequencedHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                        <div class="col-xs-10">
+                            {{ form.basepairLengthToBeSequenced }}
+                            <small class="optional text-muted" style="display: none;">Optional</small>
+                            <small class="text-mandatory" style="display: none;">Mandatory</small>
                         </div>
                     </div>
-                    <div id='pairedEndHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <div class="col-6 d-flex justify-content-end">
-                    <label class="bottom15 right4 col-form-label"> <b>{{ form.sequencingYield.label }}: </b> </label>
-                    <div id='sequencingYieldHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
-                    <div class="col-xs-10" style="width: 12.8em;">
-                        <div class="input-group">
-                            {{ form.sequencingYield }}
-                            <div class="input-group-append">
-                                <span  class="input-group-text" for="{{ form.sequencingYield.id_for_label }}">x10<sup>6</sup></span >
+                    <div class="col-6 d-flex">
+                        <div class="col-xs-10" style="margin-left: 62px; height: 62px;">
+                            <div class="alignRadioButton">
+                                {% for choice in form.pairedEndChoice %}
+                                    {{ choice.tag }} <span class="left2 right10"> {{ choice.choice_label }} </span>
+                                {% endfor %}
                             </div>
                         </div>
-                        <small class="optional text-muted" style="display: none;">Optional</small>
-                        <small class="text-mandatory" style="display: none;">Mandatory</small>
+                        <div id='pairedEndHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
                     </div>
                 </div>
+
+                <div class="row form-group">
+                    <div class="col-6 d-flex justify-content-end">
+                        <label class="bottom15 right4 col-form-label"> <b>{{ form.sequencingYield.label }}: </b> </label>
+                        <div id='sequencingYieldHelp' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                        <div class="col-xs-10" style="width: 12.8em;">
+                            <div class="input-group">
+                                {{ form.sequencingYield }}
+                                <div class="input-group-append">
+                                    <span  class="input-group-text" for="{{ form.sequencingYield.id_for_label }}">x10<sup>6</sup></span >
+                                </div>
+                            </div>
+                            <small class="optional text-muted" style="display: none;">Optional</small>
+                            <small class="text-mandatory" style="display: none;">Mandatory</small>
+                        </div>
+                    </div>
 
                 <div class="col-6 d-flex">
                     <label class="bottom15 right4 col-form-label"> <b>{{ form.coverage.label }}: </b> </label>
@@ -228,7 +228,23 @@
                         <small class="text-mandatory" style="display: none;">Mandatory</small>
                     </div>
                 </div>
-            </div>
+                </div>
+
+                 <div id="tryOutSnpDensityField" class="row form-group" style="display: none">
+                    <div class="col-10 d-flex justify-content-center">
+                        <label class="bottom15 right4 col-form-label"> <b>{{ form.tryOutExpectPolyMorph.label }}: </b> </label>
+                        <div id='tryOutSnpDensity' class="questionIcon" style="margin-top:13px; margin-right:6px;" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"></div>
+                        <div class="col-xs-10" style="width: 12.8em;">
+                            <div class="input-group">
+                                {{ form.tryOutExpectPolyMorph }}
+                                <div class="input-group-append">
+                                    <span class="input-group-text" for="{{ form.sequencingYield.id_for_label }}">per kb</span>
+                                </div>
+                            </div>
+                            <small class="optional text-muted">Optional</small>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row form-group">
@@ -292,7 +308,6 @@ const noRecommendation = "{{ noRecommendation }}"
 
 {% if expectedNumberOfSnps %}
 const expectedNumberOfSnps = "{{ expectedNumberOfSnps }}"
-const expectPolyMorph = "{{ expectPolyMorph }}"
 {% endif %}
 
 {% if dataFrames %}
@@ -300,6 +315,7 @@ const basepairLengthToBeSequenced = "{{ basepairLengthToBeSequenced }}"
 const pairedEndChoice = "{{ pairedEndChoice }}"
 const sequencingYield = "{{ sequencingYield }}"
 const coverage = "{{ coverage }}"
+const expectPolyMorph = "{{ expectPolyMorph }}"
 
 const dataFrameData = {{ dataFrames|safe }};
 {% endif %}

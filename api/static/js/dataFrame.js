@@ -44,9 +44,6 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
    experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
 
-   if (typeof expectedNumberOfSnps !== 'undefined') {
-        expectedNumberOfSnpsModifier = 1;
-   }
 
    let experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
@@ -55,31 +52,28 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
     experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps)/experimentalSelectedFragmentSize*100));
 
-    rowElement.cells[7+expectedNumberOfSnpsModifier].firstChild.innerText = String(overlapValues.overlaps).concat().concat(' [').concat(overlapValues.overlapPercentage).concat('%]')
-    rowElement.cells[7+expectedNumberOfSnpsModifier].lastChild.innerText = String(experimentalOverlaps).concat(' [').concat(experimentalOverlapPercentage).concat('%]');
+    rowElement.cells[8].firstChild.innerText = String(overlapValues.overlaps).concat().concat(' [').concat(overlapValues.overlapPercentage).concat('%]')
+    rowElement.cells[8].lastChild.innerText = String(experimentalOverlaps).concat(' [').concat(experimentalOverlapPercentage).concat('%]');
    }
 
    experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
    experimentalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, rowId, experimentalSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps)
-
-      if (typeof expectedNumberOfSnps !== 'undefined') {
-        experimentalSumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
-        experimentalNumberOfSNPs = Math.round((experimentalSumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced)) * parseFloat(expectPolyMorph))
-        rowElement.cells[4].firstChild.innerText = Math.round(theoreticalDataFrameValues.sumAllBasesOfEveryBin * parseFloat(expectPolyMorph)).toLocaleString(undefined, { minimumFractionDigits: 0 });
-        rowElement.cells[4].lastChild.innerText = experimentalNumberOfSNPs.toLocaleString(undefined, { minimumFractionDigits: 0 });
-      }
+   experimentalSumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
+   experimentalNumberOfSNPs = Math.round((experimentalSumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced)) * parseFloat(expectPolyMorph))
 
    rowElement.cells[2].firstChild.innerText = currentSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].firstChild.innerText = theoreticalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[4+expectedNumberOfSnpsModifier].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[5+expectedNumberOfSnpsModifier].firstChild.innerText =  String(Math.round(theoreticalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
-   rowElement.cells[6+expectedNumberOfSnpsModifier].firstChild.innerText = String(adaptorContaminationValues.adaptorContamination).concat(' [').concat(adaptorContaminationValues.adaptorContaminationPercentage).concat('%]');
+   rowElement.cells[4].firstChild.innerText = Math.round(theoreticalDataFrameValues.sumAllBasesOfEveryBin * parseFloat(expectPolyMorph)).toLocaleString(undefined, { minimumFractionDigits: 0 });
+   rowElement.cells[5].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
+   rowElement.cells[6].firstChild.innerText =  String(Math.round(theoreticalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
+   rowElement.cells[7].firstChild.innerText = String(adaptorContaminationValues.adaptorContamination).concat(' [').concat(adaptorContaminationValues.adaptorContaminationPercentage).concat('%]');
 
    rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].lastChild.innerText = experimentalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[4+expectedNumberOfSnpsModifier].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples;
-   rowElement.cells[5+expectedNumberOfSnpsModifier].lastChild.innerText = String(Math.round(experimentalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
-   rowElement.cells[6+expectedNumberOfSnpsModifier].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
+   rowElement.cells[4].lastChild.innerText = experimentalNumberOfSNPs.toLocaleString(undefined, { minimumFractionDigits: 0 });
+   rowElement.cells[5].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples;
+   rowElement.cells[6].lastChild.innerText = String(Math.round(experimentalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
+   rowElement.cells[7].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
    if (typeof expectedNumberOfSnps !== "undefined") {
 
@@ -90,11 +84,11 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
         }
 
        if(experimentalNumberOfSNPs < expectedNumberOfSnps) {
-            for (let i = 0; i < 8+expectedNumberOfSnpsModifier+pairedEndModifier; i++) {
+            for (let i = 0; i < 9+pairedEndModifier; i++) {
                 rowElement.classList.add("excludingSecondCutter")
             }
        } else {
-            for (let i = 0; i < 8+expectedNumberOfSnpsModifier+pairedEndModifier; i++) {
+            for (let i = 0; i < 9+pairedEndModifier; i++) {
                   rowElement.classList.remove("excludingSecondCutter")
             }
        }
@@ -175,11 +169,11 @@ function generateDataframeTableRow(rowElement, enzymeData, tableId){
             }
 
             //add sizes for certain cells
-            if(title === '' || title === 'No. fragments' || title === 'No. SNPs in digestion' || title === 'No. samples multiplexable') {
+            if(title === '' || title === 'No. fragments' || title === 'No. samples multiplexable' || title === 'Sequence efficiency') {
                 connectedTD.style = 'width: 1%;'
             }
 
-            if(title === 'Sequence efficiency' || title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle) {
+            if(title === 'Fragments under '.concat(basepairLengthToBeSequenced) || title === overlapTitle || title === 'No. SNPs in digestion' || title === 'No. basepairs in insilico digested sample') {
                 connectedTD.style = 'width: 10%;'
             }
 
@@ -305,12 +299,8 @@ function buildUpDataFrame(inputElement, tableId, dataFrameData) {
 function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame"))) {
-        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. samples multiplexable', 'Sequencing efficiency', 'Fragments under '.concat(basepairLengthToBeSequenced)]
+        dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. SNPs in digestion', 'No. samples multiplexable', 'Sequencing efficiency', 'Fragments under '.concat(basepairLengthToBeSequenced)]
         overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
-
-        if (typeof expectedNumberOfSnps !== 'undefined') {
-            dataFrameValueTitles.splice(4, 0, 'No. SNPs in digestion' );
-        }
 
         maxNumberBasesToBeSequenced = calculateMaxBasePairsToBeSequencedInLane()
 
