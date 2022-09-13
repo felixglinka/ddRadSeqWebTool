@@ -24,6 +24,7 @@ class BasicInputDDRadDataForm(forms.Form):
         self.fields['pairedEndChoice'].choices = [(PAIRED_END_ENDING, 'Paired end'), (SINGLE_END_ENDING, 'Single end')]
         self.fields['sequencingYield'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         self.fields['coverage'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+        self.fields['tryOutExpectPolyMorph'].widget = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
 
     formFile = forms.CharField(widget=forms.HiddenInput(), required=False)
     formFileName = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -42,3 +43,4 @@ class BasicInputDDRadDataForm(forms.Form):
     pairedEndChoice = forms.ChoiceField(choices=[], widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), required=False)
     sequencingYield = forms.CharField(label="Sequencing yield", required=False)
     coverage = forms.CharField(label="Desired depth", required=False)
+    tryOutExpectPolyMorph = forms.CharField(label="Expected SNP density", required=False)

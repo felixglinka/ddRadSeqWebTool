@@ -118,6 +118,7 @@ def tryOutRequest(inputForm, restrictionEnzymes, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
     context["coverage"] = inputForm.cleaned_data['coverage'] if inputForm.cleaned_data["coverage"] != "" else None
+    context["expectPolyMorph"] = int(inputForm.cleaned_data["tryOutExpectPolyMorph"])
 
     return context
 
@@ -196,8 +197,27 @@ def checkIfThereIsAnUploadError(inputForm):
 
 def checkCorrectSequenceCalculationFields(inputForm):
 
+    if (inputForm.cleaned_data['formMode'] == 'tryOut'):
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
+            inputForm.cleaned_data["tryOutExpectPolyMorph"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != ""):
+                raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
+
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-        "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
             inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
                 "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
             inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[

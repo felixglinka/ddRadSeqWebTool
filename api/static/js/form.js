@@ -4,6 +4,7 @@ function toggleDataform(mode, otherMode) {
   let otherFormSpace1 = document.getElementById(otherMode);
   let forModeInput = document.getElementById('id_formMode');
   let sequenceCalculation = document.getElementById('sequenceCalculation');
+  let tryOutSnpDensityField = document.getElementById('tryOutSnpDensityField');
 
   let optionalSmalls = document.querySelectorAll('.optional');
   let mandatorySmalls = document.querySelectorAll('.text-mandatory');
@@ -14,6 +15,7 @@ function toggleDataform(mode, otherMode) {
 
     if (mode === 'tryOut') {
        sequenceCalculation.style.display = "block";
+       tryOutSnpDensityField.style.display = "block";
        submitButton.disabled  = false;
      }
 
@@ -23,9 +25,11 @@ function toggleDataform(mode, otherMode) {
 
         if(populationStructureSection.style.display === "block" || genomeScanSection.style.display === "block") {
             sequenceCalculation.style.display = "block";
+            tryOutSnpDensityField.style.display = "none";
             submitButton.disabled  = false;
         } else {
             sequenceCalculation.style.display = "none";
+            tryOutSnpDensityField.style.display = "none";
             submitButton.disabled  = true;
         }
     }
@@ -33,6 +37,7 @@ function toggleDataform(mode, otherMode) {
     formSpace.style.display = "none";
     forModeInput.value = 'none'
     sequenceCalculation.style.display = "none";
+    tryOutSnpDensityField.style.display = "none";
     submitButton.disabled  = true;
   }
 
@@ -85,6 +90,7 @@ function initDataform() {
 
     if(mode === 'tryOut') {
         document.getElementById('tryOutForm').style.display = "block"
+        document.getElementById('tryOutSnpDensityField').style.display = 'block'
 
         optionalSmalls.forEach(function(optional){
         optional.style.display = 'block'
