@@ -54,5 +54,9 @@
   "todayUploadedFilesHelp": {
     "title": "Files uploaded today",
     "content": "Here are the files listed that were uploaded today. Instead of uploading a fasta file again, you can select one of the given files and do the calculations."
+  },
+  "tryOutSnpDensity": {
+    "title": "Expected SNP density in study population",
+    "content": "Average number of SNPs per kilobase. For a detailed explanation see the user guide. The expected number of single nucleotide polymorphisms  (SNPs) varies greatly depending on the study organism, the population sampled, and the number of samples. For example, in pedigree or linkage map analyses the number of SNPs  would be smaller, as samples are from a single family, compared to phylogeographic studies that involve samples from multiple populations across the entire species range. A sample from a single location/population would have an intermediate number of SNPs, which would depend on the genetic diversity of that population (e.g. whether it has recently undergone a population bottleneck)."
   }
 }
