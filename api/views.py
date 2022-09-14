@@ -118,7 +118,7 @@ def tryOutRequest(inputForm, restrictionEnzymes, context):
     context["pairedEndChoice"] = inputForm.cleaned_data['pairedEndChoice'] if inputForm.cleaned_data["pairedEndChoice"] != "" else None
     context["sequencingYield"] = int(inputForm.cleaned_data["sequencingYield"]) * SEQUENCING_YIELD_MULTIPLIER if inputForm.cleaned_data["sequencingYield"] != "" else None
     context["coverage"] = inputForm.cleaned_data['coverage'] if inputForm.cleaned_data["coverage"] != "" else None
-    context["expectPolyMorph"] = int(inputForm.cleaned_data["tryOutExpectPolyMorph"])
+    context["expectPolyMorph"] = int(inputForm.cleaned_data["tryOutExpectPolyMorph"])/POLYMORPHISM_MODIFIER
 
     return context
 
