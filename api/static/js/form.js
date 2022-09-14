@@ -145,6 +145,10 @@ function setInputFilterOfCharFields() {
     return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 999);
   });
 
+  setInputFilter(document.getElementById("id_tryOutExpectPolyMorph"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 999);
+  });
+
 }
 
 function initButtons() {
