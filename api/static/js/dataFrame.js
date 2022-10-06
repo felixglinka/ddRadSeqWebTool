@@ -300,7 +300,7 @@ function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame"))) {
         dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. SNPs in digestion', 'No. samples multiplexable', 'Sequencing efficiency', 'Fragments under '.concat(basepairLengthToBeSequenced)]
-        overlapTitle = "Fragments between ".concat(basepairLengthToBeSequenced).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
+        overlapTitle = "Fragments between ".concat("1").concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
 
         maxNumberBasesToBeSequenced = calculateMaxBasePairsToBeSequencedInLane()
 
