@@ -23,7 +23,7 @@ function calculateMaxBasePairsToBeSequencedInLane(){
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
-   sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2*2/3)*parseInt(basepairLengthToBeSequenced))
+   sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + sliderOneValue >= basepairLengthToBeSequenced/10 ? experimentalOverlaps*(2/3)*parseInt(basepairLengthToBeSequenced) : experimentalAdaptorContamination*parseInt(basepairLengthToBeSequenced))
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
 
@@ -50,10 +50,10 @@ function calculateAdaptorContamination(sliderOneValue, sliderTwoValue, enzymeDat
 
 function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSelectedFragmentSize) {
 
-       overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
-       overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
-       overlaps = overlapsSliderOne - overlapsSliderTwo
-       overlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/currentSelectedFragmentSize*100));
+   overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
+   overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
+   overlaps = overlapsSliderOne - overlapsSliderTwo
+   overlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/currentSelectedFragmentSize*100));
 
    return {
         'overlaps': overlaps,
@@ -83,7 +83,7 @@ function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequence
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(0), parseInt(sequenceLength)*2/10))[0] :
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(0), parseInt(sliderOneValue)))[0]
 
-    numberOfOverlaps = Math.round(selectedFragmentLength*parseFloat(overlapSlope))
+    numberOfOverlaps = sliderOneValue >= basepairLengthToBeSequenced/10 ? Math.round(selectedFragmentLength*parseFloat(overlapSlope)) : Math.round(selectedFragmentLength*parseFloat(adaptorContaminationSlope))
 
     if(sliderOneValue > parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;
