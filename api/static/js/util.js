@@ -23,7 +23,7 @@ function calculateMaxBasePairsToBeSequencedInLane(){
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
-   sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalAdaptorContamination*(2/3)*parseInt(basepairLengthToBeSequenced) + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced))
+   sumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2*2/3)*parseInt(basepairLengthToBeSequenced))
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
 
@@ -79,15 +79,15 @@ function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneVal
 
 function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequenceLength, overlapValue) {
 
-    selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
+    selectedFragmentLength =  parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
+                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(0), parseInt(sequenceLength)*2/10))[0] :
+                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(0), parseInt(sliderOneValue)))[0]
 
     numberOfOverlaps = Math.round(selectedFragmentLength*parseFloat(overlapSlope))
 
     if(sliderOneValue > parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;
-    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
+    } else if(sliderOneValue <= 0) {
         return overlapValue;
     } else {
         return overlapValue + numberOfOverlaps;

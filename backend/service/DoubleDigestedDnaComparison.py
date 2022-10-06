@@ -75,7 +75,7 @@ class DoubleDigestedDnaComparison:
         self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' adaptorContamination'] = self.sumColumnUntilLimit(restrictionEnzymeCombination, 0, self.sequenceLength if self.sequenceLength < 1000 else 1000)
         if (self.pairedEnd == PAIRED_END_ENDING):
             self.digestedDnaCollectionDataframe[restrictionEnzymeCombination + ' overlaps'] = self.sumColumnUntilLimit(
-                restrictionEnzymeCombination, self.sequenceLength,
+                restrictionEnzymeCombination, 0,
                 self.sequenceLength * 2 if self.sequenceLength < 505 else 1000)
 
     def sumColumnUntilLimit(self, restrictionEnzymeCombination, minSequenceLimit, maxSequenceLimit):
