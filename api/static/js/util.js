@@ -23,7 +23,7 @@ function calculateMaxBasePairsToBeSequencedInLane(){
 function calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, restrictionEnzymes, currentSelectedFragmentSize, experimentalAdaptorContamination, experimentalOverlaps){
 
    sumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
-   sumAllBasesOfEveryBin = Math.round( sliderOneValue >= basepairLengthToBeSequenced/10 ? sumAllBasesOfEveryBin + experimentalOverlaps*(2/3)*parseInt(basepairLengthToBeSequenced) : sumAllBasesOfEveryBin + experimentalAdaptorContamination*parseInt(basepairLengthToBeSequenced))
+   sumAllBasesOfEveryBin = Math.round( sliderOneValue >= basepairLengthToBeSequenced/10 ? sumAllBasesOfEveryBin + experimentalOverlaps*parseInt(basepairLengthToBeSequenced) : sumAllBasesOfEveryBin + experimentalAdaptorContamination*parseInt(basepairLengthToBeSequenced))
    maxNumberOfPossibleSamples = calculateSamplesToBeMultiplexed(currentSelectedFragmentSize, sequencingYield, coverage);
    numberBasesToBeSequenced = maxNumberOfPossibleSamples*sumAllBasesOfEveryBin;
 
