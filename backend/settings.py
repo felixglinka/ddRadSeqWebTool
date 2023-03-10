@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the backend like this: BASE_DIR / 'subdir'.
+from django.core.serializers.json import DjangoJSONEncoder
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -179,6 +181,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CHUNKED_UPLOAD_PATH = './chunked_uploads/%Y/%m/%d'
 CHUNKED_BASE_DIR = 'chunked_uploads/'
 CHUNKED_UPLOAD_MAX_BYTES = 21474836480
+CHUNKED_UPLOAD_ENCODER = DjangoJSONEncoder(skipkeys=True).encode
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1
