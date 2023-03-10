@@ -181,7 +181,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CHUNKED_UPLOAD_PATH = 'home/felix/ddRadSeqWebTool/chunked_uploads/%Y/%m/%d'
 CHUNKED_BASE_DIR = 'home/felix/ddRadSeqWebTool/chunked_uploads/'
 CHUNKED_UPLOAD_MAX_BYTES = 21474836480
-CHUNKED_UPLOAD_ENCODER = DjangoJSONEncoder(ensure_ascii =False).encode
+CHUNKED_UPLOAD_ENCODER = DjangoJSONEncoder(skipkeys=False, ensure_ascii =False)
 
 SEQUENCING_YIELD_MULTIPLIER = 1000000
 MAX_NUMBER_SELECTFIELDS = 100*2+1
