@@ -65,9 +65,10 @@ function fillFastaUploader() {
              });
         },
         chunkdone: function (e, data) { // Called after uploading each chunk
+            console.log(data.result.upload_id)
             if (form_data.length < 2) {
                 form_data.push(
-                    {"name": "upload_id", "value": data.result.upload_id});
+                    {"name": "upload_id", "value": Buffer.from(data.result.upload_id, 'utf-8').toString()});
             }
         },
         error: function (error) {
