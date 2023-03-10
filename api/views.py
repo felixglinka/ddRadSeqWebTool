@@ -94,8 +94,9 @@ def renameUploadedFile(inputForm):
     fileNameSplitPoint = inputForm.cleaned_data['formFileName'].rsplit('.', 1)
 
     newFilename = os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
+    newFilename = newFilename.encode()
     os.rename(inputForm.cleaned_data['formFile'],
-              newFilename.encode())
+              newFilename)
     inputForm.cleaned_data['formFile'] = newFilename
     inputForm.cleaned_data['formFileName'] = fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
 
