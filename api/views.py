@@ -92,9 +92,9 @@ def renameUploadedFile(inputForm):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%H%M%S")
     fileNameSplitPoint = inputForm.cleaned_data['formFileName'].rsplit('.', 1)
+    fileNameSplitPoint = [''.join([char for char in fileNameSplitPoint[0] if ord(char) < 127]), ''.join([char for char in fileNameSplitPoint[1] if ord(char) < 127])]
 
     newFilename = os.path.dirname(inputForm.cleaned_data['formFile']) + '/' + fileNameSplitPoint[0] + '_' + timestampStr + '.' + fileNameSplitPoint[1]
-    newFilename = ''.join([char for char in newFilename if ord(char) < 127])
 
     os.rename(inputForm.cleaned_data['formFile'],
               newFilename)
