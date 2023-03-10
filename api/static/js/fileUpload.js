@@ -67,7 +67,7 @@ function fillFastaUploader() {
         chunkdone: function (e, data) { // Called after uploading each chunk
             if (form_data.length < 2) {
                 form_data.push(
-                    {"name": "upload_id", "value": Buffer.from(data.result.upload_id, 'utf-8').toString()});
+                    {"name": "upload_id", "value": data.result.upload_id});
             }
         },
         error: function (error) {
