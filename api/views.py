@@ -201,42 +201,67 @@ def checkCorrectSequenceCalculationFields(inputForm):
 
     if (inputForm.cleaned_data['formMode'] == 'tryOut'):
         if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
-                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
-                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
-            inputForm.cleaned_data["tryOutExpectPolyMorph"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == ""):
+            raise Exception("Please insert an 'Expected SNP density'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != "" ):
+            raise Exception("Please insert an 'Expected SNP density', a 'Sequencing yield' and a 'Desired depth'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != ""):
+            raise Exception("Please insert an 'Expected SNP density', a 'Read length to be sequenced' and a 'Desired depth'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == ""):
+            raise Exception("Please insert an 'Expected SNP density', a 'Sequencing Yield' and a 'Read length to be sequenced'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == ""):
+            raise Exception("Please insert an 'Expected SNP density' and a 'Read length to be sequenced'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == ""):
+            raise Exception("Please insert an 'Expected SNP density', a 'Sequencing Yield' and a 'Read length to be sequenced'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != ""):
+            raise Exception("Please insert an 'Expected SNP density', a 'Sequencing Yield' and a 'Read length to be sequenced'")
+
+        if (inputForm.cleaned_data["tryOutExpectPolyMorph"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
                 "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != ""):
-                raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
+                raise Exception("Please insert a 'Read length to be sequenced', a 'Sequencing Yield' and a 'Desired depth'")
 
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
-                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != "" or
-            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
-                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
-                "basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == "" or
-            inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
-                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] != "" or
-            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and
-            inputForm.cleaned_data["sequencingYield"] == "" or
-            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and
-            inputForm.cleaned_data["sequencingYield"] == "" or
-            inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and
-            inputForm.cleaned_data["sequencingYield"] != ""):
-        raise Exception("All sequence calculation parameters has to be chosen for calculation of sequence cost")
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" ):
+        raise Exception("Please insert an 'Read length to be sequenced'")
+    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == "" ):
+        raise Exception("Please insert an 'Read length to be sequenced' and a 'Sequencing Yield'")
+
+    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data[
+                "sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != ""):
+        raise Exception("Please insert an 'Sequencing Yield'")
+
+    if (inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == ""):
+        raise Exception("Please insert an 'Sequencing Yield'")
+
+    if (inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == ""):
+        raise Exception("Please insert an 'Sequencing Yield' and a 'Read length to be sequenced'")
+
+    if (inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data[
+                "basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] != ""):
+        raise Exception("Please insert an 'Sequencing Yield' and a 'Desired depth'")
+
+    if (inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and
+            inputForm.cleaned_data["sequencingYield"] == ""):
+        raise Exception("Please insert a 'Desired depth'")
+
+    if (inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and
+            inputForm.cleaned_data["sequencingYield"] == ""):
+        raise Exception("Please insert a 'Desired depth' and a 'Read length to be sequenced'")
 
 def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
 
