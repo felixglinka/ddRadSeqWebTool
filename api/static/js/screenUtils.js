@@ -108,6 +108,18 @@ function initHiddenFormFields(){
     $('#id_formFileName').val('')
 }
 
+function fillHowToCite() {
+
+    if(typeof howToCite != 'undefined') {
+
+        let howToCiteTag = document.getElementById("howToCite")
+
+        howToCiteTag.innerHTML = howToCite
+    }
+}
+
+
 window.addEventListener('load', initHiddenFormFields)
 window.addEventListener('load', initChosenFastaFile)
 window.addEventListener('load', getResultsOnPage)
+window.addEventListener('load', fillHowToCite)

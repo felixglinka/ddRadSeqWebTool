@@ -289,6 +289,9 @@
     </div>
     {% endif %}
 
+    <h4 class="card-title text-center" id="howToCiteTitle">How to cite</h4>
+    <p class="card-text text-center" id="howToCite"></p>
+
 <script type="text/javascript">
 
 const mode ="{{ mode }}"
@@ -297,6 +300,7 @@ const adaptorContaminationSlope ="{{ adaptorContaminationSlope }}"
 const overlapSlope ="{{ overlapSlope }}"
 const fileName ="{{ fileName }}"
 const todaysFastaFiles = {{ todaysFastaFiles|safe }};
+const howToCite = "{{ howToCite }}"
 
 {% if fragmentList %}
 const fragmentList = "{{ fragmentList|linebreaksbr }}".replace(/<br\s*\/?>/ig, "\r\n")
