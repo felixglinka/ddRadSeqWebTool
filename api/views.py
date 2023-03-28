@@ -227,13 +227,13 @@ def checkCorrectSequenceCalculationFields(inputForm):
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == ""):
         raise Exception("Please insert an 'Read length to be sequenced' and a 'Desired depth'")
 
-    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] == "" ):
+    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != "" ):
         raise Exception("Please insert an 'Read length to be sequenced'")
 
-    if (inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["coverage"] == ""):
+    if (inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] != ""):
         raise Exception("Please insert an 'Sequencing Yield'")
 
-    if (inputForm.cleaned_data["coverage"] != "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == ""):
+    if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != ""):
         raise Exception("Please insert a 'Desired depth'")
 
 
