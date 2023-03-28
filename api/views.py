@@ -127,8 +127,6 @@ def tryOutRequest(inputForm, restrictionEnzymes, context):
 
 def beginnerPopulationStructureRequest(inputForm, context):
 
-    checkAllBeginnerFieldEntries(inputForm)
-
     if (inputForm.cleaned_data["popStructNumberOfSnps"] == "" or inputForm.cleaned_data[
         "popStructExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the population structure analysis.")
@@ -158,8 +156,6 @@ def beginnerPopulationStructureRequest(inputForm, context):
 
 def beginnerGenomeScanRequest(inputForm, context):
 
-    checkAllBeginnerFieldEntries(inputForm)
-
     if (inputForm.cleaned_data["genomeScanRadSnpDensity"] == "" or inputForm.cleaned_data[
         "genomeScanExpectPolyMorph"] == "" ):
         raise Exception("Please insert all fields for the genome scan.")
@@ -187,10 +183,6 @@ def beginnerGenomeScanRequest(inputForm, context):
 
     return context
 
-def checkAllBeginnerFieldEntries(inputForm):
-    if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" or inputForm.cleaned_data[
-        "sequencingYield"] == "" or inputForm.cleaned_data["coverage"] == ""):
-        raise Exception("All sequence calculation parameters has to be chosen for the prediction")
 
 def checkIfThereIsAnUploadError(inputForm):
 
