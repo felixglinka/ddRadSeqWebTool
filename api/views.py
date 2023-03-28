@@ -129,7 +129,7 @@ def beginnerPopulationStructureRequest(inputForm, context):
 
     if (inputForm.cleaned_data["popStructNumberOfSnps"] == "" or inputForm.cleaned_data[
         "popStructExpectPolyMorph"] == "" ):
-        raise Exception("Please insert all fields for the population structure analysis.")
+        raise Exception("Please insert a 'Number of SNPs to be genotyped' and an 'Expected SNP density'")
 
     populationStructureResult = handlePopulationStructureRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["popStructNumberOfSnps"]),
@@ -158,7 +158,7 @@ def beginnerGenomeScanRequest(inputForm, context):
 
     if (inputForm.cleaned_data["genomeScanRadSnpDensity"] == "" or inputForm.cleaned_data[
         "genomeScanExpectPolyMorph"] == "" ):
-        raise Exception("Please insert all fields for the genome scan.")
+        raise Exception("Please insert a 'Desired SNP density to be genotyped' and an 'Expected SNP density'")
 
     genomeScanResult = handleGenomeScanRequest(inputForm.cleaned_data['formFile'],
                                            int(inputForm.cleaned_data["genomeScanRadSnpDensity"])/DENSITY_MODIFIER,
@@ -219,19 +219,19 @@ def checkCorrectSequenceCalculationFields(inputForm):
         raise Exception("Please insert a 'Desired depth' and a 'Read length to be sequenced'")
     
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["coverage"] != ""):
-        raise Exception("Please insert an 'Read length to be sequenced' and a 'Sequencing Yield'")
+        raise Exception("Please insert a 'Read length to be sequenced' and a 'Sequencing Yield'")
 
     if (inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] == ""):
-        raise Exception("Please insert an 'Sequencing Yield' and a 'Desired depth'")
+        raise Exception("Please insert a 'Sequencing Yield' and a 'Desired depth'")
 
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] == ""):
-        raise Exception("Please insert an 'Read length to be sequenced' and a 'Desired depth'")
+        raise Exception("Please insert a 'Read length to be sequenced' and a 'Desired depth'")
 
     if (inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != "" ):
-        raise Exception("Please insert an 'Read length to be sequenced'")
+        raise Exception("Please insert a 'Read length to be sequenced'")
 
     if (inputForm.cleaned_data["sequencingYield"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["coverage"] != ""):
-        raise Exception("Please insert an 'Sequencing Yield'")
+        raise Exception("Please insert a 'Sequencing Yield'")
 
     if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != ""):
         raise Exception("Please insert a 'Desired depth'")
