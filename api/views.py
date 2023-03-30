@@ -127,6 +127,8 @@ def tryOutRequest(inputForm, restrictionEnzymes, context):
 
 def beginnerPopulationStructureRequest(inputForm, context):
 
+    checkCorrectSequenceCalculationFieldsRecommendation(inputForm)
+
     if (inputForm.cleaned_data["popStructNumberOfSnps"] == "" or inputForm.cleaned_data[
         "popStructExpectPolyMorph"] == "" ):
         raise Exception("Please insert a 'Number of SNPs to be genotyped' and an 'Expected SNP density'")
@@ -155,6 +157,8 @@ def beginnerPopulationStructureRequest(inputForm, context):
     return context
 
 def beginnerGenomeScanRequest(inputForm, context):
+
+    checkCorrectSequenceCalculationFieldsRecommendation(inputForm)
 
     if (inputForm.cleaned_data["genomeScanRadSnpDensity"] == "" or inputForm.cleaned_data[
         "genomeScanExpectPolyMorph"] == "" ):
@@ -215,9 +219,6 @@ def checkCorrectSequenceCalculationFields(inputForm):
         if (inputForm.cleaned_data["tryOutExpectPolyMorph"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != "" and inputForm.cleaned_data["coverage"] != ""):
             raise Exception("Please insert an 'Expected SNP density'")
 
-    if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == ""):
-        raise Exception("Please insert a 'Read length to be sequenced', a 'Sequencing Yield' and a 'Desired depth'")
-
     if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] != ""):
         raise Exception("Please insert a 'Desired depth' and a 'Read length to be sequenced'")
     
@@ -239,6 +240,10 @@ def checkCorrectSequenceCalculationFields(inputForm):
     if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] != "" and inputForm.cleaned_data["sequencingYield"] != ""):
         raise Exception("Please insert a 'Desired depth'")
 
+def checkCorrectSequenceCalculationFieldsRecommendation(inputForm):
+
+    if (inputForm.cleaned_data["coverage"] == "" and inputForm.cleaned_data["basepairLengthToBeSequenced"] == "" and inputForm.cleaned_data["sequencingYield"] == ""):
+        raise Exception("Please insert a 'Read length to be sequenced', a 'Sequencing Yield' and a 'Desired depth'")
 
 
 def getPairsOfChosenRestrictionEnzyme(inputFormClearedData, restrictionEnzymes):
