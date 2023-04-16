@@ -2,7 +2,7 @@
 
 This project is structured in a JavaScript frontend (see api/static/js) and a Phython backend (see backend).
 
-# Frontend:
+## Frontend:
 
 - beginnerForm.js:
 
@@ -41,7 +41,7 @@ This project is structured in a JavaScript frontend (see api/static/js) and a Ph
 
 	Script to provide calculation support. Helps to calculate the results for the result table (see dataFrame.js)
 
-# Backend:
+## Backend:
 
 The backend is responsible for uploading the genome file to the backend (django-chunkedupload), so it can be processed by the server:
 
