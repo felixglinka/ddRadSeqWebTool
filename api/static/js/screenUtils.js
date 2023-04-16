@@ -47,6 +47,7 @@ function showLoading() {
 
     if (typeof dataFrameData !== 'undefined') {
         document.getElementById('dataFrame').style.display="none";
+        document.getElementById('dataFrameHelp').style.display="none";
     }
 
     $('html, body').animate({
