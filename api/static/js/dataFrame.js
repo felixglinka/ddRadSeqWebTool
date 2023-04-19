@@ -41,16 +41,22 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    adaptorContaminationValues = calculateAdaptorContamination(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
    theoreticalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, rowId, currentSelectedFragmentSize,0,0)
 
-   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
+   windowsize = parseInt(sliderTwoValue)*10 - parseInt(sliderOneValue)*10 + 10
+
+   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, windowsize, basepairLengthToBeSequenced, adaptorContamination) : 0
    experimentalSelectedFragmentSize = sliderOneValue < basepairLengthToBeSequenced/10 ? currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination) : currentSelectedFragmentSize
 
 
    let experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
-    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
-    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
-    experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps)/experimentalSelectedFragmentSize*100));
+    preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
+    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination) + (preExperimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
+
+    preExperimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : preExperimentalOverlaps/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0),  parseInt(basepairLengthToBeSequenced)*2/10)[0] + windowsize*overlapWindowsize;
+    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), preExperimentalOverlapPercentage, overlaps) : 0
+
+    experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps/experimentalSelectedFragmentSize*100)));
 
     rowElement.cells[8].firstChild.innerText = String(overlapValues.overlaps).concat().concat(' [').concat(overlapValues.overlapPercentage).concat('%]')
     rowElement.cells[8].lastChild.innerText = String(experimentalOverlaps).concat(' [').concat(experimentalOverlapPercentage).concat('%]');
@@ -58,14 +64,14 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
    experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
    experimentalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, rowId, experimentalSelectedFragmentSize, (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination), (experimentalOverlaps - overlapValues.overlaps))
-   experimentalSumAllBasesOfEveryBin = sumUpFragmentLengths(Object.values(enzymeData['numberSequencedBasesOfBin']).slice(0, parseInt(sliderTwoValue)))[parseInt(sliderOneValue)];
+   experimentalSumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalAdaptorContamination*(2/3)*parseInt(basepairLengthToBeSequenced) + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced));
    experimentalNumberOfSNPs = Math.round((experimentalSumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced)) * parseFloat(expectPolyMorph))
 
    rowElement.cells[2].firstChild.innerText = currentSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].firstChild.innerText = theoreticalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[4].firstChild.innerText = Math.round(theoreticalDataFrameValues.sumAllBasesOfEveryBin * parseFloat(expectPolyMorph)).toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[5].firstChild.innerText = theoreticalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[6].firstChild.innerText =  String(Math.round(theoreticalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
+   rowElement.cells[6].firstChild.innerText = String(Math.round(theoreticalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
    rowElement.cells[7].firstChild.innerText = String(adaptorContaminationValues.adaptorContamination).concat(' [').concat(adaptorContaminationValues.adaptorContaminationPercentage).concat('%]');
 
    rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
@@ -300,7 +306,7 @@ function initDataframe() {
 
     if(document.body.contains(document.getElementById("dataFrame"))) {
         dataFrameValueTitles = ['Enzyme Pair', '', 'No. fragments', 'No. basepairs in insilico digested sample', 'No. SNPs in digestion', 'No. samples multiplexable', 'Sequencing efficiency', 'Fragments under '.concat(basepairLengthToBeSequenced)]
-        overlapTitle = "Fragments under  ".concat(parseInt(basepairLengthToBeSequenced)*2)
+        overlapTitle = "Fragments between ".concat(parseInt(basepairLengthToBeSequenced)).concat(" and ").concat(parseInt(basepairLengthToBeSequenced)*2)
 
         maxNumberBasesToBeSequenced = calculateMaxBasePairsToBeSequencedInLane()
 

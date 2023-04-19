@@ -9,7 +9,8 @@ from django.shortcuts import render
 from backend.controller.ddRadtoolController import handleDDRadSeqRequest, requestRestrictionEnzymes, \
     handlePopulationStructureRequest, requestPopoverTexts, requestInformationTexts, handleGenomeScanRequest
 from backend.settings import PAIRED_END_ENDING, SEQUENCING_YIELD_MULTIPLIER, MAX_NUMBER_SELECTFIELDS, \
-    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR
+    ADAPTORCONTAMINATIONSLOPE, OVERLAPSLOPE, POLYMORPHISM_MODIFIER, DENSITY_MODIFIER, CHUNKED_BASE_DIR, \
+    ADAPTORCONTAMINATIONWINDOWSIZE, ADAPTORCONTAMINATIONSLOPEWINDOWSIZE, OVERLAPWINDOWSIZE
 from .forms import BasicInputDDRadDataForm
 from .models import fastaFileUpload
 
@@ -20,7 +21,8 @@ logger = logging.getLogger(__name__)
 def webinterfaceViews(request):
 
     context = {"graph": "",'mode': 'none', 'popoverContents': requestPopoverTexts(),
-               'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, "overlapSlope": OVERLAPSLOPE}
+               'adaptorContaminationSlope': ADAPTORCONTAMINATIONSLOPE, 'adaptorContaminationWindowsize': ADAPTORCONTAMINATIONWINDOWSIZE, 'adaptorContaminationSlopeWindowsize': ADAPTORCONTAMINATIONSLOPEWINDOWSIZE,
+               "overlapSlope": OVERLAPSLOPE, 'overlapWindowsize': OVERLAPWINDOWSIZE}
     restrictionEnzymes = requestRestrictionEnzymes()
 
     if request.method == "POST":
