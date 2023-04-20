@@ -54,7 +54,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
     preExperimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : preExperimentalOverlaps/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0),  parseInt(basepairLengthToBeSequenced)*2/10)[0] + windowsize*overlapWindowsize;
     experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), preExperimentalOverlapPercentage, overlaps) : 0
 
-    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination) + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
+    experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps/experimentalSelectedFragmentSize*100)));
 
     rowElement.cells[8].firstChild.innerText = String(overlapValues.overlaps).concat().concat(' [').concat(overlapValues.overlapPercentage).concat('%]')
