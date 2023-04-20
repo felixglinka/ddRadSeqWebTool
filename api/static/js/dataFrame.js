@@ -44,8 +44,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    windowsize = parseInt(sliderTwoValue)*10 - parseInt(sliderOneValue)*10 + 10
 
    experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, windowsize, basepairLengthToBeSequenced, adaptorContamination) : 0
-   experimentalSelectedFragmentSize = sliderOneValue < basepairLengthToBeSequenced/10 ? currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination) : currentSelectedFragmentSize
-
+   experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
 
    experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
