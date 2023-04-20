@@ -1,3 +1,5 @@
+const sliderMaxValue = "100";
+
 function createIcon(id){
     questionIcon = document.createElement('div');
     questionIcon.id = id;
@@ -66,7 +68,7 @@ function calculatepreExperimentalAdapterContamination(fragmentLengths, sliderOne
     selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
 
-    numberOfAdaptorContamination = Math.round(selectedFragmentLength*parseFloat(adaptorContaminationSlope))
+    numberOfAdaptorContamination = selectedFragmentLength
 
     if(sliderOneValue == 0) {
          return contaminationValue
@@ -77,24 +79,8 @@ function calculatepreExperimentalAdapterContamination(fragmentLengths, sliderOne
     }
 }
 
-function calculateExperimentalAdapterContamination(fragmentLengths, sliderOneValue, sequenceLength, preExperimentalAdaptorContaminationPercentage, windowsize, contaminationValue) {
-
-    selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
-                             sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
-
-    numberOfAdaptorContamination = Math.round(selectedFragmentLength*preExperimentalAdaptorContaminationPercentage )
-
-    console.log(preExperimentalAdaptorContaminationPercentage)
-    console.log(selectedFragmentLength)
-    console.log(numberOfAdaptorContamination)
-
-    if(sliderOneValue == 0) {
-         return contaminationValue
-    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
-        return contaminationValue + numberOfAdaptorContamination;
-    } else {
-        return numberOfAdaptorContamination;
-    }
+function calculateExperimentalAdapterContamination(experimentalSelectedFragmentSize, preExperimentalAdaptorContaminationPercentage) {
+    return Math.round(experimentalSelectedFragmentSize * preExperimentalAdaptorContaminationPercentage)
 }
 
 function calculatepreExperimentalOverlaps(fragmentLengths, sliderOneValue, sequenceLength, overlapValue) {
@@ -114,26 +100,15 @@ function calculatepreExperimentalOverlaps(fragmentLengths, sliderOneValue, seque
     }
 }
 
-function calculateExperimentalOverlaps(fragmentLengths, sliderOneValue, sequenceLength, preExperimentalOverlapPercentage, overlapValue) {
-
-    selectedFragmentLength =  parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
-
-    numberOfOverlaps = Math.round(selectedFragmentLength*preExperimentalOverlapPercentage)
-
-    if(sliderOneValue > parseInt(sequenceLength*2)/10) {
-        return numberOfOverlaps;
-    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
-        return overlapValue;
-    } else {
-        return overlapValue + numberOfOverlaps;
-    }
+function calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage) {
+    return Math.round(experimentalSelectedFragmentSize * preExperimentalOverlapPercentage)
 }
 
-function calculateExperimentalFragments() {
+function calculateExperimentalFragments(fragmentLengths, sliderOneValue, preExperimentalAdaptorContaminationPercentage, preExperimentalOverlapPercentage) {
 
+    experimentalFragments = sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sliderOneValue), sliderMaxValue))[0] / (1 - preExperimentalOverlapPercentage - preExperimentalAdaptorContaminationPercentage)
 
+    return Math.round(experimentalFragments)
 }
 
 function sumUpFragmentLengths(inputArray){
