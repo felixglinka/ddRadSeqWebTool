@@ -47,7 +47,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    experimentalSelectedFragmentSize = sliderOneValue < basepairLengthToBeSequenced/10 ? currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination) : currentSelectedFragmentSize
 
 
-   let experimentalOverlaps = 0
+   experimentalOverlaps = 0
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
     preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
