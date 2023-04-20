@@ -44,6 +44,8 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    windowsize = parseInt(sliderTwoValue)*10 - parseInt(sliderOneValue)*10 + 10
 
    experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, windowsize, basepairLengthToBeSequenced, adaptorContamination) : 0
+   experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
+
    experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
 
    experimentalOverlaps = 0
@@ -60,7 +62,6 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
     rowElement.cells[8].lastChild.innerText = String(experimentalOverlaps).concat(' [').concat(experimentalOverlapPercentage).concat('%]');
    }
 
-   experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
    experimentalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, rowId, experimentalSelectedFragmentSize, (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination), (experimentalOverlaps - overlapValues.overlaps))
    experimentalSumAllBasesOfEveryBin = Math.round(sumAllBasesOfEveryBin + experimentalAdaptorContamination*(2/3)*parseInt(basepairLengthToBeSequenced) + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced));
    experimentalNumberOfSNPs = Math.round((experimentalSumAllBasesOfEveryBin + experimentalOverlaps*(0.5*2)*parseInt(basepairLengthToBeSequenced)) * parseFloat(expectPolyMorph))
