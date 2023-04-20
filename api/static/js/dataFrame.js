@@ -43,15 +43,19 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
    windowsize = parseInt(sliderTwoValue)*10 - parseInt(sliderOneValue)*10 + 10
 
-   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, windowsize, basepairLengthToBeSequenced, adaptorContamination) : 0
-   experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
+   preExperimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculatepreExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
+   preExperimentalAdaptorContaminationPercentage =  currentSelectedFragmentSize === 0 ? 0 : preExperimentalAdaptorContamination/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0, 100))[0] + windowsize*overlapWindowsize;
+
    experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
 
+   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, preExperimentalAdaptorContaminationPercentage, windowsize, adaptorContamination) : 0
+   experimentalSelectedFragmentSize = currentSelectedFragmentSize + (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination)
+
    experimentalOverlaps = 0
-    if(pairedEndChoice === 'paired end') {
+   if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
     preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
-    preExperimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : preExperimentalOverlaps/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0),  parseInt(basepairLengthToBeSequenced)*2/10)[0] + windowsize*overlapWindowsize;
+    preExperimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : preExperimentalOverlaps/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0, 100))[0] + windowsize*overlapWindowsize;
     experimentalOverlaps = calculateExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), preExperimentalOverlapPercentage, overlaps)
 
     experimentalSelectedFragmentSize = sliderOneValue >= basepairLengthToBeSequenced/10 ?  currentSelectedFragmentSize != 0 ? experimentalSelectedFragmentSize + (experimentalOverlaps - overlapValues.overlaps) : 0 : experimentalSelectedFragmentSize
