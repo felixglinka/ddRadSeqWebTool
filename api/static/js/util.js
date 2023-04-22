@@ -55,6 +55,7 @@ function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSel
    overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
    overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
    overlaps = overlapsSliderOne - overlapsSliderTwo
+   overlaps = overlapsSliderOne - overlapsSliderTwo
    overlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/currentSelectedFragmentSize*100));
 
    return {
@@ -89,7 +90,7 @@ function calculatepreExperimentalOverlaps(fragmentLengths, sliderOneValue, seque
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
                               sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
 
-    numberOfOverlaps = sliderOneValue >= basepairLengthToBeSequenced/10 ? Math.round(selectedFragmentLength*overlapSlope) : 0
+    numberOfOverlaps = sliderOneValue >= basepairLengthToBeSequenced/10 ? Math.round(selectedFragmentLength) : 0
 
     if(sliderOneValue > parseInt(sequenceLength*2)/10) {
         return numberOfOverlaps;

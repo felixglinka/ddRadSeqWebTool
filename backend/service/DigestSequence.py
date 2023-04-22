@@ -1,6 +1,6 @@
 import regex as re
 
-from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, PAIRED_END_ENDING, FIRST_BINNING_LIMIT
+from backend.settings import MAX_BINNING_LIMIT, BINNING_STEPS, PAIRED_END_ENDING, FIRST_BINNING_LIMIT, IUPACcodes
 
 
 class DigestSequence:
@@ -9,15 +9,21 @@ class DigestSequence:
 
         self.restrictionEnzymePositions = None
         self.dnaSequence = dnaSequence
-        self.restrictionEnzymes = restrictionEnzymes
+        self.restrictionEnzymes = self.restrictionEnzymeModificator(restrictionEnzymes)
         self.restrictionEnzymePositions = tuple((f.group(1), f.start(1)) for f in
                                                 re.finditer(r'(' + '|'.join(self.restrictionEnzymes) + r')', self.dnaSequence, overlapped=True))
+
+    def restrictionEnzymeModificator(self, restrictionEnzymes):
+
+        return [restrictionEnzyme.replace(code[0], code[1]) for code in IUPACcodes.items() for restrictionEnzyme in restrictionEnzymes]
 
     def addFragmentToSizeTable(self, firstRestrictionEnzyme, secondRestrictionEnzyme, digestedDnaCollectionDataframe):
 
         restrictionEnzymeCombination = firstRestrictionEnzyme.name + '+' + secondRestrictionEnzyme.name
 
-        filteredRestrictionEnzymePositions = list(filter(lambda enzymeCut: enzymeCut[0] == firstRestrictionEnzyme.getCompleteCutSite() or enzymeCut[0] == secondRestrictionEnzyme.getCompleteCutSite(),
+        regExRestrictionenzyme=self.restrictionEnzymeModificator([firstRestrictionEnzyme.getCompleteCutSite(), secondRestrictionEnzyme.getCompleteCutSite()])
+
+        filteredRestrictionEnzymePositions = list(filter(lambda enzymeCut: re.search(regExRestrictionenzyme[0], enzymeCut[0]) or re.search(regExRestrictionenzyme[1], enzymeCut[0]),
                                       self.restrictionEnzymePositions))
 
         bins = tuple(digestedDnaCollectionDataframe.index)
@@ -36,9 +42,11 @@ class DigestSequence:
 
     def getEnzymeByCompleteCutSide(self, query, firstRestrictionEnzyme, secondRestrictionEnzyme):
 
-        if(query == firstRestrictionEnzyme.getCompleteCutSite()):
+        regExRestrictionenzyme = self.restrictionEnzymeModificator([firstRestrictionEnzyme.getCompleteCutSite(), secondRestrictionEnzyme.getCompleteCutSite()])
+
+        if(re.search(regExRestrictionenzyme[0], query)):
             return firstRestrictionEnzyme
-        if (query == secondRestrictionEnzyme.getCompleteCutSite()):
+        if(re.search(regExRestrictionenzyme[1], query)):
             return secondRestrictionEnzyme
 
 def digestSequence(dnaSequence, restrictionEnzyme):
