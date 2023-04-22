@@ -12,7 +12,7 @@ def extractRestrictionEnzymesFromNewEnglandList():
 
     filteredNewEnglandEnzymeList = list(filter(lambda enzyme: enzyme["Enzyme"] != "" and
                                                               enzyme["Sequence"] != "" and
-                                                              all(character in "ACGT/" for character in enzyme["Sequence"]), newEnglandEnzymeList))
+                                                              all(character in "ACGTWRYKMSBDHV/" for character in enzyme["Sequence"]), newEnglandEnzymeList))
 
     filteredNewEnglandEnzymeList = removeAllHFFromList(filteredNewEnglandEnzymeList)
     allAvailableRestrictionEnzymes = list(map(lambda restrictionEnzyme: createRestrictionEnzymeObjectFromDictionary(restrictionEnzyme), filteredNewEnglandEnzymeList))

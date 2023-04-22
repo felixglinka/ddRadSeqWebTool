@@ -42,7 +42,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
    windowsize = parseInt(sliderTwoValue)*10 - parseInt(sliderOneValue)*10 + 10
 
-   preExperimentalAdaptorContamination = currentSelectedFragmentSize != 0 ?calculatepreExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, adaptorContamination) : 0
+   preExperimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculatepreExperimentalAdapterContamination(enzymeData[rowId], sliderOneValue, basepairLengthToBeSequenced, adaptorContaminationValues.adaptorContamination) : 0
    proportionExperimalContaminationAllFragments = preExperimentalAdaptorContamination/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0, parseInt(sliderMaxValue)))[0];
    preExperimentalAdaptorContaminationPercentage =  currentSelectedFragmentSize === 0 ? 0 : proportionExperimalContaminationAllFragments*parseFloat(adaptorContaminationSlope) + windowsize*parseFloat(adaptorContaminationWindowsize) + parseFloat(adaptorContaminationSlopeWindowsize)*windowsize*proportionExperimalContaminationAllFragments;
 
@@ -50,7 +50,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    preExperimentalOverlapPercentage = 0
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
-    preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlaps) : 0
+    preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlapValues.overlaps) : 0
     proportionExperimalOverlapsAllFragments = preExperimentalOverlaps/sumUpFragmentLengths(Object.values(enzymeData[rowId]).slice(0, parseInt(sliderMaxValue)))[0];
     preExperimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : proportionExperimalOverlapsAllFragments*parseFloat(overlapSlope) + windowsize*parseFloat(overlapWindowsize);
    }
