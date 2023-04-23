@@ -7,13 +7,15 @@ let maxNumberBasesToBeSequenced = 0
 
 function slideOne(sliderOne, sliderTwo, rowId, enzymeData) {
 
+    sliderOne.value = parseInt(sliderOne.value) <= basepairLengthToBeSequenced/10 ? basepairLengthToBeSequenced/10 : parseInt(sliderOne.value)
+
     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
         sliderOne.value = parseInt(sliderTwo.value) - minGap;
     }
     updateSliderResult(sliderOne.value, sliderTwo.value, rowId, enzymeData)
 }
 
-function slideTwo(sliderTwo, sliderOne, rowId, enzymeData) {
+function  slideTwo(sliderTwo, sliderOne, rowId, enzymeData) {
 
     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
         sliderTwo.value = parseInt(sliderOne.value) + minGap;
@@ -58,14 +60,15 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    experimentalSelectedFragmentSize = calculateExperimentalFragments(enzymeData[rowId], sliderOneValue, preExperimentalAdaptorContaminationPercentage, preExperimentalOverlapPercentage)
 
    if(pairedEndChoice === 'paired end') {
-    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage) : 0
+    overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
+    experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage, overlapValues.overlaps) : 0
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps/experimentalSelectedFragmentSize*100)));
 
     rowElement.cells[8].firstChild.innerText = String(overlapValues.overlaps).concat().concat(' [').concat(overlapValues.overlapPercentage).concat('%]')
     rowElement.cells[8].lastChild.innerText = String(experimentalOverlaps).concat(' [').concat(experimentalOverlapPercentage).concat('%]');
    }
 
-   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(experimentalSelectedFragmentSize, preExperimentalAdaptorContaminationPercentage) : 0
+   experimentalAdaptorContamination = currentSelectedFragmentSize != 0 ? calculateExperimentalAdapterContamination(experimentalSelectedFragmentSize, preExperimentalAdaptorContaminationPercentage, adaptorContaminationValues.adaptorContamination) : 0
    experimentalAdaptorContaminationPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalAdaptorContamination/experimentalSelectedFragmentSize)*100));
 
    experimentalDataFrameValues = calculateDataFrameValues(sliderOneValue, sliderTwoValue, enzymeData, rowId, experimentalSelectedFragmentSize, (experimentalAdaptorContamination - adaptorContaminationValues.adaptorContamination), (experimentalOverlaps - overlapValues.overlaps))

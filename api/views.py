@@ -64,7 +64,7 @@ def webinterfaceViews(request):
         inputForm = BasicInputDDRadDataForm(initial={'pairedEndChoice': PAIRED_END_ENDING}, restrictionEnzymes=restrictionEnzymes)
 
     context['todaysFastaFiles'] = getCurrentLoadedFiles()
-    context['howToCite'] = requestInformationTexts()['howToCite']
+    context['howToCite'] = {'howToCite': requestInformationTexts()['howToCite']}
     context["form"] = inputForm
 
     return render(request, "webinterface.html", context)

@@ -55,7 +55,6 @@ function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSel
    overlapsSliderOne = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderOneValue)]];
    overlapsSliderTwo = dataFrame['overlaps'][Object.keys(dataFrame['overlaps'])[parseInt(sliderTwoValue)]];
    overlaps = overlapsSliderOne - overlapsSliderTwo
-   overlaps = overlapsSliderOne - overlapsSliderTwo
    overlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((overlapsSliderOne - overlapsSliderTwo)/currentSelectedFragmentSize*100));
 
    return {
@@ -66,43 +65,23 @@ function calculateOverlaps(sliderOneValue, sliderTwoValue, dataFrame, currentSel
 
 function calculatepreExperimentalAdapterContamination(fragmentLengths, sliderOneValue, sequenceLength, contaminationValue) {
 
-    selectedFragmentLength = parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 ? sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sliderOneValue)))[0] :
-                             sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0]
+    return sumUpFragmentLengths(Object.values(fragmentLengths).slice(0, parseInt(sequenceLength)/10))[0] - contaminationValue
 
-    numberOfAdaptorContamination = selectedFragmentLength
-
-    if(sliderOneValue == 0) {
-         return contaminationValue
-    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
-        return contaminationValue + numberOfAdaptorContamination;
-    } else {
-        return numberOfAdaptorContamination;
-    }
 }
 
-function calculateExperimentalAdapterContamination(experimentalSelectedFragmentSize, preExperimentalAdaptorContaminationPercentage) {
-    return Math.round(experimentalSelectedFragmentSize * preExperimentalAdaptorContaminationPercentage)
+function calculateExperimentalAdapterContamination(experimentalSelectedFragmentSize, preExperimentalAdaptorContaminationPercentage, adaptorContamination) {
+    return Math.round(experimentalSelectedFragmentSize * preExperimentalAdaptorContaminationPercentage) + adaptorContamination
 }
 
 function calculatepreExperimentalOverlaps(fragmentLengths, sliderOneValue, sequenceLength, overlapValue) {
 
-    selectedFragmentLength =  parseInt(sliderOneValue) <= parseInt(sequenceLength)/10 || parseInt(sliderOneValue) >= parseInt(sequenceLength*2)/10 ?
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] :
-                              sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sliderOneValue)))[0]
+        return sumUpFragmentLengths(Object.values(fragmentLengths).slice(parseInt(sequenceLength/10), parseInt(sequenceLength)*2/10))[0] - overlapValue
 
-    numberOfOverlaps = sliderOneValue >= basepairLengthToBeSequenced/10 ? Math.round(selectedFragmentLength) : 0
-
-    if(sliderOneValue > parseInt(sequenceLength*2)/10) {
-        return numberOfOverlaps;
-    } else if(sliderOneValue <= parseInt(sequenceLength)/10) {
-        return overlapValue;
-    } else {
-        return overlapValue + numberOfOverlaps;
-    }
 }
 
-function calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage) {
-    return Math.round(experimentalSelectedFragmentSize * preExperimentalOverlapPercentage)
+function calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage, overlaps) {
+
+    return Math.round(experimentalSelectedFragmentSize * preExperimentalOverlapPercentage) + overlaps
 }
 
 function calculateExperimentalFragments(fragmentLengths, sliderOneValue, preExperimentalAdaptorContaminationPercentage, preExperimentalOverlapPercentage) {

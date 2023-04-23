@@ -115,7 +115,7 @@ function fillHowToCite() {
 
         let howToCiteTag = document.getElementById("howToCite")
 
-        howToCiteTag.innerHTML = howToCite
+        howToCiteTag.innerHTML = howToCite.howToCite
     }
 }
 
