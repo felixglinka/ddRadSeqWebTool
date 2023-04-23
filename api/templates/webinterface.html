@@ -304,7 +304,7 @@ const overlapSlope ="{{ overlapSlope }}"
 const overlapWindowsize ="{{ overlapWindowsize }}"
 const fileName ="{{ fileName }}"
 const todaysFastaFiles = {{ todaysFastaFiles|safe }};
-const howToCite = "{{ howToCite }}"
+const howToCite = {{ howToCite|safe }};
 
 {% if fragmentList %}
 const fragmentList = "{{ fragmentList|linebreaksbr }}".replace(/<br\s*\/?>/ig, "\r\n")
