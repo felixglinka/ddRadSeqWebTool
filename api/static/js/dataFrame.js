@@ -50,6 +50,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
 
    experimentalOverlaps = 0
    preExperimentalOverlapPercentage = 0
+   let overlapValues = {overlaps: 0}
    if(pairedEndChoice === 'paired end') {
     overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
     preExperimentalOverlaps = currentSelectedFragmentSize != 0 ? calculatepreExperimentalOverlaps(enzymeData[rowId], sliderOneValue, parseInt(basepairLengthToBeSequenced), overlapValues.overlaps) : 0
@@ -60,7 +61,6 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    experimentalSelectedFragmentSize = calculateExperimentalFragments(enzymeData[rowId], sliderOneValue, preExperimentalAdaptorContaminationPercentage, preExperimentalOverlapPercentage)
 
    if(pairedEndChoice === 'paired end') {
-    overlapValues = calculateOverlaps(sliderOneValue, sliderTwoValue, enzymeData, currentSelectedFragmentSize)
     experimentalOverlaps = currentSelectedFragmentSize != 0 ? calculateExperimentalOverlaps(experimentalSelectedFragmentSize, preExperimentalOverlapPercentage, overlapValues.overlaps) : 0
     experimentalOverlapPercentage = currentSelectedFragmentSize === 0 ? 0 : String(Math.round((experimentalOverlaps/experimentalSelectedFragmentSize*100)));
 
