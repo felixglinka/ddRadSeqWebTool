@@ -30,7 +30,7 @@ class DigestSequence:
 
         regExRestrictionenzyme = self.restrictionEnzymeModificator([firstRestrictionEnzyme.getCompleteCutSite(), secondRestrictionEnzyme.getCompleteCutSite()])
 
-        filteredRestrictionEnzymePositions = list(filter(lambda enzymeCut: re.search(regExRestrictionenzyme[0], enzymeCut[0]) or re.search(regExRestrictionenzyme[1], enzymeCut[0]),
+        filteredRestrictionEnzymePositions = list(filter(lambda enzymeCut: re.fullmatch(regExRestrictionenzyme[0], enzymeCut[0]) or re.fullmatch(regExRestrictionenzyme[1], enzymeCut[0]),
                                       self.restrictionEnzymePositions))
 
         bins = tuple(digestedDnaCollectionDataframe.index)
