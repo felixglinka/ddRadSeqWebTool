@@ -85,11 +85,8 @@ def countFragmentLength(doubleDigestedDnaComparison, fasta, restrictionEnzymePai
 
     for fastaPart in fastaSequences:
 
-        digestingSequence = DigestSequence(str(fastaPart.seq.upper()), restrictionEnzymes)
-
-        for restrictionEnzymePair in restrictionEnzymePairList:
-            digestingSequence.addFragmentToSizeTable(restrictionEnzymePair[0],
-                                                     restrictionEnzymePair[1], doubleDigestedDnaComparison.digestedDnaCollectionDataframe)
+        digestFastaPart(doubleDigestedDnaComparison, fastaPart, restrictionEnzymePairList,
+                        restrictionEnzymes)
             # old counting method
             # digestFastaSequence(str(fastaPart.seq.upper()), restrictionEnzymePair[0],
             #                     restrictionEnzymePair[1], doubleDigestedDnaComparison)
@@ -159,12 +156,8 @@ def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubl
 
     for fastaPart in fastaSequences:
 
-        digestingSequence = DigestSequence(str(fastaPart.seq.upper()), restrictionEnzymes)
-
-        for restrictionEnzymePair in restrictionEnzymePairList:
-            digestingSequence.addFragmentToSizeTable(restrictionEnzymePair[0],
-                                                     restrictionEnzymePair[1],
-                                                     doubleDigestedDnaComparison.digestedDnaCollectionDataframe)
+        digestingSequence = digestFastaPart(doubleDigestedDnaComparison, fastaPart, restrictionEnzymePairList,
+                                            restrictionEnzymes)
 
         for rareCutter in rareCutters:
             totalRareCutterDigestions[rareCutter.name] += sum(position[0] == rareCutter.cutSite5end + rareCutter.cutSite3end for position in digestingSequence.restrictionEnzymePositions)
@@ -198,3 +191,12 @@ def countFragmentLengthAndTotalRareCutterDigestionsAndGenomeMutationAmount(doubl
         genomeScanRadSnpDensity)
 
     return totalRareCutterDigestionsAndGenomeMutationAmount
+
+
+def digestFastaPart(doubleDigestedDnaComparison, fastaPart, restrictionEnzymePairList, restrictionEnzymes):
+    digestingSequence = DigestSequence(str(fastaPart.seq.upper()), restrictionEnzymes)
+    for restrictionEnzymePair in restrictionEnzymePairList:
+        digestingSequence.addFragmentToSizeTable(restrictionEnzymePair[0],
+                                                 restrictionEnzymePair[1],
+                                                 doubleDigestedDnaComparison.digestedDnaCollectionDataframe)
+    return digestingSequence
