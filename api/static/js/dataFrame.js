@@ -85,7 +85,7 @@ function updateSliderResult(sliderOneValue, sliderTwoValue, rowId, enzymeData) {
    rowElement.cells[2].lastChild.innerText = experimentalSelectedFragmentSize.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[3].lastChild.innerText = experimentalDataFrameValues.sumAllBasesOfEveryBin.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[4].lastChild.innerText = experimentalNumberOfSNPs.toLocaleString(undefined, { minimumFractionDigits: 0 });
-   rowElement.cells[5].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples;
+   rowElement.cells[5].lastChild.innerText = experimentalDataFrameValues.maxNumberOfPossibleSamples.toLocaleString(undefined, { minimumFractionDigits: 0 });
    rowElement.cells[6].lastChild.innerText = String(Math.round(experimentalDataFrameValues.numberBasesToBeSequenced / maxNumberBasesToBeSequenced *10000) / 100 ).concat('%');
    rowElement.cells[7].lastChild.innerText = String(experimentalAdaptorContamination).concat(' [').concat(experimentalAdaptorContaminationPercentage).concat('%]');
 
