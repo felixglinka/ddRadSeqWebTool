@@ -13,22 +13,22 @@ class DigestSequence:
         self.restrictionEnzymePositions = tuple((f.group(1), f.start(1)) for f in
                                                 re.finditer(r'(' + '|'.join(self.restrictionEnzymes) + r')', self.dnaSequence, overlapped=True))
 
-    def restrictionEnzymeModificator(self, restrictionEnzymes):
+    def restrictionEnzymeModificator(self, restrictionEnzymeSequences):
 
-        regExRestrictionenzymes = []
+        regExRestrictionEnzymeSequences = []
 
-        for restrictionEnzyme in restrictionEnzymes:
+        for restrictionEnzymeSequence in restrictionEnzymeSequences:
             for code in IUPACcodes.items():
-                restrictionEnzyme.replace(code[0], code[1])
-            regExRestrictionenzymes.append(restrictionEnzyme)
+                restrictionEnzymeSequence = restrictionEnzymeSequence.replace(code[0], code[1])
+            regExRestrictionEnzymeSequences.append(restrictionEnzymeSequence)
 
-        return regExRestrictionenzymes
+        return regExRestrictionEnzymeSequences
 
     def addFragmentToSizeTable(self, firstRestrictionEnzyme, secondRestrictionEnzyme, digestedDnaCollectionDataframe):
 
         restrictionEnzymeCombination = firstRestrictionEnzyme.name + '+' + secondRestrictionEnzyme.name
 
-        regExRestrictionenzyme=self.restrictionEnzymeModificator([firstRestrictionEnzyme.getCompleteCutSite(), secondRestrictionEnzyme.getCompleteCutSite()])
+        regExRestrictionenzyme = self.restrictionEnzymeModificator([firstRestrictionEnzyme.getCompleteCutSite(), secondRestrictionEnzyme.getCompleteCutSite()])
 
         filteredRestrictionEnzymePositions = list(filter(lambda enzymeCut: re.search(regExRestrictionenzyme[0], enzymeCut[0]) or re.search(regExRestrictionenzyme[1], enzymeCut[0]),
                                       self.restrictionEnzymePositions))
