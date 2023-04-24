@@ -15,7 +15,14 @@ class DigestSequence:
 
     def restrictionEnzymeModificator(self, restrictionEnzymes):
 
-        return [restrictionEnzyme.replace(code[0], code[1]) for code in IUPACcodes.items() for restrictionEnzyme in restrictionEnzymes]
+        regExRestrictionenzymes = []
+
+        for restrictionEnzyme in restrictionEnzymes:
+            for code in IUPACcodes.items():
+                restrictionEnzyme.replace(code[0], code[1])
+            regExRestrictionenzymes.append(restrictionEnzyme)
+
+        return regExRestrictionenzymes
 
     def addFragmentToSizeTable(self, firstRestrictionEnzyme, secondRestrictionEnzyme, digestedDnaCollectionDataframe):
 
