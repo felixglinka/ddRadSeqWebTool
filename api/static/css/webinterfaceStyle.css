@@ -343,13 +343,42 @@ input[type='range']:active::-webkit-slider-thumb{
   width: 60%;
   text-align: center;
 }
-.Fraction {
-    text-align: center;
+
+.eq-c {
+	 text-align: center;
+	 padding: 0em 0em;
+	 font-size: 0.8rem;
+    font-style: italic;
 }
-.Denominator{
-    border-top: 1px solid #000;
-    display: block;
+ .eq-c .radical {
+	 font-size: 3.6rem;
+	 vertical-align: middle;
+	 margin: 0;
+	 padding: 0;
+	 right: -0.8rem;
 }
-.Fraction, .Numerator, .Denominator {
-    padding: 0px 5px;
+ .eq-c .radicand {
+	 top: 0.4rem;
+	 padding: 0 0.5rem;
+	 border-top: 0.2rem black solid;
+}
+ .eq-c sup {
+	 font-size: 75%;
+}
+
+.fraction {
+	 display: inline-block;
+	 vertical-align: middle;
+	 margin: 0 0.2em 0.4ex;
+	 text-align: center;
+}
+.fraction > span {
+	 display: block;
+	 padding-top: 0.15em;
+}
+.fraction span.fdn {
+    border-top: thin solid black;
+}
+.fraction span.bar {
+	 display: none;
 }
