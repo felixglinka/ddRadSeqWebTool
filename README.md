@@ -1,6 +1,6 @@
 # ddRadSeqWebTool
 
-This project is structured in a JavaScript frontend (see api/static/js) and a Phython backend (see backend).
+This project is structured in a JavaScript frontend (see directory ./api/static/js) and a Python backend (see directory ./backend/service).
 Backbone for this project is the Django framework.
 
 ## Frontend:
